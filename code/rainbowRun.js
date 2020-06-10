@@ -31,18 +31,21 @@ function startGame(){
 }
 
 function mainLoop(){
-
-    // test
     //ctx.clearRect(0,0,w,h);
-    let currentTile = Math.floor(Math.random()*map.length);
-    map[currentTile].currentDisplay();
-    map[currentTile+1].nextDisplay();
-    for (let i=currentTile-1; i>=0; i--){
-        map[i].pastDisplay();
-    }
-    
     //requestAnimationFrame(mainLoop);
-    
+    let currentTile = Math.floor(Math.random()*(map.length-1));
+
+    console.log("currentTile i:" + currentTile);
+
+    map[currentTile].currentDisplay();
+    ctx.save();
+    for (let j = currentTile+1; j<map.length; j++){
+        map[j].nextDisplay();
+    }
+    ctx.restore();
+    for (let i=currentTile-1; i>=0; i--){
+        map[i].pastDisplay(map[i+1].relativePositionToLast);
+    }
 }
 
 function generateMap(){
@@ -121,9 +124,9 @@ class Tile{
         ctx.fillRect(-6,-6,12,12);
     }
 
-    pastDisplay(){ // when the tile is shown as hitory
+    pastDisplay(relativePositionToLastOfLastTile){ // when the tile is shown as hitory
         ctx.globalAlpha = 0.15;
-        let relativePositionToNext = getOppositeDirection(this.relativePositionToLast);
+        let relativePositionToNext = getOppositeDirection(relativePositionToLastOfLastTile);
         let xDistance = tileWidth/2 + tileHeight*1.5; // distance from the last tile on x-axis
         let yDistance = tileHeight + tileLength/2; // distance from the last tile on y-axis
         switch(relativePositionToNext){
