@@ -1,4 +1,4 @@
-editor.autoIndent
+//editor.autoIndent
 
 let canvas, ctx, w, h; // canvas 
 let tileWidth, tileLength, tileHeight; // tile 
