@@ -1,10 +1,10 @@
-
+editor.autoIndent
 
 let canvas, ctx, w, h; // canvas 
 let tileWidth, tileLength, tileHeight; // tile 
 // map (variables should vary for different levels in the final version)
 let nColors = 2; // number of colors
-let colors = [['#6CFFF4','#22B3AD'],['#FFF680','#D7D040'],['#F98C8C','#E20242'],['#CCFF40','#8BC800'],['#FCBC68','#DE8800']]; // [tileClr, shadowClr]; blue, yellow, red, green, orange
+let colors = [['#6CFFF4','#22B3AD','blue'],['#FFF680','#D7D040','yellow'],['#F98C8C','#E20242'],['#CCFF40','#8BC800'],['#FCBC68','#DE8800']]; // [tileClr, shadowClr]; blue, yellow, red, green, orange
 let nTiles = 4; // number of tiles in a color sequence
 let nTurns = 1; // number of turns in a sequence; nTurns <= (nTiles-2)
 let map = [];
@@ -34,17 +34,25 @@ function startGame(){
 let i=0;
 function mainLoop(){
     //ctx.clearRect(0,0,w,h);
-
-    let currentTile = Math.floor(Math.random()*map.length);
-    console.log("currentTile:");
-    console.log(currentTile);
-    map[currentTile].currentDisplay();
-    map[currentTile+1].nextDisplay();
-    for (let i=currentTile-1; i>=0; i--){
-        map[i].pastDisplay();
-    }
+    testCenterCurrentTile();
+    
     
     //requestAnimationFrame(mainLoop);
+}
+function testCenterCurrentTile(){
+let currentTile = Math.floor(Math.random()*(map.length-1));
+
+    console.log("currentTile i:" + currentTile);
+
+    map[currentTile].currentDisplay();
+    ctx.save();
+    for (let j = currentTile+1; j<map.length; j++){
+        map[j].nextDisplay();
+    }
+    ctx.restore();
+    for (let i=currentTile-1; i>=0; i--){
+        map[i].pastDisplay(map[i+1].relativePositionToLast);
+    }
 }
 
 function generateMap(){
@@ -78,20 +86,21 @@ function generateMap(){
         });
         
         for (let seg=0; seg<segments.length; seg++){
-            console.log("segments:");
-            console.log(segments[seg]);
+            console.log(colors[nC][2] + " segment turning point:" + segments[seg]);
         }
 
         // assign the position to every tile in every sequence
         nT=0;
         for (let s=0; s<segments.length; s++){
             let segmentDirection = pickDirection();
+            console.log((s+1) +"th segment direction:" + segmentDirection);
             for(; nT<=segments[s]; nT++){ // segments[s]: start turning from s
                 map[nC*nTiles+nT].relativePositionToLast = segmentDirection;
             }
         }
         // finish off the last segment in the color sequence
         let segmentDirection = pickDirection();
+        console.log("remaining segment direction:" + segmentDirection);
         for(; nT<nTiles; nT++){
             map[nC*nTiles+nT].relativePositionToLast = segmentDirection;
         }
@@ -130,9 +139,9 @@ class Tile{
         ctx.fillRect(-6,-6,12,12);
     }
 
-    pastDisplay(){ // when the tile is shown as hitory
+    pastDisplay(relativePositionToLastOfLastTile){ // when the tile is shown as hitory
         ctx.globalAlpha = 0.15;
-        let relativePositionToNext = getOppositeDirection(this.relativePositionToLast);
+        let relativePositionToNext = getOppositeDirection(relativePositionToLastOfLastTile);
         let xDistance = tileWidth/2 + tileHeight*1.5; // distance from the last tile on x-axis
         let yDistance = tileHeight + tileLength/2; // distance from the last tile on y-axis
         switch(relativePositionToNext){

@@ -23,7 +23,7 @@ window.onload = function init(){
 
 function startGame(){
     // set up variables
-    tileWidth = w/4; 
+    tileWidth = w/5; 
     tileLength = tileWidth/1.5;
     tileHeight = tileLength/5;
     // map
