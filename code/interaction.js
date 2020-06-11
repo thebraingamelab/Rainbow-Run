@@ -1,18 +1,16 @@
 
 function updatePlayerPosition(evt) {
     let playerMove = getInteractionArea(evt);
-    if (currentTile === map.length - 1) { // if reaching the end
-        generateMap();
-        currentTile = 0;
-        message.innerHTML = "Hello again! Click on where the next tile appears to run through the maze.";
-    }
+    if (endOfMaze){}
     else if (playerMove === map[currentTile + 1].relativePositionToLast) {
         message.style.color = "black";
         message.innerHTML = "Nice move!";
         //playerOnTile(map[currentTile+1]);
         correctMove = true;
-        if (currentTile === map.length - 2) {
-            message.innerHTML = "You reached the end! Click anywhere to restart.";
+        currentTile++;
+        if (currentTile === map.length - 1) {
+            message.innerHTML = "You have reached the end! Press R to restart.";
+            endOfMaze=true;
         }
     }
     else { // the player tapped a wrong direction
@@ -39,19 +37,19 @@ function proceedTransition(transitionDirection) {
     switch (transitionDirection) {
         case 'TL':
             ctx.translate(-xPerY, -1);
-            centerTile(currentTile);
+            centerTile(currentTile-1);
             break;
         case 'TR':
             ctx.translate(xPerY, -1);
-            centerTile(currentTile);
+            centerTile(currentTile-1);
             break;
         case 'BL':
             ctx.translate(-xPerY, 1);
-            centerTile(currentTile);
+            centerTile(currentTile-1);
             break;
         case 'BR':
             ctx.translate(xPerY, 1);
-            centerTile(currentTile);
+            centerTile(currentTile-1);
             break;
     }
     ctx.translate(-w / 2, -h / 2); // cancel the translate(w/2,h/2) in centerTile() function
@@ -61,4 +59,14 @@ function playerOnTile(tile){
     if (currentTile === map.length-1) ctx.fillStyle = 'red';
     else ctx.fillStyle = 'black';
     ctx.fillRect(tile.x-6, tile.y-6, 12, 12);
+}
+
+function restart(evt){
+    if (evt.key=='r') {
+        generateMap();
+        currentTile = 0;
+        endOfMaze=false;
+        message.style.color = 'black';
+        message.innerHTML = "Hello again! Click on where the next tile appears to run through the maze.";
+    }
 }

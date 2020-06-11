@@ -4,10 +4,10 @@ let canvas, ctx, w, h; // canvas
 let tileWidth, tileLength, tileHeight; // tile 
 
 // map (variables should vary for different levels in the final version)
-let nColors = 3; // number of colors
+let nColors = 2; // number of colors
 let colors = [['#6CFFF4','#22B3AD','blue'],['#FFF680','#D7D040','yellow'],['#F98C8C','#E20242','red'],['#CCFF40','#8BC800','green'],['#FCBC68','#DE8800','orange']]; // [tileClr, shadowClr]; blue, yellow, red, green, orange
-let nTiles = 6; // number of tiles in a color sequence
-let nTurns = 2; // number of turns in a sequence; nTurns <= (nTiles-2)
+let nTiles = 4; // number of tiles in a color sequence
+let nTurns = 1; // number of turns in a sequence; nTurns <= (nTiles-2)
 let nHistory=5; // history shown
 let map = [];
 let directions = ['TL', 'TR', 'BL', 'BR']; // TopLeft, TopRight, BottomLeft, BottomRight
@@ -36,6 +36,7 @@ window.onload = function init(){
     h=canvas.clientHeight;
     ctx=canvas.getContext("2d");
     startGame();
+    window.addEventListener("keydown", restart);
     canvas.addEventListener("click", updatePlayerPosition);
     mainLoop();
 }
@@ -61,7 +62,7 @@ function mainLoop(){
     if (correctMove===true){ // transitioning
         //playerOnTile(map[currentTile+1]);
         if (transitionProgressY < yDistance){
-            proceedTransition(getOppositeDirection(map[currentTile + 1].relativePositionToLast));
+            proceedTransition(getOppositeDirection(map[currentTile].relativePositionToLast));
             //playerOnTile(map[currentTile+1]);
             transitionProgressY+=2;
         }
@@ -71,7 +72,7 @@ function mainLoop(){
             dCurrentTileAlpha = 0;
             dNextTileAlpha = 0;
             ctx.restore(); // 0,0
-            currentTile++;
+            // currentTile++;
         }
     }
     else {
