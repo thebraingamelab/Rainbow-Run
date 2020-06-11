@@ -3,3 +3,9 @@ canvas{
     background-color: #E7F4FF;
     margin: 1rem;
 }
+
+#myMessage{
+    text-align: center;
+    font-family: 'overpass';
+    font-size: 18px;
+}
