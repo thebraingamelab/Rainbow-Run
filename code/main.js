@@ -15,6 +15,11 @@ let endOfMaze = false;
 
 // tile
 let xDistance, yDistance; // distance between tiles
+let currentTileAlpha=1;
+let nextTileAlpha=0.4;
+let historyAlpha=0.15;
+let dCurrentTileAlpha = 0; // amount reduced
+let dNextTileAlpha = 0; // amount increased
 
 // interaction
 let correctMove = false;
@@ -53,18 +58,18 @@ let transitionProgressY = 0; // tbe amount of transition already happened on the
 function mainLoop(){
 //clear area
     ctx.clearRect(0,0,w,h);
-    // // display message
-    // ctx.font = '18px overpass';
-    // ctx.fillText(message, tileHeight*5, tileHeight*5);
-    //console.log("transitionProgressY " + transitionProgressY);
     if (correctMove===true){ // transitioning
+        //playerOnTile(map[currentTile+1]);
         if (transitionProgressY < yDistance){
             proceedTransition(getOppositeDirection(map[currentTile + 1].relativePositionToLast));
+            //playerOnTile(map[currentTile+1]);
             transitionProgressY+=2;
         }
         else{ // finished transition
             correctMove = false;
             transitionProgressY=0;
+            dCurrentTileAlpha = 0;
+            dNextTileAlpha = 0;
             ctx.restore(); // 0,0
             currentTile++;
         }
@@ -73,6 +78,7 @@ function mainLoop(){
         ctx.save(); // 0,0
         ctx.save(); // 0,0
         centerTile(currentTile);
+        playerOnTile(map[currentTile]);
         ctx.restore(); // 0,0
     }
 

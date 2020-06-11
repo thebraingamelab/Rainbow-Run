@@ -9,6 +9,7 @@ function updatePlayerPosition(evt) {
     else if (playerMove === map[currentTile + 1].relativePositionToLast) {
         message.style.color = "black";
         message.innerHTML = "Nice move!";
+        //playerOnTile(map[currentTile+1]);
         correctMove = true;
         if (currentTile === map.length - 2) {
             message.innerHTML = "You reached the end! Click anywhere to restart.";
@@ -32,9 +33,9 @@ function getInteractionArea(evt) {
 }
 
 function proceedTransition(transitionDirection) {
-    // position transition
-    //if (transitionProgressY===0) ctx.translate(w/2,h/2);
     let xPerY = xDistance / yDistance; // for every transition of 1 on y-axis, transition of xPerY on x-axis
+    dCurrentTileAlpha = transitionProgressY/yDistance*(currentTileAlpha-historyAlpha);
+    dNextTileAlpha = transitionProgressY/yDistance*(currentTileAlpha-nextTileAlpha);
     switch (transitionDirection) {
         case 'TL':
             ctx.translate(-xPerY, -1);
@@ -53,5 +54,11 @@ function proceedTransition(transitionDirection) {
             centerTile(currentTile);
             break;
     }
-    ctx.translate(-w/2, -h/2); // cancel the translate(w/2,h/2) in centerTile() function
+    ctx.translate(-w / 2, -h / 2); // cancel the translate(w/2,h/2) in centerTile() function
+}
+
+function playerOnTile(tile){
+    if (currentTile === map.length-1) ctx.fillStyle = 'red';
+    else ctx.fillStyle = 'black';
+    ctx.fillRect(tile.x-6, tile.y-6, 12, 12);
 }

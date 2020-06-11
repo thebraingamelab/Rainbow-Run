@@ -1,8 +1,8 @@
 
 class Tile {
     constructor(tileClr, shadowClr) {
-        this.x = 0; // x of the last tile
-        this.y = 0; // y of the last tile
+        this.x = 0;
+        this.y = 0; 
         this.relativePositionToLast; // relative position to the last tile
         //this.relativePositionToNext; // relative position to the next tile
         this.tileClr = tileClr;
@@ -10,16 +10,11 @@ class Tile {
     }
 
     currentDisplay() { // when the tile is where the player currently is, position it in the middle
-        ctx.globalAlpha = 1;
         ctx.translate(w / 2, h / 2);
         this.display();
-        // square representing the player
-        ctx.fillStyle = 'black';
-        ctx.fillRect(-6, -6, 12, 12);
     }
 
     pastDisplay(relativePositionToLastOfLastTile) { // when the tile is shown as hitory
-        ctx.globalAlpha = 0.15;
         let relativePositionToNext = getOppositeDirection(relativePositionToLastOfLastTile);
         switch (relativePositionToNext) {
             case 'TL':
@@ -39,7 +34,6 @@ class Tile {
     }
 
     nextDisplay() { // when this is the next tile
-        ctx.globalAlpha = 0.4;
         switch (this.relativePositionToLast) {
             case 'TL':
                 ctx.translate(-xDistance, -yDistance);
@@ -110,24 +104,22 @@ function getOppositeDirection(relativePositionToLast) {
 }
 
 function centerTile(currentTile) { // start position: last end position
-    // let currentTile = Math.floor(Math.random()*(map.length-1));
-    // console.log("currentTile i:" + currentTile);
+    //current tile
+    ctx.globalAlpha = currentTileAlpha-dCurrentTileAlpha;
     map[currentTile].currentDisplay();
     ctx.save(); // currentTile position
     ctx.save(); // currentTile position
-    // current tile
-    if (currentTile === map.length - 1) {
-        // reaching end: square turning red
-        ctx.fillStyle = 'red';
-        ctx.fillRect(-6, -6, 12, 12);
-    }
+
     // next tile
-    else {
+    if (currentTile !== map.length - 1) {
+        ctx.globalAlpha = nextTileAlpha+dNextTileAlpha;
         map[currentTile + 1].nextDisplay();
         //for (let j = currentTile+1; j<map.length; j++) map[j].nextDisplay(); //test every remaining tiles
     }
+    
     // history
     ctx.restore(); // currentTile position
+    ctx.globalAlpha = historyAlpha;
     for (let i = currentTile - 1; (i >= 0) && (i >= currentTile - nHistory); i--) {
         map[i].pastDisplay(map[i + 1].relativePositionToLast);
     }
