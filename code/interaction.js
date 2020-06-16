@@ -67,7 +67,8 @@ function proceedTransition(transitionDirection) {
 function playerOnTile(tile){
     if (currentTile === map.length-1) ctx.fillStyle = 'red';
     else ctx.fillStyle = 'black';
-    ctx.fillRect(tile.x-6, tile.y-6, 12, 12);
+    let playerSize = tileWidth/6;
+    ctx.fillRect(tile.x-playerSize/2, tile.y-playerSize/2, playerSize, playerSize);
 }
 
 function restart(evt){
