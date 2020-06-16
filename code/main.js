@@ -51,7 +51,7 @@ function init(){
 
 function startGame(){
     // set up variables
-    tileWidth = w/12; 
+    tileWidth = w/6; 
     tileLength = tileWidth/1.5;
     tileHeight = tileLength/5;
     xDistance = tileWidth/2 + tileHeight*1.5; // distance from the last tile on x-axis
