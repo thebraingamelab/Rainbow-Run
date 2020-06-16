@@ -3,19 +3,19 @@ function updatePlayerPosition(evt) {
     let playerMove = getInteractionArea(evt);
     if (endOfMaze){}
     else if (playerMove === map[currentTile + 1].relativePositionToLast) {
-        message.style.color = "black";
-        message.innerHTML = "Nice move!";
+        // message.style.color = "black";
+        // message.innerHTML = "Nice move!";
         //playerOnTile(map[currentTile+1]);
         correctMove = true;
         currentTile++;
         if (currentTile === map.length - 1) {
-            message.innerHTML = "You have reached the end! Press R to restart.";
+            // message.innerHTML = "You have reached the end! Press R to restart.";
             endOfMaze=true;
         }
     }
     else { // the player tapped a wrong direction
-        message.style.color = "red";
-        message.innerHTML = "Wrong direction! Try again.";
+        // message.style.color = "red";
+        // message.innerHTML = "Wrong direction! Try again.";
         correctMove = false;
     }
 }
@@ -75,7 +75,7 @@ function restart(evt){
         generateMap();
         currentTile = 0;
         endOfMaze=false;
-        message.style.color = 'black';
-        message.innerHTML = "Hello again! Click on where the next tile appears to run through the maze.";
+        // message.style.color = 'black';
+        // message.innerHTML = "Hello again! Click on where the next tile appears to run through the maze.";
     }
 }

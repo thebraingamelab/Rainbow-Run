@@ -120,17 +120,17 @@ function centerTile(currentTile) { // start position: last end position
             map[j].pastDisplay(map[j + 1].relativePositionToLast);
         }
         // history before highlighted shape
-        ctx.globalAlpha = historyAlpha - dHistoryAlpha;
+        ctx.globalAlpha = historyAlpha - dHistoryAlpha - rateHistoryAlpha*(nTiles-1);
         for (; (j>=0) && (j>= currentTile-nHistory); j--){
             map[j].pastDisplay(map[j + 1].relativePositionToLast);
-            ctx.globalAlpha = historyAlpha - rateHistoryAlpha * (currentTile-1-j +1) - dHistoryAlpha;
+            ctx.globalAlpha -= rateHistoryAlpha;
         }
     }
     else {
         ctx.globalAlpha = historyAlpha - dHistoryAlpha;
         for (let i = currentTile - 1; (i >= 0) && (i >= currentTile - nHistory); i--) {
             map[i].pastDisplay(map[i + 1].relativePositionToLast);
-            ctx.globalAlpha = historyAlpha - rateHistoryAlpha * (currentTile-1-i +1) - dHistoryAlpha;
+            ctx.globalAlpha -= rateHistoryAlpha;
         }
     }
     

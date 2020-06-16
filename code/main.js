@@ -1,5 +1,5 @@
 // general / html-related
-let message;
+// let message;
 let requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 let canvas, ctx, w, h; // canvas 
 
@@ -7,8 +7,8 @@ let canvas, ctx, w, h; // canvas
 let nColors = 6; // number of colors
 let colors = [['#5ECBF2','#1D9DD2','blue'],['#FEDE68','#E9B926','yellow'],['#FB4D4B','#D60904','red'],['#2CDDAF','#168469','green'],['#FC954F','#D45A10','orange'],['#9582D2','#553BA9', 'purple']]; // [tileClr, shadowClr, colorName]
 let nTiles = 5; // number of tiles in a color sequence
-let nTurns = 1; // number of turns in a sequence; nTurns <= (nTiles-2)
-let nHistory=4; // history shown
+let nTurns = 2; // number of turns in a sequence; nTurns <= (nTiles-2)
+let nHistory=6; // history shown
 let map = [];
 let directions = ['TL', 'TR', 'BL', 'BR']; // TopLeft, TopRight, BottomLeft, BottomRight
 let endOfMaze = false;
@@ -29,17 +29,24 @@ let correctMove = false;
 let transitionSpeed = 2;
 
 
-window.onload = function init(){
-    canvas = document.querySelector("#myCanvas");
-    message = document.querySelector("#myMessage");
-    message.innerHTML = "Welcome to Rainbow Run! Click on where the next tile appears to run through the maze.";
-    w=canvas.clientWidth;
-    h=canvas.clientHeight;
-    ctx=canvas.getContext("2d");
-    startGame();
+window.onload = function(){
+    init();
     window.addEventListener("keydown", restart);
     canvas.addEventListener("click", updatePlayerPosition);
+    window.addEventListener('resize', init, false);
+    startGame();
     mainLoop();
+} 
+
+function init(){
+    canvas = document.querySelector("#myCanvas");
+    ctx=canvas.getContext("2d");
+    // message = document.querySelector("#myMessage");
+    // message.innerHTML = "Welcome to Rainbow Run! Click on where the next tile appears to run through the maze.";
+    w = window.innerWidth -5;
+    h = window.innerHeight -5;
+    ctx.canvas.width = w;
+    ctx.canvas.height = h;
 }
 
 function startGame(){
