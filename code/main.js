@@ -1,31 +1,32 @@
-//editor.autoIndent
-
+// general / html-related
+let message;
+let requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 let canvas, ctx, w, h; // canvas 
-let tileWidth, tileLength, tileHeight; // tile 
 
 // map (variables should vary for different levels in the final version)
-let nColors = 2; // number of colors
-let colors = [['#6CFFF4','#22B3AD','blue'],['#FFF680','#D7D040','yellow'],['#F98C8C','#E20242','red'],['#CCFF40','#8BC800','green'],['#FCBC68','#DE8800','orange']]; // [tileClr, shadowClr]; blue, yellow, red, green, orange
-let nTiles = 4; // number of tiles in a color sequence
+let nColors = 6; // number of colors
+let colors = [['#5ECBF2','#1D9DD2','blue'],['#FEDE68','#E9B926','yellow'],['#FB4D4B','#D60904','red'],['#2CDDAF','#168469','green'],['#FC954F','#D45A10','orange'],['#9582D2','#553BA9', 'purple']]; // [tileClr, shadowClr, colorName]
+let nTiles = 5; // number of tiles in a color sequence
 let nTurns = 1; // number of turns in a sequence; nTurns <= (nTiles-2)
-let nHistory=5; // history shown
+let nHistory=4; // history shown
 let map = [];
 let directions = ['TL', 'TR', 'BL', 'BR']; // TopLeft, TopRight, BottomLeft, BottomRight
 let endOfMaze = false;
 
 // tile
+let tileWidth, tileLength, tileHeight; // tile 
 let xDistance, yDistance; // distance between tiles
 let currentTileAlpha=1;
-let nextTileAlpha=0.4;
-let historyAlpha=0.15;
+let nextTileAlpha=0.8;
+let historyAlpha=0.5;
 let dCurrentTileAlpha = 0; // amount reduced
 let dNextTileAlpha = 0; // amount increased
+let dHistoryAlpha = 0;
+let rateHistoryAlpha = (historyAlpha-0)/(nHistory);
 
 // interaction
 let correctMove = false;
-
-let message;
-let requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+let transitionSpeed = 2;
 
 
 window.onload = function init(){
@@ -58,24 +59,30 @@ let transitionProgressY = 0; // tbe amount of transition already happened on the
 
 function mainLoop(){
 //clear area
-    ctx.clearRect(0,0,w,h);
+    //ctx.clearRect(0,0,w,h);
+
     if (correctMove===true){ // transitioning
         //playerOnTile(map[currentTile+1]);
-        if (transitionProgressY < yDistance){
+        if (transitionProgressY <= yDistance){
+            ctx.clearRect(0,0,w,h);
             proceedTransition(getOppositeDirection(map[currentTile].relativePositionToLast));
             //playerOnTile(map[currentTile+1]);
-            transitionProgressY+=2;
+            transitionProgressY+=transitionSpeed;
         }
         else{ // finished transition
+            // no clearRect here, otherwise the end of the transition will be jerky
             correctMove = false;
-            transitionProgressY=0;
-            dCurrentTileAlpha = 0;
-            dNextTileAlpha = 0;
             ctx.restore(); // 0,0
             // currentTile++;
         }
     }
     else {
+        ctx.clearRect(0,0,w,h);
+
+        transitionProgressY=0;
+        dCurrentTileAlpha = 0;
+        dNextTileAlpha = 0;
+        dHistoryAlpha = 0;
         ctx.save(); // 0,0
         ctx.save(); // 0,0
         centerTile(currentTile);

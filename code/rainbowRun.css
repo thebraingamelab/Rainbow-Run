@@ -1,11 +1,13 @@
 canvas{
     /* border: 1px solid black; */
-    background-color: #E7F4FF;
+    background-color: #DEF8FF;
     margin: 1rem;
+    padding: 1rem;
 }
 
 #myMessage{
-    text-align: center;
+    /* text-align: center; */
+    margin-left: 2rem;
     font-family: 'overpass';
     font-size: 18px;
 }
