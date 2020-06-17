@@ -73,7 +73,7 @@ function mainLoop(){
     if (correctMove===true){ // transitioning
         //playerOnTile(map[currentTile+1]);
         if (transitionProgressY <= yDistance){
-            ctx.clearRect(0,0,w,h);
+            ctx.clearRect(0-xDistance,0-yDistance,w+xDistance*2,h+yDistance*2);
             proceedTransition(getOppositeDirection(map[currentTile].relativePositionToLast));
             //playerOnTile(map[currentTile+1]);
             transitionProgressY+=transitionSpeed;
