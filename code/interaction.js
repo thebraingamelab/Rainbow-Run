@@ -24,10 +24,10 @@ function getInteractionArea(evt) {
     let rect = canvas.getBoundingClientRect();
     let mousePosX = evt.clientX - rect.left;
     let mousePosY = evt.clientY - rect.top;
-    if ((mousePosX < w / 2 - tileHeight) && (mousePosY < h / 2 - tileHeight)) return 'TL';
-    else if ((mousePosX < w / 2 - tileHeight) && (mousePosY > h / 2 + tileHeight)) return 'BL';
-    else if ((mousePosX > w / 2 + tileHeight) && (mousePosY < h / 2 - tileHeight)) return 'TR';
-    else if ((mousePosX > w / 2 + tileHeight) && (mousePosY > h / 2 + tileHeight)) return 'BR';
+    if ((mousePosX < w / 2) && (mousePosY < h / 2 )) return 'TL';
+    else if ((mousePosX < w / 2) && (mousePosY > h / 2 )) return 'BL';
+    else if ((mousePosX > w / 2) && (mousePosY < h / 2 )) return 'TR';
+    else if ((mousePosX > w / 2) && (mousePosY > h / 2 )) return 'BR';
 }
 
 function proceedTransition(transitionDirection) {
