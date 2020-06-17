@@ -26,7 +26,7 @@ let rateHistoryAlpha = (historyAlpha-0)/(nHistory);
 
 // interaction
 let correctMove = false;
-let transitionSpeed = 2;
+let transitionSpeed;
 
 
 window.onload = function(){
@@ -52,8 +52,10 @@ function init(){
 function startGame(){
     // set up variables
     tileWidth = w/6; 
+    console.log(tileWidth);
     tileLength = tileWidth/1.5;
     tileHeight = tileLength/5;
+    transitionSpeed = tileWidth / 40;
     xDistance = tileWidth/2 + tileHeight*1.5; // distance from the last tile on x-axis
     yDistance = tileHeight + tileLength/2; // distance from the last tile on y-axis
     // map
