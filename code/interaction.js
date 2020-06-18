@@ -8,6 +8,8 @@ function updatePlayerPosition(evt) {
         //playerOnTile(map[currentTile+1]);
         correctMove = true;
         currentTile++;
+        if (sinceClrStarted===nTiles) sinceClrStarted=0;
+        if (map[currentTile].tileClr !== '#B1BCCA') sinceClrStarted++;
         if (currentTile === map.length - 1) {
             // message.innerHTML = "You have reached the end! Press R to restart.";
             endOfMaze=true;
@@ -33,7 +35,7 @@ function getInteractionArea(evt) {
 function proceedTransition(transitionDirection) {
     let xPerY = xDistance / yDistance; // for every transition of 1 on y-axis, transition of xPerY on x-axis
     let change = Math.min(transitionProgressY/yDistance, 1);
-    if ((currentTile-1+1)%nTiles == 0) {
+    if (sinceClrStarted === nTiles) {
         dCurrentTileAlpha = 0; // highlighting the shape
         dHistoryAlpha = 0;
     }

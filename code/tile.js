@@ -1,12 +1,12 @@
 
 class Tile {
-    constructor(tileClr, shadowClr) {
+    constructor(tileClr, shadowClr, relativePositionToLast) {
         this.x = 0;
         this.y = 0;
-        this.relativePositionToLast; // relative position to the last tile
-        //this.relativePositionToNext; // relative position to the next tile
         this.tileClr = tileClr;
         this.shadowClr = shadowClr;
+        this.relativePositionToLast = relativePositionToLast; // relative position to the last tile
+        //this.relativePositionToNext; // relative position to the next tile
     }
 
     currentDisplay() { // when the tile is where the player currently is, position it in the middle
@@ -62,6 +62,7 @@ class Tile {
         ctx.lineTo(this.x + tileWidth / 2, this.y);
         ctx.lineTo(this.x, this.y + tileLength / 2);
         ctx.closePath();
+
         ctx.fill();
 
         ctx.fillStyle = this.shadowClr;
@@ -112,11 +113,11 @@ function centerTile(currentTile) { // start position: last end position
 
     // history
     // highlighting the shape if completing a sequence
-    if ((currentTile + 1) % nTiles == 0) {
+    if (sinceClrStarted === nTiles) {
         ctx.globalAlpha = 1;
         // highlighted shape
         let j = currentTile-1;
-        for (; j > currentTile - nTiles; j--) {
+        for (; (j>=0) && (j > currentTile - nTiles); j--) {
             map[j].pastDisplay(map[j + 1].relativePositionToLast);
         }
         // history before highlighted shape
@@ -142,6 +143,7 @@ function centerTile(currentTile) { // start position: last end position
         ctx.globalAlpha = nextTileAlpha + dNextTileAlpha;
         map[currentTile + 1].nextDisplay();
     }
-
+    
     ctx.restore(); // currentTile position
+
 } // end position: currentTile position
