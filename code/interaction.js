@@ -20,6 +20,7 @@ function updatePlayerPosition(evt) {
         // message.innerHTML = "Wrong direction! Try again.";
         correctMove = false;
     }
+    console.log(currentTile);
 }
 
 function getInteractionArea(evt) {
@@ -45,22 +46,24 @@ function proceedTransition(transitionDirection) {
     }
     dNextTileAlpha = change*(currentTileAlpha-nextTileAlpha);
 
+    let centered = currentTile-1; // animate around the last tile -> smoother transition
+
     switch (transitionDirection) {
         case 'TL':
             ctx.translate(-xPerY * transitionSpeed, -transitionSpeed);
-            centerTile(currentTile-1);
+            centerTile(centered);
             break;
         case 'TR':
             ctx.translate(xPerY * transitionSpeed, -transitionSpeed);
-            centerTile(currentTile-1);
+            centerTile(centered);
             break;
         case 'BL':
             ctx.translate(-xPerY * transitionSpeed, transitionSpeed);
-            centerTile(currentTile-1);
+            centerTile(centered);
             break;
         case 'BR':
             ctx.translate(xPerY * transitionSpeed, transitionSpeed);
-            centerTile(currentTile-1);
+            centerTile(centered);
             break;
     }
     ctx.translate(-w / 2, -h / 2); // cancel the translate(w/2,h/2) in centerTile() function
