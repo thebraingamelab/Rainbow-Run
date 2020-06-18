@@ -111,39 +111,46 @@ function centerTile(cur) { // start position: last end position
     ctx.save(); // currentTile position
     ctx.save(); // currentTile position
 
+    let j;
+    let lastHighlight;
+    let lastHistory;
+
+    if (cur !== currentTile){
+        lastHighlight=cur-nTiles+1;
+        lastHistory = cur-nHistory+1;
+    }
+    else {
+        lastHighlight = cur-nTiles;
+        lastHistory =  cur - nHistory;
+    }
+
     // history
     // highlighting the shape if completing a sequence
     if (sinceClrStarted === nTiles) {
         ctx.save(); // currentTile position
 
-        let j;
-        let n;
-
-        if (cur !== currentTile) n=cur-nTiles+1;
-        else n = cur-nTiles;
-
         // highlighted shape        
         ctx.globalAlpha = 1;
-        for (j = cur - 1; (j >= 0) && (j > n); j--) {
+        for (j = cur - 1; (j >= 0) && (j > lastHighlight); j--) {
             map[j].pastDisplay(map[j + 1].relativePositionToLast);
         }
         // history before highlighted shape
         ctx.globalAlpha = historyAlpha - dHistoryAlpha - rateHistoryAlpha * (nTiles - 1);
-        for (j = n; (j >= 0) && (j >= cur - nHistory); j--) {
+        for (j = lastHighlight; (j >= 0) && (j >= lastHistory); j--) {
             map[j].pastDisplay(map[j + 1].relativePositionToLast);
             ctx.globalAlpha -= rateHistoryAlpha;
         }
         ctx.restore(); // currentTile position
         // highlighted shape
         ctx.globalAlpha = 1;
-        for (j = cur - 1; (j >= 0) && (j > n); j--) {
+        for (j = cur - 1; (j >= 0) && (j > lastHighlight); j--) {
             map[j].pastDisplay(map[j + 1].relativePositionToLast);
         }
 
     }
     else {
         ctx.globalAlpha = historyAlpha - dHistoryAlpha;
-        for (let i = cur - 1; (i >= 0) && (i >= cur - nHistory); i--) {
+        for (let i = cur - 1; (i >= 0) && (i >= lastHistory); i--) {
             map[i].pastDisplay(map[i + 1].relativePositionToLast);
             ctx.globalAlpha -= rateHistoryAlpha;
         }

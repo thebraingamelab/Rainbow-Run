@@ -7,10 +7,10 @@ let canvas, ctx, w, h; // canvas
 let nColors = 3; // number of colors >=2; <nColorsUpperLimit
 let colors = [['#5ECBF2', '#1D9DD2', 'blue'], ['#FEDE68', '#E9B926', 'yellow'], ['#FB4D4B', '#D60904', 'red'], ['#2CDDAF', '#168469', 'green'], ['#FC954F', '#D45A10', 'orange'], ['#9582D2', '#553BA9', 'purple']];
 // [tileClr, shadowClr, colorName, colorSegments ( [i,'d'] - for tiles until i, their directions are 'd'; e.g. [[1,'TL'],[3,'BL']])]
-let nTimes = 4; // number of times each color sequence appears
+let nTimes = 3; // number of times each color sequence appears
 let nTiles = 3; // number of tiles in a color sequence
 let nTurns = 0; // number of turns in a sequence; nTurns <= (nTiles-2)
-let nHistory = 6; // history shown
+let nHistory = 4; // history shown
 let map = [];
 let directions = ['TL', 'TR', 'BL', 'BR']; // TopLeft, TopRight, BottomLeft, BottomRight
 let endOfMaze = false;
