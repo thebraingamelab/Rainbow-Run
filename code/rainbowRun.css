@@ -16,3 +16,8 @@ body, html {
     margin: 0;
     overflow: hidden;
 }
+
+#life{
+    width: 56;
+    height: 48;
+}

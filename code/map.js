@@ -17,7 +17,7 @@ function colorOrder() {
         for (let j = 0; j < nTimes; j++) randomOrder.push(i); // the color's counter in the colors[] array
     }
     shuffle(randomOrder);
-    let lastClr = -1;
+    let lastClr = false;
     for (let k = 0; k < randomOrder.length; k++) {
         let curClr = randomOrder[k];
         if (curClr === lastClr) order.push('grey'); // if a color is repeating itself immediately after the last occurance, add a random grey sequence
@@ -165,13 +165,13 @@ function buildMap() {
 }
 
 function addGreySequence() {
-    let nGreyTiles;
+    let nGreyTiles = nTiles;
     let nGreyTurns;
     let control = true;
     do {
-        nGreyTiles = Math.floor(Math.random() * 4) + 3; //[3,6]
+        //nGreyTiles = Math.floor(Math.random() * 4) + 3; //[3,6]
         nGreyTurns = Math.max(Math.floor(Math.random() * nGreyTiles) - 1, 1); //[0, nGreyTiles-2]
-        if ((nGreyTiles === nTiles) && (nGreyTurns === nTurns)) control = false;
+        //if ((nGreyTiles === nTiles) && (nGreyTurns === nTurns)) control = false;
     }
     while (!control);
 
