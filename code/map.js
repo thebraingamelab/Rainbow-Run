@@ -3,7 +3,6 @@ let order =[];
 function generateMap() {
     colorOrder();
     colorShape();
-    map = [];
     buildMap();
 }
 

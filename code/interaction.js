@@ -1,8 +1,11 @@
 
 function updatePlayerPosition(evt) {
     let playerMove = getInteractionArea(evt);
-    if (endOfMaze) { }
-    else if (playerMove === map[currentTile + 1].relativePositionToLast) {
+    if (currentTile === map.length-1) {
+        // message.innerHTML = "You have reached the end! Press R to restart.";
+        restart();
+    }
+    if (playerMove === map[currentTile + 1].relativePositionToLast) {
         // message.style.color = "black";
         // message.innerHTML = "Nice move!";
         //playerOnTile(map[currentTile+1]);
@@ -10,29 +13,27 @@ function updatePlayerPosition(evt) {
         proceed = true;
         moves.push(true);
         currentTile++;
+        if (currentTile === map.length-1) endOfMaze = true;
+        currentCollapsing = currentCollapsingThreshold*0.95;
         if (sinceClrStarted === nTiles) {
             sinceClrStarted = 0;
         }
         if (map[currentTile].tileClr !== '#B1BCCA') sinceClrStarted++;
-        if (sinceClrStarted ===nTiles){
+        if (sinceClrStarted === nTiles) {
             // only extra life when the sequence was accurately completed
             // an array to record the moves
             let accurateSequence = true;
-            for (let i=currentTile; i>currentTile-nTiles; i--){
+            for (let i = currentTile; i > currentTile - nTiles; i--) {
                 let curMove = moves[i];
-                if(curMove===false){
+                if (curMove === false) {
                     accurateSequence = false;
                     break;
                 }
             }
-            if(accurateSequence){
+            if (accurateSequence) {
                 lifeLeft++;
                 lifeLeft = Math.min(lifeLeft, lifeMax);
             }
-        }
-        if (currentTile === map.length - 1) {
-            // message.innerHTML = "You have reached the end! Press R to restart.";
-            endOfMaze = true;
         }
     }
     else { // the player tapped a wrong direction
@@ -41,7 +42,7 @@ function updatePlayerPosition(evt) {
         mistake = true;
         moves.push(false);
         lifeLeft--;
-        if (lifeLeft === 0) end = true;
+        if (lifeLeft === 0) restart();
     }
     console.log(currentTile);
 }
@@ -61,11 +62,11 @@ function proceedTransition(transitionDirection) {
     let change = Math.min(transitionProgressY / yDistance, 1);
     if (sinceClrStarted === nTiles) {
         dCurrentTileAlpha = 0; // highlighting the shape
-        dHistoryAlpha = 0;
+        // dHistoryAlpha = 0;
     }
     else {
         dCurrentTileAlpha = change * (currentTileAlpha - historyAlpha);
-        dHistoryAlpha = change * (rateHistoryAlpha);
+        // dHistoryAlpha = change * (rateHistoryAlpha);
     }
     //dNextTileAlpha = change * (currentTileAlpha - nextTileAlpha);
 
@@ -99,13 +100,6 @@ function playerOnTile(tile) {
     ctx.fillRect(tile.x - playerSize / 2, tile.y - playerSize / 2, playerSize, playerSize);
 }
 
-function restart(evt) {
-    if (evt.key == 'r') {
-        generateMap();
-        currentTile = 0;
-        endOfMaze = false;
-        sinceClrStarted =1;
-        // message.style.color = 'black';
-        // message.innerHTML = "Hello again! Click on where the next tile appears to run through the maze.";
-    }
+function restart() {
+    location.reload();
 }

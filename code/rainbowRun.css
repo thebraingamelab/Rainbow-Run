@@ -17,7 +17,9 @@ body, html {
     overflow: hidden;
 }
 
-#life{
-    width: 56;
-    height: 48;
+.life{
+    position: absolute;
+    right: 2rem;
+    top: 2rem;
+    display: none;
 }
