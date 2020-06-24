@@ -37,7 +37,7 @@ let disappearingTiles = []; // {tile (tile's counter -  from the last history sh
 let alphaThreshold = 0.3;
 let disappearingSpeed = 0.003; // in terms of globalAlpha
 // let collapseThreshold = 0.1;
-let collapsingInterval = 1500; // in ms
+let collapsingInterval = 1000; // in ms
 let collapsingSpeed = disappearingSpeed*3;
 
 // interaction
