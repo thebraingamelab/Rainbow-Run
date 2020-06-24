@@ -110,20 +110,21 @@ let shownTiles = []; // {xOffset, yOffset}
 function centerTile(cur) { // start position: last end position
     shownTiles = [];
 
-    //current tile
-    ctx.globalAlpha = currentTileAlpha - dCurrentTileAlpha;
-    map[cur].currentDisplay();
+    // store currentTile position. currentTile displayed at the last to make sure it's the foremost tile.
     offsets = { x: 0, y: 0 };
     shownTiles.push(offsets);
+    ctx.translate(w / 2, h / 2);
     ctx.save(); // currentTile position
     ctx.save(); // currentTile position
 
     // history
     disappearHistory();
+
     ctx.restore();  // currentTile position
+
     // highlight
+    ctx.save();
     let lastHighlight;
-    //let lastHistory;
     // check if transition
     if (cur !== currentTile) {
         lastHighlight = cur - nTiles + 1;
@@ -136,11 +137,7 @@ function centerTile(cur) { // start position: last end position
     if (sinceClrStarted === nTiles) {
         highlight(cur, lastHighlight)
     }
-    // else {
-    //     for (let i = cur; (i > cur - nTiles) && (i >= 0); i--) {
-    //         map[i].highlighted = false;
-    //     }
-    // }
+    ctx.restore();
 
     // next tile
     // delay time
@@ -160,24 +157,12 @@ function centerTile(cur) { // start position: last end position
 
     ctx.restore(); // currentTile position
 
-} // end position: currentTile position
+    ctx.translate(-w/2,-h/2);
+    //current tile
+    ctx.globalAlpha = currentTileAlpha - dCurrentTileAlpha;
+    map[cur].currentDisplay();
 
-// function showHistory(cur) {
-//     for (let i = cur - 1; (i >= 0); i--) {
-//         offsets = getOffsets(getOppositeDirection(map[i + 1].relativePositionToLast));
-//         if (checkOverlap(cur) !== false) {
-//             let originalAlpha = ctx.globalAlpha;
-//             ctx.globalAlpha = 0;
-//             map[i].pastDisplay(map[i + 1].relativePositionToLast);
-//             ctx.globalAlpha = originalAlpha - rateHistoryAlpha;
-//         }
-//         else {
-//             map[i].pastDisplay(map[i + 1].relativePositionToLast);
-//             ctx.globalAlpha -= rateHistoryAlpha;
-//         }
-//         shownTiles.push(offsets);
-//     }
-// }
+} // end position: currentTile position
 
 function disappearHistory() {
     for (let i = disappearingTiles.length - 1; i >= 0; i--) { // from cur to past
@@ -185,9 +170,23 @@ function disappearHistory() {
         let tileCounter = disappearingTiles[i].tile;
         disappearingTiles[i].alpha -= disappearingSpeed;
 
+        // collapse
+        if (disappearingTiles[i].alpha <= collapseThreshold) {
+            map[tileCounter].collapsed = true;
+            map[tileCounter].collapseY += 5;
+            map[tileCounter].y = map[tileCounter].collapseY;
+            disappearingTiles[i].alpha -= collapsingSpeed;
+        }
+
+        // remove disappeared tile
+        if (map[tileCounter].y > h / 2) {
+            map[tileCounter].disappeared = true;
+            disappearingTiles.splice(i, 1);
+            continue;
+        }
 
         // display if not overlapping
-        offsets = getOffsets(getOppositeDirection(map[tileCounter + 1].relativePositionToLast));
+        offsets = getOffsets(tileCounter, getOppositeDirection(map[tileCounter + 1].relativePositionToLast));
         if (checkOverlap(tileCounter) !== false) {
             ctx.globalAlpha = 0;
             map[tileCounter].pastDisplay(map[tileCounter + 1].relativePositionToLast);
@@ -196,89 +195,39 @@ function disappearHistory() {
             let tileAlpha = disappearingTiles[i].alpha;
             ctx.globalAlpha = Math.max(tileAlpha, 0);
             map[tileCounter].pastDisplay(map[tileCounter + 1].relativePositionToLast);
-
         }
-
-        // collapse
-        if (disappearingTiles[i].alpha <= collapseThreshold) {
-            collapse(i, tileCounter);
-        }
-
-        if (map[tileCounter].y > h / 2) {
-            map[tileCounter].disappeared = true;
-            disappearingTiles.splice(i, 1);
-            continue;
-        }
-        // // remove invisible tiles
-        // if (map[tileCounter].y>h/2) {
-        //     //disappearingTiles.splice(i, 1);
-        //     map[tileCounter].y=0;
-        //     //i++;
-        // }
+        shownTiles.push(offsets);
     }
-}
-
-// loop through collapsing[] and call this function
-function collapse(i, tileCounter) { // drop down the tile
-    map[tileCounter].collapsed = true;
-    map[tileCounter].collapseY += 5;
-    //if (map[tileCounter].highlighted) map[tileCounter].collapsedDuringHighlight = true;
-    // else map[tileCounter].y = map[tileCounter].collapseY;
-    map[tileCounter].y = map[tileCounter].collapseY;
-    disappearingTiles[i].alpha -= collapsingSpeed;
 }
 
 
 function highlight(cur, lastHighlight) {
-    ctx.save(); // currentTile position
-
-    let j;
-    // highlighted shape    
-    for (j = cur - 1; (j >= 0) && (j > lastHighlight); j--) {
+    // store highlighted shape position to ensure foremost priority
+    ctx.globalAlpha=0;
+    for (let i = cur - 1; (i > Math.max(-1, lastHighlight)); i--) {
+        map[i].pastDisplay(map[i + 1].relativePositionToLast);
+    }
+    // display highlighted shape
+    for (let j = Math.max(lastHighlight+1,0); j<=cur-1; j++){
         if (map[j].collapsed) ctx.save();
         if (map[j].disappeared) ctx.globalAlpha = 0;
-        else {
-            ctx.globalAlpha = 1;
-        }
-        //map[j].highlighted = true;
-        map[j].pastDisplay(map[j + 1].relativePositionToLast);
+        else ctx.globalAlpha = 1;
+
+        if (j===Math.max(lastHighlight+1,0)) map[j].display();
+        else map[j].nextDisplay();
 
         if (map[j].collapsed) {
             ctx.restore();
             ctx.globalAlpha = 0.3;
             let collapsedHighlightTile = map[j];
             collapsedHighlightTile.y = 0;
-            collapsedHighlightTile.pastDisplay(map[j + 1].relativePositionToLast);
+            if (j===Math.max(lastHighlight+1,0)) collapsedHighlightTile.display();
+            else collapsedHighlightTile.nextDisplay();
         }
 
-        offsets = getOffsets(getOppositeDirection(map[j + 1].relativePositionToLast));
+        offsets = getOffsets(j, getOppositeDirection(map[j + 1].relativePositionToLast));
         shownTiles.push(offsets);
     }
-    ctx.restore(); // currentTile position
-
-    // history before highlighted shape
-    // ctx.globalAlpha = historyAlpha - dHistoryAlpha - rateHistoryAlpha * (nTiles - 1);
-    // showHistory(lastHighlight + 1, lastHistory);
-    // for (j = lastHighlight; (j >= 0) && (j >= lastHistory); j--) {
-    //     offsets = getOffsets(getOppositeDirection(map[j + 1].relativePositionToLast));
-    //     if (checkOverlap(cur) !== false) {
-    //         let originalAlpha = ctx.globalAlpha;
-    //         ctx.globalAlpha = 0;
-    //         map[j].pastDisplay(map[j + 1].relativePositionToLast);
-    //         ctx.globalAlpha = originalAlpha - rateHistoryAlpha;
-    //     }
-    //     else {
-    //         shownTiles.push(offsets);
-    //         map[j].pastDisplay(map[j + 1].relativePositionToLast);
-    //         ctx.globalAlpha -= rateHistoryAlpha;
-    //     }
-    // }
-    // ctx.restore(); // currentTile position
-    // // highlighted shape
-    // ctx.globalAlpha = 1;
-    // for (j = cur - 1; (j >= 0) && (j > lastHighlight); j--) {
-    //     map[j].pastDisplay(map[j + 1].relativePositionToLast);
-    // }
 }
 
 
@@ -294,15 +243,16 @@ function checkOverlap(cur) {
     return false;
 }
 
-function getOffsets(relativePositionToLast) {
+function getOffsets(tileCounter, relativePositionToLast) {
+    let collapsedY = map[tileCounter].collapseY;
     switch (relativePositionToLast) {
         case 'TL':
-            return { x: offsets.x - xDistance, y: offsets.y - yDistance };
+            return { x: offsets.x - xDistance, y: offsets.y + collapsedY - yDistance };
         case 'TR':
-            return { x: offsets.x + xDistance, y: offsets.y - yDistance };
+            return { x: offsets.x + xDistance, y: offsets.y + collapsedY - yDistance };
         case 'BL':
-            return { x: offsets.x - xDistance, y: offsets.y + yDistance };
+            return { x: offsets.x - xDistance, y: offsets.y + collapsedY + yDistance };
         case 'BR':
-            return { x: offsets.x + xDistance, y: offsets.y + yDistance };
+            return { x: offsets.x + xDistance, y: offsets.y + collapsedY + yDistance };
     }
 }

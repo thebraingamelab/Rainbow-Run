@@ -35,8 +35,8 @@ let nextTileDelayTime = 20;
 let delayed = 0;
 let disappearingTiles = []; // {tile (tile's counter -  from the last history shown to cur-1), alpha]
 let disappearThreshold = 0.05;
-let disappearingSpeed = 0.0015; // in terms of globalAlpha
-let collapseThreshold = 0.1;
+let disappearingSpeed = 0.0005; // in terms of globalAlpha
+let collapseThreshold = 0.2;
 let collapsingSpeed = disappearingSpeed / 10; // in terms of globalAlpha
 
 // interaction
@@ -90,7 +90,7 @@ function init() {
 
 function startGame() {
     // set up variables
-    tileWidth = w / (nHistory + 1);
+    tileWidth = Math.max(w,h) / (nHistory + 1);
     console.log(tileWidth);
     tileLength = tileWidth / 1.5;
     tileHeight = tileLength / 5;
@@ -113,6 +113,8 @@ function startGame() {
 function mainLoop() {
     //clear area
     //ctx.clearRect(0,0,w,h);
+
+    if (lifeLeft === 0) restart();
     if (proceed === true) { // transitioning
         //playerOnTile(map[currentTile+1]);
         if (transitionProgressY <= yDistance) {
@@ -181,11 +183,10 @@ function drawGrid() {
 
             // tile left
             ctx.beginPath();
-            ctx.moveTo(wid - tileWidth / 2, hei);
+            ctx.moveTo(wid, hei+tileLength/2);
+            ctx.lineTo(wid - tileWidth / 2, hei);
             ctx.lineTo(wid - tileWidth / 2, hei + tileHeight);
             ctx.lineTo(wid, hei + tileLength / 2 + tileHeight);
-            ctx.lineTo(wid, hei + tileLength / 2);
-            ctx.closePath();
             ctx.stroke();
 
             // tile right
@@ -209,11 +210,10 @@ function drawGrid() {
 
             // tile left
             ctx.beginPath();
-            ctx.moveTo(wid - tileWidth / 2, hei);
+            ctx.moveTo(wid, hei+tileLength/2);
+            ctx.lineTo(wid - tileWidth / 2, hei);
             ctx.lineTo(wid - tileWidth / 2, hei + tileHeight);
             ctx.lineTo(wid, hei + tileLength / 2 + tileHeight);
-            ctx.lineTo(wid, hei + tileLength / 2);
-            ctx.closePath();
             ctx.stroke();
 
             // tile right

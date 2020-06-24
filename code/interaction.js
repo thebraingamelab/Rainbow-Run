@@ -42,7 +42,6 @@ function updatePlayerPosition(evt) {
         mistake = true;
         moves.push(false);
         lifeLeft--;
-        if (lifeLeft === 0) restart();
     }
     console.log(currentTile);
 }
