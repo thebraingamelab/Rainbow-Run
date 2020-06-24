@@ -34,10 +34,11 @@ let currentTile = 0;
 let nextTileDelayTime = 20;
 let delayed = 0;
 let disappearingTiles = []; // {tile (tile's counter -  from the last history shown to cur-1), alpha]
-let disappearThreshold = 0.03;
+let alphaThreshold = 0.3;
 let disappearingSpeed = 0.003; // in terms of globalAlpha
-let collapseThreshold = 0.1;
-let collapsingSpeed = disappearingSpeed / 10; // in terms of globalAlpha
+// let collapseThreshold = 0.1;
+let collapsingInterval = 1500; // in ms
+let collapsingSpeed = disappearingSpeed*3;
 
 // interaction
 let transitionProgressY = 0; // tbe amount of transition already happened on the y-axis
@@ -66,6 +67,7 @@ window.onload = function () {
     canvas.addEventListener("click", updatePlayerPosition);
     window.addEventListener('resize', init, false);
     startGame();
+    setInterval(collapse, collapsingInterval);
     mainLoop();
 }
 
@@ -83,6 +85,7 @@ function init() {
 
     shuffle(colors);
 
+    //life
     let lifeImgs = document.getElementsByClassName("life");
     lifeImgWidth = Math.min(w,h)/12;
     for (let i=0; i<lifeImgs.length; i++){
@@ -153,14 +156,14 @@ function mainLoop() {
         ctx.save(); // 0,0
         ctx.save(); // 0,0
 
-        if ((currentTile > nTiles - 1) && (disappearingTiles.length === 0) && (!endOfMaze)) {
-            currentCollapsing++;
-            if (currentCollapsing >= currentCollapsingThreshold) {
-                mistake = true;
-                lifeLeft--;
-                currentCollapsing = 0;
-            }
-        }
+        // if ((currentTile > nTiles - 1) && (disappearingTiles.length === 0) && (!endOfMaze)) {
+        //     currentCollapsing++;
+        //     if (currentCollapsing >= currentCollapsingThreshold) {
+        //         mistake = true;
+        //         lifeLeft--;
+        //         currentCollapsing = 0;
+        //     }
+        // }
 
         centerTile(currentTile);
         playerOnTile(map[currentTile]);

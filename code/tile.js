@@ -157,7 +157,7 @@ function centerTile(cur) { // start position: last end position
 
     ctx.restore(); // currentTile position
 
-    ctx.translate(-w/2,-h/2);
+    ctx.translate(-w / 2, -h / 2);
     //current tile
     ctx.globalAlpha = currentTileAlpha - dCurrentTileAlpha;
     map[cur].currentDisplay();
@@ -168,18 +168,18 @@ function disappearHistory() {
     for (let i = disappearingTiles.length - 1; i >= 0; i--) { // from cur to past
 
         let tileCounter = disappearingTiles[i].tile;
-        disappearingTiles[i].alpha -= disappearingSpeed;
+        if (!map[tileCounter].collapsed) disappearingTiles[i].alpha = Math.max(alphaThreshold, disappearingTiles[i].alpha-disappearingSpeed);
+        else disappearingTiles[i].alpha -= disappearingSpeed;
 
         // collapse
-        if (disappearingTiles[i].alpha <= collapseThreshold) {
-            map[tileCounter].collapsed = true;
+        if (map[tileCounter].collapsed) {        
             map[tileCounter].collapseY += 5;
             map[tileCounter].y = map[tileCounter].collapseY;
             disappearingTiles[i].alpha -= collapsingSpeed;
         }
 
         // remove disappeared tile
-        if (map[tileCounter].y > h / 2) {
+        if (map[tileCounter].y > h / 2 + tileHeight) {
             map[tileCounter].disappeared = true;
             disappearingTiles.splice(i, 1);
             continue;
@@ -203,25 +203,25 @@ function disappearHistory() {
 
 function highlight(cur, lastHighlight) {
     // store highlighted shape position to ensure foremost priority
-    ctx.globalAlpha=0;
+    ctx.globalAlpha = 0;
     for (let i = cur - 1; (i > Math.max(-1, lastHighlight)); i--) {
         map[i].pastDisplay(map[i + 1].relativePositionToLast);
     }
     // display highlighted shape
-    for (let j = Math.max(lastHighlight+1,0); j<=cur-1; j++){
+    for (let j = Math.max(lastHighlight + 1, 0); j <= cur - 1; j++) {
         if (map[j].collapsed) ctx.save();
         if (map[j].disappeared) ctx.globalAlpha = 0;
         else ctx.globalAlpha = 1;
 
-        if (j===Math.max(lastHighlight+1,0)) map[j].display();
+        if (j === Math.max(lastHighlight + 1, 0)) map[j].display();
         else map[j].nextDisplay();
 
         if (map[j].collapsed) {
             ctx.restore();
-            ctx.globalAlpha = 0.3;
+            ctx.globalAlpha = alphaThreshold;
             let collapsedHighlightTile = map[j];
             collapsedHighlightTile.y = 0;
-            if (j===Math.max(lastHighlight+1,0)) collapsedHighlightTile.display();
+            if (j === Math.max(lastHighlight + 1, 0)) collapsedHighlightTile.display();
             else collapsedHighlightTile.nextDisplay();
         }
 
