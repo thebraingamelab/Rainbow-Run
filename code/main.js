@@ -95,7 +95,7 @@ function startGame() {
     shuffle(colors);
 
     // set mode
-    mode = 'ARROW';
+    mode = 'GRIDARROW';
 
     // set up variables
     tileWidth = Math.max(w, h) / (nHistory + 1);
@@ -115,7 +115,7 @@ function startGame() {
     }
 
     //arrow
-    if (mode === 'ARROW') {
+    if ((mode === 'ARROW') || (mode === 'GRIDARROW')) {
         let arrowImgs = document.getElementsByClassName("arrow");
         arrowImgWidth = tileWidth / 1.5;
         for (let i = 0; i < arrowImgs.length; i++) {
@@ -172,17 +172,4 @@ function mainLoop() {
     }
 
     requestAnimationFrame(mainLoop);
-}
-
-function modeFeature(mode) {
-    switch (mode) {
-        case 'GRID':
-            drawGrid();
-            break;
-        case 'ARROW':
-            drawArrows();
-            break;
-        case 'CLEAN':
-            break;
-    }
 }

@@ -150,9 +150,12 @@ function centerTile(cur) { // start position: last end position
         delayed++;
     }
     // mistake shake + next tile
-    if (mistake & !proceed) preShake();
+    if (mistake & !proceed) {
+        preShake();
+        ctx.globalAlpha =1;
+    }
+    else ctx.globalAlpha = curNextTileAlpha;
     if (cur !== map.length - 1) {
-        ctx.globalAlpha = curNextTileAlpha;
         map[cur + 1].nextDisplay();
     }
     if (mistake & !proceed) postShake();

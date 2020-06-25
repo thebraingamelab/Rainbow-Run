@@ -1,3 +1,20 @@
+function modeFeature(mode) {
+    switch (mode) {
+        case 'GRID':
+            drawGrid();
+            break;
+        case 'ARROW':
+            drawArrows();
+            break;
+        case 'GRIDARROW':
+            drawGrid();
+            drawArrows();
+            break;
+        case 'CLEAN':
+            break;
+    }
+}
+
 function drawGrid() {
     let nTileOnEachSide = Math.floor(Math.max(w, h) / tileWidth / 2) + 1;
     ctx.save();
@@ -65,20 +82,20 @@ function drawArrows() {
         let distanceAdjustment = 1.2;
         switch (arrowDirection) {
             case 'TL':
-                arrows[i].style.top = h / 2 - tileLength *distanceAdjustment + "px";
-                arrows[i].style.left = w / 2 - tileWidth*distanceAdjustment + "px";
+                arrows[i].style.top = h / 2 - tileLength * distanceAdjustment + "px";
+                arrows[i].style.left = w / 2 - tileWidth * distanceAdjustment + "px";
                 break;
             case 'TR':
-                arrows[i].style.top = h / 2 - tileLength *distanceAdjustment + "px";
-                arrows[i].style.right = w / 2 - tileWidth*distanceAdjustment + "px";
+                arrows[i].style.top = h / 2 - tileLength * distanceAdjustment + "px";
+                arrows[i].style.right = w / 2 - tileWidth * distanceAdjustment + "px";
                 break;
             case 'BL':
-                arrows[i].style.bottom = h / 2 - tileLength *distanceAdjustment-tileHeight*0.5 + "px";
-                arrows[i].style.left = w / 2 - tileWidth*distanceAdjustment - tileHeight*0.5 + "px";
+                arrows[i].style.bottom = h / 2 - tileLength * distanceAdjustment - tileHeight * 0.5 + "px";
+                arrows[i].style.left = w / 2 - tileWidth * distanceAdjustment - tileHeight * 0.5 + "px";
                 break;
             case 'BR':
-                arrows[i].style.bottom = h / 2 - tileLength *distanceAdjustment-tileHeight*0.5 + "px";
-                arrows[i].style.right = w / 2 - tileWidth*distanceAdjustment -tileHeight*0.5 + "px";
+                arrows[i].style.bottom = h / 2 - tileLength * distanceAdjustment - tileHeight * 0.5 + "px";
+                arrows[i].style.right = w / 2 - tileWidth * distanceAdjustment - tileHeight * 0.5 + "px";
                 break;
         }
     }
