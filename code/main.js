@@ -140,21 +140,18 @@ function mainLoop() {
         if (transitionProgressY <= yDistance) {
             ctx.clearRect(0 - xDistance, 0 - yDistance, w + xDistance * 2, h + yDistance * 2);
             modeFeature(mode);
-
-            //displayLife();
             transitionProgressY += transitionSpeed;
             proceedTransition(getOppositeDirection(map[currentTile].relativePositionToLast));
-            //playerOnTile(map[currentTile+1]);
         }
+        // note: this else block will NOT execute if the player moves before the transition completes
         else { // just finished transition
             // no clearRect here, otherwise the end of the transition will be jerky
+            transitionProgressY = 0;
             proceed = false;
             delayed = 0;
             curNextTileAlpha = 0;
             disappearingTiles.push({ tile: currentTile - 1, alpha: historyAlpha });
-            //if (map[currentTile].tileClr !== '#B1BCCA') sinceClrStarted++;
             ctx.restore(); // 0,0
-            // currentTile++;
         }
     }
     else {
@@ -164,22 +161,10 @@ function mainLoop() {
 
         displayLife();
 
-        transitionProgressY = 0;
         dCurrentTileAlpha = 0;
-        // dHistoryAlpha = 0;
-        //dNextTileAlpha=0;
         ctx.save(); // 0,0
         ctx.save(); // 0,0
         ctx.save(); // 0,0
-
-        // if ((currentTile > nTiles - 1) && (disappearingTiles.length === 0) && (!endOfMaze)) {
-        //     currentCollapsing++;
-        //     if (currentCollapsing >= currentCollapsingThreshold) {
-        //         mistake = true;
-        //         lifeLeft--;
-        //         currentCollapsing = 0;
-        //     }
-        // }
 
         centerTile(currentTile);
         playerOnTile(map[currentTile]);

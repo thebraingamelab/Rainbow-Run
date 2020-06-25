@@ -1,20 +1,40 @@
 
 function updatePlayerPosition(evt) {
+
+
+    console.log("currentTile: ")
+    console.log(currentTile);
+    console.log("shownTiles: ");
+    console.log(shownTiles);
+    console.log("disappearingTiles: ")
+    console.log(disappearingTiles);
+    console.log("");
+
+
     let playerMove = getInteractionArea(evt);
-    if (currentTile === map.length-1) {
+    if (currentTile === map.length - 1) {
         // message.innerHTML = "You have reached the end! Press R to restart.";
         restart();
     }
     if (playerMove === map[currentTile + 1].relativePositionToLast) {
-        // message.style.color = "black";
-        // message.innerHTML = "Nice move!";
-        //playerOnTile(map[currentTile+1]);
+        if (proceed) { // if the player is clicking before the transition finishes
+            proceed = false;
+            delayed = 0;
+            curNextTileAlpha = 0;
+            disappearingTiles.push({ tile: currentTile - 1, alpha: historyAlpha });
+            ctx.restore(); // 0,0
+            ctx.save(); // 0,0
+            ctx.save(); // 0,0
+            centerTile(currentTile);
+            playerOnTile(map[currentTile]);
+            ctx.restore(); // 0,0
+        }
         mistake = false;
         proceed = true;
         moves.push(true);
         currentTile++;
-        if (currentTile === map.length-1) endOfMaze = true;
-        currentCollapsing = currentCollapsingThreshold*0.95;
+        if (currentTile === map.length - 1) endOfMaze = true;
+        currentCollapsing = currentCollapsingThreshold * 0.95;
         if (sinceClrStarted === nTiles) {
             sinceClrStarted = 0;
         }
@@ -37,13 +57,11 @@ function updatePlayerPosition(evt) {
         }
     }
     else { // the player tapped a wrong direction
-        // message.style.color = "red";
-        // message.innerHTML = "Wrong direction! Try again.";
         mistake = true;
         moves.push(false);
         lifeLeft--;
     }
-    console.log(currentTile);
+
 }
 
 function getInteractionArea(evt) {

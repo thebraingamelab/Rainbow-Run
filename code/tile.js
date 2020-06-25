@@ -107,6 +107,7 @@ function getOppositeDirection(relativePositionToLast) {
 
 let offsets;
 let shownTiles = []; // {xOffset, yOffset}
+
 function centerTile(cur) { // start position: last end position
     shownTiles = [];
 
@@ -135,6 +136,7 @@ function centerTile(cur) { // start position: last end position
         // lastHistory = cur - nHistory;
     }
     if (sinceClrStarted === nTiles) {
+        offsets = { x: 0, y: 0 };
         highlight(cur, lastHighlight)
     }
     ctx.restore();
@@ -148,12 +150,12 @@ function centerTile(cur) { // start position: last end position
         delayed++;
     }
     // mistake shake + next tile
-    if (mistake) preShake();
+    if (mistake & !proceed) preShake();
     if (cur !== map.length - 1) {
         ctx.globalAlpha = curNextTileAlpha;
         map[cur + 1].nextDisplay();
     }
-    if (mistake) postShake();
+    if (mistake & !proceed) postShake();
 
     ctx.restore(); // currentTile position
 
