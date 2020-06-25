@@ -30,7 +30,7 @@ function collapse() {
             lifeLeft--;
         // }
     }
-    else if ((currentTile < nTiles-1) || endOfMaze){}
+    else if ((currentTile < nTiles) || endOfMaze){}
     else {
         let tileCounter;
         for (let i = 0; i < disappearingTiles.length; i++) {

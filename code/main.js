@@ -16,7 +16,7 @@ let map = [];
 let directions = ['TL', 'TR', 'BL', 'BR']; // TopLeft, TopRight, BottomLeft, BottomRight
 let endOfMaze = false;
 
-let nColorsUpperLimit = combinations(nTiles - 2, nTurns) * directions.length * (nTurns + 1);
+// let nColorsUpperLimit = combinations(nTiles - 2, nTurns) * directions.length * (nTurns + 1);
 
 // tile
 let tileWidth, tileLength, tileHeight; // tile 
@@ -37,8 +37,8 @@ let disappearingTiles = []; // {tile (tile's counter -  from the last history sh
 let alphaThreshold = 0.3;
 let disappearingSpeed = 0.003; // in terms of globalAlpha
 // let collapseThreshold = 0.1;
-let collapsingInterval = 1000; // in ms
-let collapsingSpeed = disappearingSpeed*3;
+let collapsingInterval = 1200; // in ms
+let collapsingSpeed = disappearingSpeed * 3;
 
 // interaction
 let transitionProgressY = 0; // tbe amount of transition already happened on the y-axis
@@ -57,16 +57,19 @@ let heartW, heartH, heartInterval;
 let currentCollapsingThreshold = 500;
 let currentCollapsing = currentCollapsingThreshold * 0.95;
 
-
+// mode
+let mode = 'CLEAN';
+let arrowImgWidth;
+let arrows = [];
 
 window.onload = function () {
     // if (nColorsUpperLimit < nColors) alert("nColors exceeds its limit!");
     // if (nTurns > nTiles-2) alert("nTurns exceeds its limit!");
     init();
+    startGame();
     window.addEventListener("keydown", restart);
     canvas.addEventListener("click", updatePlayerPosition);
     window.addEventListener('resize', init, false);
-    startGame();
     setInterval(collapse, collapsingInterval);
     mainLoop();
 }
@@ -82,21 +85,16 @@ function init() {
     ctx.canvas.width = w;
     ctx.canvas.height = h;
     dNextTileAlpha = nextTileAlpha / 50;
-
-    shuffle(colors);
-
-    //life
-    let lifeImgs = document.getElementsByClassName("life");
-    lifeImgWidth = Math.min(w,h)/12;
-    for (let i=0; i<lifeImgs.length; i++){
-        lifeImgs[i].width = lifeImgWidth;
-        lives.push(lifeImgs[i]);
-    }
 }
 
 function startGame() {
+    shuffle(colors);
+
+    // set mode
+    mode = 'ARROW';
+
     // set up variables
-    tileWidth = Math.max(w,h) / (nHistory + 1);
+    tileWidth = Math.max(w, h) / (nHistory + 1);
     console.log(tileWidth);
     tileLength = tileWidth / 1.5;
     tileHeight = tileLength / 5;
@@ -104,12 +102,24 @@ function startGame() {
     xDistance = tileWidth / 2 + tileHeight * 1.5; // distance from the last tile on x-axis
     yDistance = tileHeight + tileLength / 2; // distance from the last tile on y-axis
 
-    // feedback
-    // lifeImg.width = 56;
-    // lifeImg.height = 48;
-    // heartW = lifeImg.width;
-    // heartH = lifeImg.height;
-    // heartInterval = heartW/2;
+    //life
+    let lifeImgs = document.getElementsByClassName("life");
+    lifeImgWidth = Math.min(w, h) / 12;
+    for (let i = 0; i < lifeImgs.length; i++) {
+        lifeImgs[i].width = lifeImgWidth;
+        lives.push(lifeImgs[i]);
+    }
+
+    //arrow
+    if (mode === 'ARROW') {
+        let arrowImgs = document.getElementsByClassName("arrow");
+        arrowImgWidth = tileWidth / 1.5;
+        for (let i = 0; i < arrowImgs.length; i++) {
+            arrowImgs[i].width = arrowImgWidth;
+            arrowImgs[i].addEventListener('click', updatePlayerPosition);
+            arrows.push(arrowImgs[i]);
+        }
+    }
 
     // map
     generateMap();
@@ -125,7 +135,8 @@ function mainLoop() {
         //playerOnTile(map[currentTile+1]);
         if (transitionProgressY <= yDistance) {
             ctx.clearRect(0 - xDistance, 0 - yDistance, w + xDistance * 2, h + yDistance * 2);
-            drawGrid();
+            modeFeature(mode);
+
             //displayLife();
             transitionProgressY += transitionSpeed;
             proceedTransition(getOppositeDirection(map[currentTile].relativePositionToLast));
@@ -145,7 +156,8 @@ function mainLoop() {
     else {
         ctx.restore(); // 0,0
         ctx.clearRect(0, 0, w, h);
-        drawGrid();
+        modeFeature(mode);
+
         displayLife();
 
         transitionProgressY = 0;
@@ -173,84 +185,15 @@ function mainLoop() {
     requestAnimationFrame(mainLoop);
 }
 
-
-function drawGrid() {
-
-    let nTileOnEachSide = Math.floor(Math.max(w,h)/tileWidth/2)+1;
-    ctx.save();
-    for (let wid = w/2 - xDistance*2*nTileOnEachSide; wid < w/2 + xDistance*2*nTileOnEachSide; wid += xDistance *2) {
-        for (let hei = h/2 - yDistance*2*nTileOnEachSide; hei < h/2 + yDistance*2*nTileOnEachSide; hei += yDistance*2) {
-            ctx.strokeStyle = strokeClr;
-            ctx.beginPath();
-            ctx.moveTo(wid - tileWidth / 2, hei);
-            ctx.lineTo(wid, hei - tileLength / 2);
-            ctx.lineTo(wid + tileWidth / 2, hei);
-            ctx.stroke();
-
-            // tile left
-            ctx.beginPath();
-            ctx.moveTo(wid, hei+tileLength/2);
-            ctx.lineTo(wid - tileWidth / 2, hei);
-            ctx.lineTo(wid - tileWidth / 2, hei + tileHeight);
-            ctx.lineTo(wid, hei + tileLength / 2 + tileHeight);
-            ctx.stroke();
-
-            // tile right
-            ctx.beginPath();
-            ctx.moveTo(wid, hei + tileLength / 2);
-            ctx.lineTo(wid, hei + tileHeight + tileLength / 2);
-            ctx.lineTo(wid + tileWidth / 2, hei + tileHeight);
-            ctx.lineTo(wid + tileWidth / 2, hei);
-            ctx.closePath();
-            ctx.stroke();
-        }
-    }
-    for (let wid = (w/2-xDistance) - xDistance*2*nTileOnEachSide; wid < (w/2-xDistance) + xDistance*2*nTileOnEachSide; wid += xDistance *2) {
-        for (let hei = (h/2-yDistance) - yDistance*2*nTileOnEachSide; hei < (h/2-yDistance) + yDistance*2*nTileOnEachSide; hei += yDistance*2) {
-            ctx.strokeStyle = strokeClr;
-            ctx.beginPath();
-            ctx.moveTo(wid - tileWidth / 2, hei);
-            ctx.lineTo(wid, hei - tileLength / 2);
-            ctx.lineTo(wid + tileWidth / 2, hei);
-            ctx.stroke();
-
-            // tile left
-            ctx.beginPath();
-            ctx.moveTo(wid, hei+tileLength/2);
-            ctx.lineTo(wid - tileWidth / 2, hei);
-            ctx.lineTo(wid - tileWidth / 2, hei + tileHeight);
-            ctx.lineTo(wid, hei + tileLength / 2 + tileHeight);
-            ctx.stroke();
-
-            // tile right
-            ctx.beginPath();
-            ctx.moveTo(wid, hei + tileLength / 2);
-            ctx.lineTo(wid, hei + tileHeight + tileLength / 2);
-            ctx.lineTo(wid + tileWidth / 2, hei + tileHeight);
-            ctx.lineTo(wid + tileWidth / 2, hei);
-            ctx.closePath();
-            ctx.stroke();
-        }
-    }
-    ctx.restore();
-}
-
-function product_Range(a, b) {
-    var prd = a, i = a;
-
-    while (i++ < b) {
-        prd *= i;
-    }
-    return prd;
-}
-
-
-function combinations(n, r) {
-    if (n == r) {
-        return 1;
-    }
-    else {
-        r = (r < n - r) ? n - r : r;
-        return product_Range(r + 1, n) / product_Range(1, n - r);
+function modeFeature(mode) {
+    switch (mode) {
+        case 'GRID':
+            drawGrid();
+            break;
+        case 'ARROW':
+            drawArrows();
+            break;
+        case 'CLEAN':
+            break;
     }
 }

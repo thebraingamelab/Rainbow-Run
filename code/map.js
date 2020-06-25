@@ -25,19 +25,6 @@ function colorOrder() {
     }
 }
 
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
-
-        // swap elements array[i] and array[j]
-        // we use "destructuring assignment" syntax to achieve that
-        // you'll find more details about that syntax in later chapters
-        // same can be written as:
-        // let t = array[i]; array[i] = array[j]; array[j] = t
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
-
 
 function colorShape() {
     for (nC = 0; nC < nColors; nC++) {
@@ -63,39 +50,6 @@ function colorShape() {
         else nC--;
     }
 }
-
-// function compareArray(arr1, arr2) {
-//     // if (!arr1 || !arr2) return;
-//     let result;
-//     arr1.forEach((e1, i) => arr2.forEach(e2 => {
-//         if (e1.length > 1 && e2.length) result = compare(e1, e2);
-//         else if (e1 !== e2) result = false;
-//         else result = true;
-//     })
-//     )
-//     return result;
-// }
-
-Array.prototype.compare = function (array) {
-    if (!array) {
-        return false;
-    }
-    if (this.length !== array.length) {
-        return false;
-    }
-    for (var i = 0, l = this.length; i < l; i++) {
-        if (this[i] instanceof Array && array[i] instanceof Array) {
-            if (!this[i].compare(array[i])) {
-                return false;
-            }
-        }
-        else if (this[i] !== array[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
 
 function divideSegments(nOfTiles, nOfTurns) {
     let segments = [];
