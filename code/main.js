@@ -37,8 +37,11 @@ let disappearingTiles = []; // {tile (tile's counter -  from the last history sh
 let alphaThreshold = 0.3;
 let disappearingSpeed = 0.003; // in terms of globalAlpha
 // let collapseThreshold = 0.1;
-let collapsingInterval = 1200; // in ms
+let collapseDefault;
+let justCollapsed = 0;
+let collapsingInterval = 1300; // in ms
 let collapsingSpeed = disappearingSpeed * 3;
+
 
 // interaction
 let transitionProgressY = 0; // tbe amount of transition already happened on the y-axis
@@ -57,6 +60,7 @@ let heartW, heartH, heartInterval;
 let currentCollapsingThreshold = 500;
 let currentCollapsing = currentCollapsingThreshold * 0.95;
 
+
 // mode
 let mode = 'CLEAN';
 let arrowImgWidth;
@@ -70,7 +74,7 @@ window.onload = function () {
     window.addEventListener("keydown", restart);
     canvas.addEventListener("click", updatePlayerPosition);
     window.addEventListener('resize', init, false);
-    setInterval(collapse, collapsingInterval);
+    collapseDefault = setInterval(collapse, collapsingInterval);
     mainLoop();
 }
 

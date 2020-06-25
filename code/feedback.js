@@ -24,13 +24,17 @@ function displayLife() {
 }
 
 function collapse() {
-    if ((currentTile>nTiles-1) && (disappearingTiles.length === 0)) {
+    if (justCollapsed > 3) justCollapsed = 0;
+
+    if ((currentTile < nTiles) || endOfMaze) { }
+    else if ((currentTile > nTiles - 1) && (disappearingTiles.length === 0) && (justCollapsed === 0)) {
         // if (!endOfMaze){
-            mistake = true;
-            lifeLeft--;
+        mistake = true;
+        lifeLeft--;
+        justCollapsed++;
         // }
     }
-    else if ((currentTile < nTiles) || endOfMaze){}
+    else if (justCollapsed > 0) justCollapsed++;
     else {
         let tileCounter;
         for (let i = 0; i < disappearingTiles.length; i++) {
