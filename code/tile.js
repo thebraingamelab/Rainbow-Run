@@ -61,6 +61,7 @@ class Tile {
 
         // tile top
         ctx.fillStyle = this.tileClr;
+        ctx.strokeStyle = 'transparent';
         ctx.beginPath();
         ctx.moveTo(this.x - tileWidth / 2, this.y);
         ctx.lineTo(this.x, this.y - tileLength / 2);
@@ -87,6 +88,7 @@ class Tile {
         ctx.lineTo(this.x + tileWidth / 2, this.y);
         ctx.closePath();
         ctx.fill();
+        ctx.stroke();
 
         ctx.restore();
     }
@@ -191,7 +193,7 @@ function disappearHistory() {
         }
 
         // display if not overlapping
-        offsets = getOffsets(tileCounter, getOppositeDirection(map[tileCounter + 1].relativePositionToLast));
+        offsets = getOffsets(getOppositeDirection(map[tileCounter + 1].relativePositionToLast));
         if (checkOverlap(tileCounter) !== false) {
             ctx.globalAlpha = 0;
             map[tileCounter].pastDisplay(map[tileCounter + 1].relativePositionToLast);
@@ -230,7 +232,7 @@ function highlight(cur, lastHighlight) {
             else collapsedHighlightTile.nextDisplay();
         }
 
-        offsets = getOffsets(j, getOppositeDirection(map[j + 1].relativePositionToLast));
+        offsets = getOffsets(getOppositeDirection(map[j + 1].relativePositionToLast));
         shownTiles.push(offsets);
     }
 }
@@ -248,16 +250,26 @@ function checkOverlap(cur) {
     return false;
 }
 
-function getOffsets(tileCounter, relativePositionToLast) {
-    let collapsedY = map[tileCounter].collapseY;
+function getOffsets(relativePositionToLast) {
     switch (relativePositionToLast) {
         case 'TL':
-            return { x: offsets.x - xDistance, y: offsets.y + collapsedY - yDistance };
+            return { x: offsets.x - xDistance, y: offsets.y - yDistance };
         case 'TR':
-            return { x: offsets.x + xDistance, y: offsets.y + collapsedY - yDistance };
+            return { x: offsets.x + xDistance, y: offsets.y - yDistance };
         case 'BL':
-            return { x: offsets.x - xDistance, y: offsets.y + collapsedY + yDistance };
+            return { x: offsets.x - xDistance, y: offsets.y + yDistance };
         case 'BR':
-            return { x: offsets.x + xDistance, y: offsets.y + collapsedY + yDistance };
+            return { x: offsets.x + xDistance, y: offsets.y + yDistance };
     }
+    // let collapsedY = map[tileCounter].collapseY;
+    // switch (relativePositionToLast) {
+    //     case 'TL':
+    //         return { x: offsets.x - xDistance, y: offsets.y + collapsedY - yDistance };
+    //     case 'TR':
+    //         return { x: offsets.x + xDistance, y: offsets.y + collapsedY - yDistance };
+    //     case 'BL':
+    //         return { x: offsets.x - xDistance, y: offsets.y + collapsedY + yDistance };
+    //     case 'BR':
+    //         return { x: offsets.x + xDistance, y: offsets.y + collapsedY + yDistance };
+    // }
 }

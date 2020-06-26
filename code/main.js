@@ -5,13 +5,13 @@ let canvas, ctx, w, h; // canvas
 let strokeClr = 'rgba(35,44,58,0.2)';
 
 // map (variables should vary for different levels in the final version)
-let nColors = 2; // number of colors >=2; <nColorsUpperLimit
+let nColors = 3; // number of colors >=2; <nColorsUpperLimit
 let colors = [['#5ECBF2', '#1D9DD2', 'blue'], ['#FEDE68', '#E9B926', 'yellow'], ['#FB4D4B', '#D60904', 'red'], ['#2CDDAF', '#168469', 'green'], ['#FC954F', '#D45A10', 'orange'], ['#9582D2', '#553BA9', 'purple']];
 // [tileClr, shadowClr, colorName, colorSegments ( [i,'d'] - for tiles until i, their directions are 'd'; e.g. [[1,'TL'],[3,'BL']])]
-let nTimes = 3; // number of times each color sequence appears
+let nTimes = 1; // number of times each color sequence appears
 let nTiles = 5; // number of tiles in a color sequence
 let nTurns = 2; // number of turns in a sequence; nTurns <= (nTiles-2)
-let nHistory = 7; // history shown
+let nHistory = 7; // history shown 
 let map = [];
 let directions = ['TL', 'TR', 'BL', 'BR']; // TopLeft, TopRight, BottomLeft, BottomRight
 let endOfMaze = false;
@@ -59,7 +59,8 @@ let heartW, heartH, heartInterval;
 //let end;
 let currentCollapsingThreshold = 500;
 let currentCollapsing = currentCollapsingThreshold * 0.95;
-
+let mapView;
+let mapTranslateX, mapTranslateY;
 
 // mode
 let mode = 'CLEAN';
@@ -71,10 +72,6 @@ window.onload = function () {
     // if (nTurns > nTiles-2) alert("nTurns exceeds its limit!");
     init();
     startGame();
-    window.addEventListener("keydown", restart);
-    canvas.addEventListener("click", updatePlayerPosition);
-    window.addEventListener('resize', init, false);
-    collapseDefault = setInterval(collapse, collapsingInterval);
     mainLoop();
 }
 
@@ -99,13 +96,8 @@ function startGame() {
 
     // set up variables
     tileWidth = Math.max(w, h) / (nHistory + 1);
-    console.log(tileWidth);
-    tileLength = tileWidth / 1.5;
-    tileHeight = tileLength / 5;
+    setTileParaByWidth(tileWidth);
     transitionSpeed = tileWidth / 40;
-    xDistance = tileWidth / 2 + tileHeight * 1.5; // distance from the last tile on x-axis
-    yDistance = tileHeight + tileLength / 2; // distance from the last tile on y-axis
-
     //life
     let lifeImgs = document.getElementsByClassName("life");
     lifeImgWidth = Math.min(w, h) / 12;
@@ -114,11 +106,13 @@ function startGame() {
         lives.push(lifeImgs[i]);
     }
 
+
     //arrow
     if ((mode === 'ARROW') || (mode === 'GRIDARROW')) {
         let arrowImgs = document.getElementsByClassName("arrow");
         arrowImgWidth = tileWidth / 1.5;
         for (let i = 0; i < arrowImgs.length; i++) {
+            arrowImgs[i].style.display = 'initial';
             arrowImgs[i].width = arrowImgWidth;
             arrowImgs[i].addEventListener('click', updatePlayerPosition);
             arrows.push(arrowImgs[i]);
@@ -127,12 +121,56 @@ function startGame() {
 
     // map
     generateMap();
+
+    //feedback
+    mapView = false;
 }
 
+function setTileParaByWidth(tileWidth) {
+    tileLength = tileWidth / 1.5;
+    tileHeight = tileLength / 5;
+    xDistance = tileWidth / 2 + tileHeight * 1.5; // distance from the last tile on x-axis
+    yDistance = tileHeight + tileLength / 2; // distance from the last tile on y-axis
+
+}
+
+function setTileParaByLength(tileLength) {
+    tileWidth = tileLength * 1.5;
+    tileHeight = tileLength / 5;
+    xDistance = tileWidth / 2 + tileHeight * 1.5; // distance from the last tile on x-axis
+    yDistance = tileHeight + tileLength / 2; // distance from the last tile on y-axis
+}
 
 function mainLoop() {
     //clear area
     //ctx.clearRect(0,0,w,h);
+
+    if (mapView) {
+        if ((mode === 'ARROW') || (mode === 'GRIDARROW')) {
+            let arrowImgs = document.getElementsByClassName("arrow");
+            arrowImgWidth = tileWidth / 1.5;
+            for (let i = 0; i < arrowImgs.length; i++) {
+                arrowImgs[i].style.display = 'none';
+            }
+        }
+        clearInterval(collapseDefault);
+        setParaForMapView();
+        mapLoop();
+    }
+    else {
+        window.addEventListener("keydown", restart);
+        canvas.addEventListener("click", updatePlayerPosition);
+        window.addEventListener('resize', init, false);
+        collapseDefault = setInterval(collapse, collapsingInterval);
+        gameLoop();
+    }
+
+    // requestAnimationFrame(mainLoop);
+
+}
+
+
+function gameLoop() {
 
     if (lifeLeft === 0) restart();
     if (proceed === true) { // transitioning
@@ -171,5 +209,5 @@ function mainLoop() {
         ctx.restore(); // 0,0
     }
 
-    requestAnimationFrame(mainLoop);
+    requestAnimationFrame(gameLoop);
 }

@@ -27,5 +27,5 @@ body, html {
 .arrow{
     position: absolute;
     opacity: 0.8;
-    /* display: none; */
+    display: none;
 }

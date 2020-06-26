@@ -1,22 +1,13 @@
 
 function updatePlayerPosition(evt) {
-
-
-    console.log("currentTile: ")
-    console.log(currentTile);
-    console.log("shownTiles: ");
-    console.log(shownTiles);
-    console.log("disappearingTiles: ")
-    console.log(disappearingTiles);
-    console.log("");
-
-
     let playerMove = getInteractionArea(evt);
     if (currentTile === map.length - 1) {
         // message.innerHTML = "You have reached the end! Press R to restart.";
-        restart();
+        mapView = true;
+        mainLoop();
+        // restart();
     }
-    if (playerMove === map[currentTile + 1].relativePositionToLast) {
+    else if (playerMove === map[currentTile + 1].relativePositionToLast) {
         if (proceed) { // if the player is clicking before the transition finishes
             proceed = false;
             delayed = 0;
