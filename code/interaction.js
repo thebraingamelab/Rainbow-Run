@@ -3,13 +3,16 @@ function updatePlayerPosition(evt) {
     clickAudio.play();
     let playerMove = getInteractionArea(evt);
     if (gameOver) restart();
-    else if (currentTile === map.length - 1) {
+    else if (endOfMaze) {
         // message.innerHTML = "You have reached the end! Press R to restart.";
+        winText.style.display = "none";
+        crownImg.style.display = "none";
         mapView = true;
         mainLoop();
-        // restart();
-    }
+    }    
+    else if (currentTile === map.length - 1) {}
     else if (playerMove === map[currentTile + 1].relativePositionToLast) {
+        // clickPop(evt);
         if (proceed) { // if the player is clicking before the transition finishes
             proceed = false;
             delayed = 0;
@@ -23,13 +26,16 @@ function updatePlayerPosition(evt) {
             ctx.restore(); // 0,0
         }
         mistake = false;
+        incorrectImg.style.display = 'none';
+        // reduceLifeImg.style.display = 'none';
+        slow = false;
         proceed = true;
         moves.push(true);
         currentTile++;
-        if (currentTile === map.length - 1){
-            completeAudio.play();
-            endOfMaze = true;
-        }
+        // if (currentTile === map.length - 1) {
+        //     completeAudio.play();
+        //     endOfMaze = true;
+        // }
         currentCollapsing = currentCollapsingThreshold * 0.95;
         if (sinceClrStarted === nTiles) {
             sinceClrStarted = 0;
@@ -64,8 +70,8 @@ function updatePlayerPosition(evt) {
 
 function getInteractionArea(evt) {
     let rect = canvas.getBoundingClientRect();
-    let mousePosX = evt.clientX - rect.left;
-    let mousePosY = evt.clientY - rect.top;
+    mousePosX = evt.clientX - rect.left;
+    mousePosY = evt.clientY - rect.top;
 
     if ((mousePosX < w / 2) && (mousePosY < h / 2)) return 'TL';
     else if ((mousePosX < w / 2) && (mousePosY > h / 2)) return 'BL';

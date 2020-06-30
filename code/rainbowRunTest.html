@@ -12,12 +12,12 @@
   <script src="feedback.js"></script>
   <script src="mode.js"></script>
   <script src="generalFunctions.js"></script>
+  <script src="variables.js"></script>
 
   <title>Rainbow Run Map Test</title>
 </head>
 
 <body>
-  <!-- <p id="myMessage"></p> -->
   <canvas id="myCanvas" width="1000px" height="500px"></canvas>
   <div>
     <img class="life" id="life1" src="life.png" alt="life1">
@@ -38,7 +38,21 @@
   <audio id="incorrectSound" src="negative one-chime.mp3"> incorrect </audio>
   <audio id="fallSound" src="whoosh.mp3"> fall </audio>
   <audio id="gameOverSound" src="gameOver.mp3"> Game Over </audio>
-
+  
+  <div >
+  <img class="feedback" id="incorrectImg" src="incorrect.png" alt = "incorrect">
+  <img class="feedback" id="reduceLifeImg" src="reduceLife.png" alt="reduce one life">
+  <img class="feedback" id="crownImg" src="crown.png" alt="You win!">
+  <div class="feedback" id="gameOverText">
+    <p> GAME OVER </p>
+    <p id="gameOverInstruction"> Click once more to restart.</p>
+  </div>
+  <div class="feedback" id="winText">
+    <p> You Win! </p>
+    <p id="winInstruction"> Click once more to view your path.</p>
+  </div>
+  <!-- <p id="mapViewInstruction"> Click once more to restart. </p> -->
+</div>
 </body>
 
 </html>

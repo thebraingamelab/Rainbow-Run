@@ -29,3 +29,37 @@ body, html {
     opacity: 0.8;
     display: none;
 }
+
+.feedback{
+    position: absolute;
+    display: none;
+}
+
+#gameOverText{
+    font-family: 'Overpass';
+    color: #E00000;
+    font-size: 36px;
+    /* text-align: center; */
+    left: 1rem;
+    top: 1rem;
+    line-height: 0rem;
+}
+#winText{
+    font-family: 'Overpass';
+    color: #D88500;
+    font-size: 36px;
+    /* text-align: center; */
+    left: 1rem;
+    top: 1rem;
+    line-height: 0rem;
+}
+#gameOverInstruction, #winInstruction, #mapViewInstruction{
+    font-family: 'Overpass';
+    color: black;
+    font-size: 18px;
+    top: 1rem;
+    line-height: 0rem;
+}
+#crownImg{
+    opacity:0;
+}

@@ -26,11 +26,11 @@ function displayLife() {
 function collapse() {
     if (justCollapsed > 3) justCollapsed = 0;
 
-    if ((currentTile < nTiles) || endOfMaze || gameOver) { }
+    if ((currentTile < nTiles) || endOfMaze || gameOver) {}
     else if ((currentTile > nTiles - 1) && (disappearingTiles.length === 0) && (justCollapsed === 0)) {
         // if (!endOfMaze){
         slowAudio.play();
-        mistake = true;
+        slow = true;
         lifeLeft--;
         console.log(lifeLeft);
         justCollapsed++;
@@ -139,3 +139,55 @@ function setParaForMapView() {
     mapTranslateX *= tileWidthChange;
     mapTranslateY *= tileLengthChange;
 }
+
+// function clickPop(evt){
+//     let rect = canvas.getBoundingClientRect();
+//     let mousePosX = evt.clientX - rect.left;
+//     let mousePosY = evt.clientY - rect.top;
+
+//     ctx.save();
+//     ctx.lineWidth = "5";
+//     ctx.strokeStyle = "black";
+//     ctx.fillStyle = map[currentTile].tileClr;
+//     ctx.rotate(-10 * Math.PI / 180);
+//     ctx.fillRect(mousePosX-15, mousePosY-30, 5, 15);
+//     // ctx.rotate();
+//     // ctx.fillRect();
+//     // ctx.rotate();
+//     // ctx.fillRect();
+//     ctx.stroke();
+//     ctx.restore();
+// }
+
+function mistakeFeedback(){
+    incorrectImg.style.left = mousePosX - incorrectImg.width/2 + "px";
+    incorrectImg.style.top = mousePosY - incorrectImg.height/2 + "px";
+    incorrectImg.style.display = "initial";
+    // reduceLifeImg.style.left = mousePosX - incorrectImg.width/2 + incorrectImg.width *1.5 + "px";
+    // reduceLifeImg.style.top = mousePosY + "px";
+    // reduceLifeImg.style.display = "initial";
+}
+
+function gameOverFeedback(){
+    // gameOverText.style.fontSize = w/10 + "px";
+    // console.log(gameOverText.style.fontSize);
+    // gameOverText.style.left = tileWidth + "px"; 
+    gameOverText.style.display = "initial";
+}
+
+function winFeedback(){
+    // winText.style.left = tileWidth + "px"; 
+    winText.style.display = "initial";
+
+    crownImg.style.display = "initial";
+    crownAlpha +=0.05;
+    crownImg.style.opacity = crownAlpha;
+    crownImg.style.left = w/2-crownImg.width/2 + "px";
+    crownImgTop = Math.max(crownImgTop-crownImgUpSpeed,lifeImgWidth/1.5);
+    crownImg.style.top = crownImgTop + "px";
+}
+
+// function mapViewFeedback(){
+//     mapViewText.style.left = tileWidth + "px"; 
+//     mapViewText.style.display = 'initial';
+// }
