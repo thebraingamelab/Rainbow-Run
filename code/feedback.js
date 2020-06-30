@@ -26,11 +26,13 @@ function displayLife() {
 function collapse() {
     if (justCollapsed > 3) justCollapsed = 0;
 
-    if ((currentTile < nTiles) || endOfMaze) { }
+    if ((currentTile < nTiles) || endOfMaze || gameOver) { }
     else if ((currentTile > nTiles - 1) && (disappearingTiles.length === 0) && (justCollapsed === 0)) {
         // if (!endOfMaze){
+        slowAudio.play();
         mistake = true;
         lifeLeft--;
+        console.log(lifeLeft);
         justCollapsed++;
         // }
     }
@@ -43,6 +45,13 @@ function collapse() {
         }
         if (tileCounter !== undefined) {
             map[tileCounter].collapsed = true;
+            // if (tileCounter != currentTile){
+            //     if (fallAudio.paused) fallAudio.play();
+            //     else{
+            //         fallAudio.pause();
+            //         fallAudio.currentTime =0;
+            //     }
+            // }
             map[tileCounter].collapseY += 5;
             map[tileCounter].y = map[tileCounter].collapseY;
             // disappearingTiles[0].alpha -= collapsingSpeed;

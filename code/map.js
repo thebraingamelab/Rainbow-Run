@@ -123,7 +123,7 @@ function addGreySequence() {
     let control = true;
     do {
         //nGreyTiles = Math.floor(Math.random() * 4) + 3; //[3,6]
-        nGreyTurns = Math.max(Math.floor(Math.random() * nGreyTiles) - 1, 1); //[0, nGreyTiles-2]
+        nGreyTurns = Math.max(Math.floor(Math.random() * nGreyTiles) - 1, 0); //[0, nGreyTiles-2]
         //if ((nGreyTiles === nTiles) && (nGreyTurns === nTurns)) control = false;
     }
     while (!control);

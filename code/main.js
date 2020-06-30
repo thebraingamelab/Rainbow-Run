@@ -9,8 +9,8 @@ let nColors = 3; // number of colors >=2; <nColorsUpperLimit
 let colors = [['#5ECBF2', '#1D9DD2', 'blue'], ['#FEDE68', '#E9B926', 'yellow'], ['#FB4D4B', '#D60904', 'red'], ['#2CDDAF', '#168469', 'green'], ['#FC954F', '#D45A10', 'orange'], ['#9582D2', '#553BA9', 'purple']];
 // [tileClr, shadowClr, colorName, colorSegments ( [i,'d'] - for tiles until i, their directions are 'd'; e.g. [[1,'TL'],[3,'BL']])]
 let nTimes = 2; // number of times each color sequence appears
-let nTiles = 5; // number of tiles in a color sequence
-let nTurns = 2; // number of turns in a sequence; nTurns <= (nTiles-2)
+let nTiles = 3; // number of tiles in a color sequence
+let nTurns = 1; // number of turns in a sequence; nTurns <= (nTiles-2)
 let nHistory = 7; // history shown 
 let map = [];
 let directions = ['TL', 'TR', 'BL', 'BR']; // TopLeft, TopRight, BottomLeft, BottomRight
@@ -56,7 +56,7 @@ let lifeMax = 3; // Must update the number of img (.life) in html when changing 
 let lifeLeft = lifeMax;
 let lifeImgWidth;
 let heartW, heartH, heartInterval;
-//let end;
+let gameOver;
 let currentCollapsingThreshold = 500;
 let currentCollapsing = currentCollapsingThreshold * 0.95;
 let mapView;
@@ -66,6 +66,9 @@ let mapTranslateX, mapTranslateY;
 let mode = 'CLEAN';
 let arrowImgWidth;
 let arrows = [];
+
+// sound
+let clickAudio, completeAudio, highlightAudio, slowAudio, errorAudio, fallAudio, gameOverAudio;
 
 window.onload = function () {
     // if (nColorsUpperLimit < nColors) alert("nColors exceeds its limit!");
@@ -79,8 +82,6 @@ function init() {
     canvas = document.querySelector("#myCanvas");
     ctx = canvas.getContext("2d");
     ctx.imageSmoothingEnabled = false;
-    // message = document.querySelector("#myMessage");
-    // message.innerHTML = "Welcome to Rainbow Run! Click on where the next tile appears to run through the maze.";
     w = window.innerWidth;
     h = window.innerHeight;
     ctx.canvas.width = w;
@@ -106,7 +107,6 @@ function startGame() {
         lives.push(lifeImgs[i]);
     }
 
-
     //arrow
     if ((mode === 'ARROW') || (mode === 'GRIDARROW')) {
         let arrowImgs = document.getElementsByClassName("arrow");
@@ -122,8 +122,21 @@ function startGame() {
     // map
     generateMap();
 
-    //feedback
+    // feedback
     mapView = false;
+    gameOver = false;
+    // sound
+    clickAudio = document.getElementById("clickSound");
+    completeAudio = document.getElementById("completeSound");
+    completeAudio.volume = 0.8;
+    highlightAudio = document.getElementById("highlightSound");
+    highlightAudio.volume = 0.8;
+    slowAudio = document.getElementById("slowErrorSound");
+    errorAudio = document.getElementById("incorrectSound");
+    errorAudio.volume = 0.9;
+    fallAudio = document.getElementById("fallSound");
+    fallAudio.volume = 0.1;
+    gameOverAudio = document.getElementById("gameOverSound");
 }
 
 function setTileParaByWidth(tileWidth) {
@@ -172,7 +185,10 @@ function mainLoop() {
 
 function gameLoop() {
 
-    if (lifeLeft === 0) restart();
+    if ((lifeLeft === 0)&&(!gameOver)){
+        gameOverAudio.play();
+        gameOver = true;
+    }
     if (proceed === true) { // transitioning
         //playerOnTile(map[currentTile+1]);
         if (transitionProgressY <= yDistance) {

@@ -1,7 +1,9 @@
 
 function updatePlayerPosition(evt) {
+    clickAudio.play();
     let playerMove = getInteractionArea(evt);
-    if (currentTile === map.length - 1) {
+    if (gameOver) restart();
+    else if (currentTile === map.length - 1) {
         // message.innerHTML = "You have reached the end! Press R to restart.";
         mapView = true;
         mainLoop();
@@ -24,13 +26,17 @@ function updatePlayerPosition(evt) {
         proceed = true;
         moves.push(true);
         currentTile++;
-        if (currentTile === map.length - 1) endOfMaze = true;
+        if (currentTile === map.length - 1){
+            completeAudio.play();
+            endOfMaze = true;
+        }
         currentCollapsing = currentCollapsingThreshold * 0.95;
         if (sinceClrStarted === nTiles) {
             sinceClrStarted = 0;
         }
         if (map[currentTile].tileClr !== '#B1BCCA') sinceClrStarted++;
         if (sinceClrStarted === nTiles) {
+            highlightAudio.play();
             // only extra life when the sequence was accurately completed
             // an array to record the moves
             let accurateSequence = true;
@@ -48,6 +54,7 @@ function updatePlayerPosition(evt) {
         }
     }
     else { // the player tapped a wrong direction
+        errorAudio.play();
         mistake = true;
         moves.push(false);
         lifeLeft--;
