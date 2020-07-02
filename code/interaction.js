@@ -25,12 +25,12 @@ function updatePlayerPosition(evt) {
             playerOnTile(map[currentTile]);
             ctx.restore(); // 0,0
         }
+        if (!mistake) moves.push(true);
         mistake = false;
         incorrectImg.style.display = 'none';
         // reduceLifeImg.style.display = 'none';
         slow = false;
         proceed = true;
-        moves.push(true);
         currentTile++;
         // if (currentTile === map.length - 1) {
         //     completeAudio.play();
@@ -53,9 +53,9 @@ function updatePlayerPosition(evt) {
                     break;
                 }
             }
+            for (i=0; i<moves.length; i++) console.log(moves);
             if (accurateSequence) {
-                lifeLeft++;
-                lifeLeft = Math.min(lifeLeft, lifeMax);
+                lifeLeft = Math.min(lifeLeft+1, lifeMax);
             }
         }
     }
