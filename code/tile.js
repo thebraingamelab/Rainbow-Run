@@ -58,18 +58,18 @@ class Tile {
 
     display() { // the unpositioned tile outline
         ctx.save();
-
+        ctx.strokeStyle = 'rgba(35,44,58,0.2)';
         // tile top
         ctx.fillStyle = this.tileClr;
-        ctx.strokeStyle = 'transparent';
+        // ctx.strokeStyle = 'transparent';
         ctx.beginPath();
         ctx.moveTo(this.x - tileWidth / 2, this.y);
         ctx.lineTo(this.x, this.y - tileLength / 2);
         ctx.lineTo(this.x + tileWidth / 2, this.y);
         ctx.lineTo(this.x, this.y + tileLength / 2);
         ctx.closePath();
-
         ctx.fill();
+        ctx.stroke();
 
         ctx.fillStyle = this.shadowClr;
         // tile left
@@ -80,6 +80,7 @@ class Tile {
         ctx.lineTo(this.x, this.y + tileLength / 2);
         ctx.closePath();
         ctx.fill();
+        ctx.stroke();
         // tile right
         ctx.beginPath();
         ctx.moveTo(this.x, this.y + tileLength / 2);

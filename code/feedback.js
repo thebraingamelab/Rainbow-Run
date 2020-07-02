@@ -26,7 +26,7 @@ function displayLife() {
 function collapse() {
     if (justCollapsed > 3) justCollapsed = 0;
 
-    if ((currentTile < nTiles) || endOfMaze || gameOver) {}
+    if ((currentTile < nTiles) || endOfMaze || gameOver) { }
     else if ((currentTile > nTiles - 1) && (disappearingTiles.length === 0) && (justCollapsed === 0)) {
         // if (!endOfMaze){
         slowAudio.play();
@@ -59,39 +59,111 @@ function collapse() {
     }
 }
 
-
-
+// let high;
+let xMove = 0;
+let yMove = 0;
 function mapLoop() {
-    // add route arrow
+    ctx.font = "18px Overpass";
+    ctx.globalAlpha = 0.9;
     ctx.clearRect(0, 0, w, h);
     ctx.save();
+
     shownTiles = [];
     ctx.translate(mapTranslateX, mapTranslateY);
-    ctx.globalAlpha = 1;
     map[map.length - 1].currentDisplay();
-    ctx.save();
+    ctx.save(); // map starting point (end)
 
+    let endSize = tileWidth / 8;
     offsets = { x: 0, y: 0 };
     shownTiles.push(offsets);
+
+    let shownTileCounter = 0;
+    // ctx.globalAlpha = 1;
+
     for (let i = map.length - 2; i >= 0; i--) {
+        shownTileCounter++;
         offsets = getOffsets(getOppositeDirection(map[i + 1].relativePositionToLast));
-        if (checkOverlap(i) !== false) ctx.globalAlpha = 0;
-        else ctx.globalAlpha = 1;
+        if (checkOverlap(i) !== false) {
+            moveTile(i);
+            // xMove -= high;
+            // yMove -= high*1.5;
+            // offsets.x += xMove;
+            // offsets.y += yMove;
+        }
+        map[i].x += xMove;
+        map[i].y += yMove;
         map[i].pastDisplay(map[i + 1].relativePositionToLast);
         shownTiles.push(offsets);
-    }
-    ctx.restore();
 
-    ctx.strokeStyle = 'rgba(35,44,58)';
-    ctx.moveTo(0,0);
-    for (let i=1; i<shownTiles.length; i++){
-        ctx.lineTo(shownTiles[i].x, shownTiles[i].y);
+        ctx.beginPath();
+        ctx.moveTo(0 + xMove, 0 + yMove);
+        ctx.lineTo(shownTiles[shownTileCounter - 1].x - shownTiles[shownTileCounter].x + xMove, shownTiles[shownTileCounter - 1].y - shownTiles[shownTileCounter].y + yMove);
+        // console.log(-(shownTiles[shownTileCounter].x - shownTiles[shownTileCounter - 1].x ));
+        // console.log(-(shownTiles[shownTileCounter].y - shownTiles[shownTileCounter - 1].y ));
+        ctx.strokeStyle = 'rgba(35,44,58)';
         ctx.stroke();
-        // ctx.moveTo(shownTiles[i].x, shownTiles[i].y);
+        if (i === 0) {
+            //start point
+            ctx.save();
+            ctx.fillStyle = 'black';
+            ctx.beginPath();
+            ctx.arc(0 + xMove, 0 + yMove, endSize, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.closePath();
+            ctx.fillText("START", - endSize + xMove, - endSize * 1.5 + yMove);
+            ctx.restore();
+        }
     }
+
+    ctx.restore(); //map starting point
+    //end point
+    ctx.save();
+    ctx.fillStyle = 'black';
+    ctx.beginPath();
+    ctx.arc(0, 0, endSize, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.closePath();
+    ctx.fillText("END", - endSize, -endSize * 1.5);
     ctx.restore();
 
+
+    for (let i = 0; i < map.length; i++) {
+        map[i].x = 0;
+        map[i].y = 0;
+    }
+    xMove = 0;
+    yMove = 0;
+
+    ctx.restore();
     requestAnimationFrame(mapLoop);
+}
+
+function moveTile(i) {
+    let relativePositionToNext;
+    if (i == map.length - 1) relativePositionToNext = 'TL';
+    else relativePositionToNext = map[i + 1].relativePositionToLast;
+    switch (relativePositionToNext) {
+        case 'TL':
+            xMove += xDistance / 2;
+            offsets.x += xDistance / 2;
+            // yMove += (xDistance + yDistance) / 2 * 1.5;
+            break;
+        case 'TR':
+            xMove -= xDistance / 2;
+            offsets.x -= xDistance / 2;
+            // yMove += (xDistance + yDistance) / 2 * 1.5;
+            break;
+        case 'BL':
+            // xMove -= (xDistance + yDistance) / 2;
+            yMove += xDistance / 2;
+            offsets.y += xDistance / 2;
+            break;
+        case 'BR':
+            // xMove += (xDistance + yDistance) / 2;
+            yMove -= xDistance / 2;
+            offsets.y -= xDistance / 2;
+            break;
+    }
 }
 
 function getMapSize() {
@@ -159,31 +231,31 @@ function setParaForMapView() {
 //     ctx.restore();
 // }
 
-function mistakeFeedback(){
-    incorrectImg.style.left = mousePosX - incorrectImg.width/2 + "px";
-    incorrectImg.style.top = mousePosY - incorrectImg.height/2 + "px";
+function mistakeFeedback() {
+    incorrectImg.style.left = mousePosX - incorrectImg.width / 2 + "px";
+    incorrectImg.style.top = mousePosY - incorrectImg.height / 2 + "px";
     incorrectImg.style.display = "initial";
     // reduceLifeImg.style.left = mousePosX - incorrectImg.width/2 + incorrectImg.width *1.5 + "px";
     // reduceLifeImg.style.top = mousePosY + "px";
     // reduceLifeImg.style.display = "initial";
 }
 
-function gameOverFeedback(){
+function gameOverFeedback() {
     // gameOverText.style.fontSize = w/10 + "px";
     // console.log(gameOverText.style.fontSize);
     // gameOverText.style.left = tileWidth + "px"; 
     gameOverText.style.display = "initial";
 }
 
-function winFeedback(){
+function winFeedback() {
     // winText.style.left = tileWidth + "px"; 
     winText.style.display = "initial";
 
     crownImg.style.display = "initial";
-    crownAlpha +=0.05;
+    crownAlpha += 0.05;
     crownImg.style.opacity = crownAlpha;
-    crownImg.style.left = w/2-crownImg.width/2 + "px";
-    crownImgTop = Math.max(crownImgTop-crownImgUpSpeed,lifeImgWidth/1.5);
+    crownImg.style.left = w / 2 - crownImg.width / 2 + "px";
+    crownImgTop = Math.max(crownImgTop - crownImgUpSpeed, lifeImgWidth / 1.5);
     crownImg.style.top = crownImgTop + "px";
 }
 
