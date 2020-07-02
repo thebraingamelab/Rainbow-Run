@@ -140,28 +140,26 @@ function mapLoop() {
 
 function moveTile(i) {
     let relativePositionToNext;
+    let translation = xDistance/2;
     if (i == map.length - 1) relativePositionToNext = 'TL';
     else relativePositionToNext = map[i + 1].relativePositionToLast;
     switch (relativePositionToNext) {
         case 'TL':
-            xMove += xDistance / 2;
-            offsets.x += xDistance / 2;
-            // yMove += (xDistance + yDistance) / 2 * 1.5;
+            xMove += translation;
+            offsets.x += translation;
             break;
         case 'TR':
-            xMove -= xDistance / 2;
-            offsets.x -= xDistance / 2;
-            // yMove += (xDistance + yDistance) / 2 * 1.5;
+            xMove -= translation;
+            offsets.x -= translation;
             break;
-        case 'BL':
-            // xMove -= (xDistance + yDistance) / 2;
-            yMove += xDistance / 2;
-            offsets.y += xDistance / 2;
+        case 'BL': 
+        // not perfect pic 13:52
+            yMove += translation;
+            offsets.y += translation;
             break;
         case 'BR':
-            // xMove += (xDistance + yDistance) / 2;
-            yMove -= xDistance / 2;
-            offsets.y -= xDistance / 2;
+            yMove -= translation;
+            offsets.y -= translation;
             break;
     }
 }

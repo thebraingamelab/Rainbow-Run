@@ -30,12 +30,6 @@ function colorShape() {
     for (nC = 0; nC < nColors; nC++) {
         let colorSegments = divideSegments(nTiles,nTurns);
 
-        // ensure each color has a unique segments-direction combination
-        // *** STANDARD ***
-        //
-        //
-        //
-
         let repeated = false;
         for (let i = 0; i < nC; i++) {
             let comparedColorSegments = colors[i][3];
@@ -109,6 +103,20 @@ function buildMap() {
             let shadowClr = colors[curClr][1];
             let clrSegments = colors[curClr][3];
 
+            if (i!==0){
+                let curDirection = clrSegments[0][1];
+                let oppDirection = getOppositeDirection(curDirection);
+                if ((curDirection===map[map.length-1].relativePositionToLast) || (oppDirection===map[map.length-1].relativePositionToLast)){
+                    let greyDirection;
+                    do{
+                        greyDirection = directions[Math.floor(Math.random() * directions.length)]
+                    } while((curDirection ===greyDirection) || (oppDirection === greyDirection));
+                    map.push(new Tile(greyTileClr,greyShadowClr,greyDirection));
+                }
+
+
+            }
+
             let tileCounter = 0;
             for (let s = 0; s < clrSegments.length; s++) {
                 for (; tileCounter <= clrSegments[s][0]; tileCounter++) map.push(new Tile(tileClr, shadowClr, clrSegments[s][1]));
@@ -123,13 +131,14 @@ function addGreySequence() {
     let control = true;
     do {
         //nGreyTiles = Math.floor(Math.random() * 4) + 3; //[3,6]
-        nGreyTurns = Math.max(Math.floor(Math.random() * nGreyTiles) - 1, 0); //[0, nGreyTiles-2]
+        nGreyTurns = Math.max(Math.floor(Math.random() * nGreyTiles) - 1, 1); //[0, nGreyTiles-2]
         //if ((nGreyTiles === nTiles) && (nGreyTurns === nTurns)) control = false;
     }
     while (!control);
 
-    let tileClr = '#B1BCCA';
-    let shadowClr = '#66738E';
+    let tileClr = greyTileClr;
+    let shadowClr = greyShadowClr;
+    lastDirection = map[map.length-1].relativePositionToLast;
     let greySegments = divideSegments(nGreyTiles, nGreyTurns);
 
     let tileCounter = 0;

@@ -8,8 +8,10 @@ let strokeClr = 'rgba(35,44,58,0.2)';
 let nColors = 2; // number of colors >=2; <nColorsUpperLimit
 let colors = [['#5ECBF2', '#1D9DD2', 'blue'], ['#FEDE68', '#E9B926', 'yellow'], ['#FB4D4B', '#D60904', 'red'], ['#2CDDAF', '#168469', 'green'], ['#FC954F', '#D45A10', 'orange'], ['#9582D2', '#553BA9', 'purple']];
 // [tileClr, shadowClr, colorName, colorSegments ( [i,'d'] - for tiles until i, their directions are 'd'; e.g. [[1,'TL'],[3,'BL']])]
+let greyTileClr = '#B1BCCA';
+let greyShadowClr = '#66738E';
 let nTimes = 2; // number of times each color sequence appears
-let nTiles = 3; // number of tiles in a color sequence
+let nTiles = 4; // number of tiles in a color sequence
 let nTurns = 1; // number of turns in a sequence; nTurns <= (nTiles-2)
 let nHistory = 7; // history shown 
 let map = [];
