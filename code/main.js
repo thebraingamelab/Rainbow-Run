@@ -10,6 +10,7 @@ function mainLoop() {
                 arrowImgs[i].style.display = 'none';
             }
         }
+        character.style.opacity = 0;
         clearInterval(collapseDefault);
         setParaForMapView();
         mapLoop();
@@ -26,7 +27,6 @@ function mainLoop() {
 
 
 function gameLoop() {
-
     if ((lifeLeft <= 0) && (!gameOver)) {
         gameOverAudio.play();
         gameOver = true;
@@ -39,7 +39,6 @@ function gameLoop() {
         mistakeFeedback();
     }
     if (proceed === true) { // transitioning
-        //playerOnTile(map[currentTile+1]);
         if (transitionProgressY <= yDistance) {
             ctx.clearRect(0 - xDistance, 0 - yDistance, w + xDistance * 2, h + yDistance * 2);
             modeFeature(mode);
@@ -74,9 +73,10 @@ function gameLoop() {
         ctx.save(); // 0,0
 
         centerTile(currentTile);
-        playerOnTile(map[currentTile]);
+
         ctx.restore(); // 0,0
     }
 
+    displayPlayer(w/2,h/2);
     requestAnimationFrame(gameLoop);
 }

@@ -67,13 +67,22 @@ function mapLoop() {
     ctx.globalAlpha = 0.9;
     ctx.clearRect(0, 0, w, h);
     ctx.save();
+    let endSize = tileWidth / 8;
 
     shownTiles = [];
     ctx.translate(mapTranslateX, mapTranslateY);
     map[map.length - 1].currentDisplay();
-    ctx.save(); // map starting point (end)
+    // ctx.save(); // map starting point (end)
+    //end point
+    ctx.save();
+    ctx.fillStyle = 'black';
+    ctx.beginPath();
+    ctx.arc(0, 0, endSize, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.closePath();
+    ctx.fillText("END", - endSize, -endSize * 1.5);
+    ctx.restore();
 
-    let endSize = tileWidth / 8;
     offsets = { x: 0, y: 0 };
     shownTiles.push(offsets);
 
@@ -115,16 +124,16 @@ function mapLoop() {
         }
     }
 
-    ctx.restore(); //map starting point
-    //end point
-    ctx.save();
-    ctx.fillStyle = 'black';
-    ctx.beginPath();
-    ctx.arc(0, 0, endSize, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.closePath();
-    ctx.fillText("END", - endSize, -endSize * 1.5);
-    ctx.restore();
+    // ctx.restore(); //map starting point
+    // //end point
+    // ctx.save();
+    // ctx.fillStyle = 'black';
+    // ctx.beginPath();
+    // ctx.arc(0, 0, endSize, 0, 2 * Math.PI);
+    // ctx.fill();
+    // ctx.closePath();
+    // ctx.fillText("END", - endSize, -endSize * 1.5);
+    // ctx.restore();
 
 
     for (let i = 0; i < map.length; i++) {
@@ -140,7 +149,7 @@ function mapLoop() {
 
 function moveTile(i) {
     let relativePositionToNext;
-    let translation = xDistance/2;
+    let translation = xDistance / 2;
     if (i == map.length - 1) relativePositionToNext = 'TL';
     else relativePositionToNext = map[i + 1].relativePositionToLast;
     switch (relativePositionToNext) {
@@ -152,8 +161,8 @@ function moveTile(i) {
             xMove -= translation;
             offsets.x -= translation;
             break;
-        case 'BL': 
-        // not perfect pic 13:52
+        case 'BL':
+            // not perfect pic 13:52
             yMove += translation;
             offsets.y += translation;
             break;
@@ -261,3 +270,9 @@ function winFeedback() {
 //     mapViewText.style.left = tileWidth + "px"; 
 //     mapViewText.style.display = 'initial';
 // }
+
+function displayPlayer(x,y){
+    character.style.display = "initial";
+    character.style.left = x - character.width/2 + "px";
+    character.style.top = y - character.height/2 + "px";
+}

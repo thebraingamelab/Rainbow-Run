@@ -1,6 +1,6 @@
 
 function updatePlayerPosition(evt) {
-    clickAudio.currentTime=0;
+    clickAudio.currentTime = 0;
     clickAudio.play();
     let playerMove = getInteractionArea(evt);
     if (gameOver) restart();
@@ -10,8 +10,8 @@ function updatePlayerPosition(evt) {
         crownImg.style.display = "none";
         mapView = true;
         mainLoop();
-    }    
-    else if (currentTile === map.length - 1) {}
+    }
+    else if (currentTile === map.length - 1) { }
     else if (playerMove === map[currentTile + 1].relativePositionToLast) {
         // clickPop(evt);
         if (proceed) { // if the player is clicking before the transition finishes
@@ -23,7 +23,6 @@ function updatePlayerPosition(evt) {
             ctx.save(); // 0,0
             ctx.save(); // 0,0
             centerTile(currentTile);
-            playerOnTile(map[currentTile]);
             ctx.restore(); // 0,0
         }
         if (!mistake) moves.push(true);
@@ -51,14 +50,13 @@ function updatePlayerPosition(evt) {
                     break;
                 }
             }
-            for (i=0; i<moves.length; i++) console.log(moves);
             if (accurateSequence) {
-                lifeLeft = Math.min(lifeLeft+1, lifeMax);
+                lifeLeft = Math.min(lifeLeft + 1, lifeMax);
             }
         }
     }
     else { // the player tapped a wrong direction
-        errorAudio.currentTime =0;
+        errorAudio.currentTime = 0;
         errorAudio.play();
         mistake = true;
         moves.push(false);
@@ -114,12 +112,52 @@ function proceedTransition(transitionDirection) {
     ctx.translate(-w / 2, -h / 2); // cancel the translate(w/2,h/2) in centerTile() function
 }
 
-function playerOnTile(tile) {
-    if (currentTile === map.length - 1) ctx.fillStyle = 'red';
-    else ctx.fillStyle = 'black';
-    let playerSize = tileWidth / 6;
-    ctx.fillRect(tile.x - playerSize / 2, tile.y - playerSize / 2, playerSize, playerSize);
-}
+// function displayPlayer(x,y) {
+//     let playerWidth = tileWidth / 3;
+//     let playerLength = playerWidth / 1.5;
+//     let playerHeight = playerLength / 1.5;
+
+//     ctx.save();
+//     ctx.translate(0,-playerHeight/2);
+//     ctx.fillStyle = '#F7F7F7';
+//     ctx.strokeStyle = '#325A74';
+//     // ctx.strokeStyle = 'transparent';
+
+//     //  top
+//     // ctx.fillStyle = '#917367';
+//     ctx.beginPath();
+//     ctx.moveTo(x, -playerLength / 2);
+//     ctx.lineTo(-playerWidth / 2, y);
+//     ctx.lineTo(x, playerLength / 2);
+//     ctx.lineTo(playerWidth / 2, y);
+//     ctx.closePath();
+//     ctx.fill();
+//     ctx.stroke();
+
+//     //  shadow
+//     // ctx.fillStyle = '#232C3A';
+//     ctx.beginPath();
+//     ctx.moveTo(x - playerWidth / 2, y);
+//     ctx.lineTo(x - playerWidth / 2, y + playerHeight);
+//     ctx.lineTo(x, y + playerLength / 2 + playerHeight);
+//     ctx.lineTo(x, y + playerLength / 2);
+//     ctx.closePath();
+//     ctx.fill();
+//     ctx.stroke();
+
+//     // tile right
+//     ctx.beginPath();
+//     ctx.moveTo(x, y + playerLength / 2);
+//     ctx.lineTo(x, y + playerHeight + playerLength / 2);
+//     ctx.lineTo(x + playerWidth / 2, y + playerHeight);
+//     ctx.lineTo(x + playerWidth / 2, y);
+//     ctx.closePath();
+//     ctx.fill();
+//     ctx.stroke();
+
+//     ctx.restore();
+
+// }
 
 function restart() {
     location.reload();

@@ -67,7 +67,7 @@ let mapTranslateX, mapTranslateY;
 let incorrectImg, reduceLifeImg;
 let mousePosX, mousePosY;
 let gameOverText, winText, mapViewText;
-let crownImg, crownImgTop, crownAlpha;
+let crownImg, crownImgTop, crownAlpha, character;
 let crownImgUpSpeed = 5;
 
 // sound
@@ -146,6 +146,9 @@ function startGame() {
     crownImg.width = tileWidth/2;
     crownImgTop = h/2 - tileLength;
     crownAlpha = 0;
+    character = document.getElementById("character");
+    character.width = tileWidth/2;
+
     // sound
     clickAudio = document.getElementById("clickSound");
     completeAudio = document.getElementById("completeSound");
@@ -158,6 +161,7 @@ function startGame() {
     fallAudio = document.getElementById("fallSound");
     fallAudio.volume = 0.1;
     gameOverAudio = document.getElementById("gameOverSound");
+    
 }
 
 function setTileParaByWidth(tileWidth) {
