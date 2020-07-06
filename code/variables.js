@@ -152,16 +152,22 @@ function startGame() {
     // sound
     // clickAudio = document.getElementById("clickSound");
     clickAudio = new Audio('click2.mp3');
-    completeAudio = document.getElementById("completeSound");
+    // completeAudio = document.getElementById("completeSound");
+    completeAudio = new Audio('complete1.mp3');
     completeAudio.volume = 0.8;
-    highlightAudio = document.getElementById("highlightSound");
+    // highlightAudio = document.getElementById("highlightSound");
+    highlightAudio = new Audio('positive2.mp3');
     highlightAudio.volume = 0.8;
-    slowAudio = document.getElementById("slowErrorSound");
-    errorAudio = document.getElementById("incorrectSound");
+    // slowAudio = document.getElementById("slowErrorSound");
+    slowAudio = new Audio('negative two-beep (slow).mp3');
+    // errorAudio = document.getElementById("incorrectSound");
+    errorAudio = new Audio('negative one-chime.mp3');
     errorAudio.volume = 0.9;
-    fallAudio = document.getElementById("fallSound");
+    // fallAudio = document.getElementById("fallSound");
+    fallAudio = new Audio('whoosh.mp3');
     fallAudio.volume = 0.1;
-    gameOverAudio = document.getElementById("gameOverSound");
+    // gameOverAudio = document.getElementById("gameOverSound");
+    gameOverAudio = new Audio('gameOver.mp3');
     
 }
 
