@@ -71,7 +71,15 @@ let crownImg, crownImgTop, crownAlpha, character;
 let crownImgUpSpeed = 5;
 
 // sound
+let context;
+// var bufferLoader;
 let clickAudio, completeAudio, highlightAudio, slowAudio, errorAudio, fallAudio, gameOverAudio;
+let _musicGainNode, _sfxGainNode;
+// Volume control (1 = 100%)
+let _masterVolume = 1;
+let _musicVolume = 0.1;
+let _sfxVolume = 0.15;
+
 
 // mode
 let mode = 'CLEAN';
@@ -95,6 +103,26 @@ function init() {
     ctx.canvas.width = w;
     ctx.canvas.height = h;
     dNextTileAlpha = nextTileAlpha / 50;
+
+    // sound
+    try {
+        // Fix up for prefixing
+        window.AudioContext = window.AudioContext||window.webkitAudioContext;
+        context = new AudioContext();
+      }
+      catch(e) {
+        alert('Web Audio API is not supported in this browser');
+      }
+    // Music volume
+    _musicGainNode = context.createGain();
+    _musicGainNode.gain.value = _musicVolume;
+    // Sound Effects volume
+    _sfxGainNode = context.createGain();
+    _sfxGainNode.gain.value = _sfxVolume;
+    // SFX
+    // let _valid = new Sound("audio/ding", _audioContext, _sfxGainNode);
+    // let _error = new Sound("audio/error", _audioContext, _sfxGainNode);
+    // // let _bgm = new Sound("audio/bgm", _audioContext, _musicGainNode, true);
 }
 
 function startGame() {
@@ -138,37 +166,38 @@ function startGame() {
         lives.push(lifeImgs[i]);
     }
     incorrectImg = document.getElementById("incorrectImg");
-    incorrectImg.width = tileWidth/2;
+    incorrectImg.width = tileWidth / 2;
     incorrectImg.height = incorrectImg.width;
     // reduceLifeImg = document.getElementById("reduceLifeImg");
     // reduceLifeImg.height = incorrectImg.height/1.5;
     crownImg = document.getElementById("crownImg");
-    crownImg.width = tileWidth/2;
-    crownImgTop = h/2 - tileLength;
+    crownImg.width = tileWidth / 2;
+    crownImgTop = h / 2 - tileLength;
     crownAlpha = 0;
     character = document.getElementById("character");
-    character.width = tileWidth/2;
+    character.width = tileWidth / 2;
 
     // sound
     // clickAudio = document.getElementById("clickSound");
-    clickAudio = new Audio('click2.mp3');
     // completeAudio = document.getElementById("completeSound");
-    completeAudio = new Audio('complete1.mp3');
-    completeAudio.volume = 0.8;
+    // completeAudio.volume = 0.8;
     // highlightAudio = document.getElementById("highlightSound");
-    highlightAudio = new Audio('positive2.mp3');
-    highlightAudio.volume = 0.8;
+    // highlightAudio.volume = 0.8;
     // slowAudio = document.getElementById("slowErrorSound");
-    slowAudio = new Audio('negative two-beep (slow).mp3');
     // errorAudio = document.getElementById("incorrectSound");
-    errorAudio = new Audio('negative one-chime.mp3');
-    errorAudio.volume = 0.9;
+    // errorAudio.volume = 0.9;
     // fallAudio = document.getElementById("fallSound");
-    fallAudio = new Audio('whoosh.mp3');
-    fallAudio.volume = 0.1;
+    // fallAudio.volume = 0.1;
     // gameOverAudio = document.getElementById("gameOverSound");
-    gameOverAudio = new Audio('gameOver.mp3');
-    
+
+    clickAudio = new Sound("audio/click2.mp3", context, _sfxGainNode);
+    completeAudio = new Sound("audio/complete1.mp3", context, _sfxGainNode);
+    highlightAudio = new Sound("audio/positive2.mp3", context, _sfxGainNode);
+    slowAudio = new Sound("audio/negative two-beep (slow).mp3", context, _sfxGainNode);
+    errorAudio = new Sound("audio/negative one-chime.mp3", context, _sfxGainNode);
+    fallAudio = new Sound("audio/whoosh.mp3", context, _sfxGainNode);
+    gameOverAudio = new Sound("audio/gameOver.mp3", context, _sfxGainNode);
+
 }
 
 function setTileParaByWidth(tileWidth) {
@@ -185,3 +214,68 @@ function setTileParaByLength(tileLength) {
     xDistance = tileWidth / 2 + tileHeight * 1.5; // distance from the last tile on x-axis
     yDistance = tileHeight + tileLength / 2; // distance from the last tile on y-axis
 }
+
+
+// Sound object
+function Sound(filePath, audioContext, gainNode, loop = false) {
+    let my = this;
+    let testAudio;
+    let xhr;
+
+    // Initialize fields (constructor stuff)
+    this.buffer = null;
+    this.audioContext = audioContext;
+    this.gainNode = gainNode;
+    this.loop = loop;
+
+    // Check for file type compatibility
+    testAudio = document.createElement("audio");
+
+    // Fetch the file
+    xhr = new XMLHttpRequest();
+    xhr.open('GET', encodeURI(filePath), true);
+    xhr.responseType = 'arraybuffer';
+    // xhr.onload = function() {
+    //     context.decodeAudioData(xhr.response, function(buffer) {
+    //       my.buffer = buffer;
+    //     }, onError);
+    //   }
+    // Oopsie doopsie, couldn't fetch the file
+    xhr.addEventListener("error", function () {
+        console.log('Error loading from server: ' + filePath);
+    }, false);
+    // On successful load, decode the audio data
+    xhr.addEventListener("load", function () {
+        audioContext.decodeAudioData(xhr.response,
+            // Success
+            function (audioBuffer) {
+                my.buffer = audioBuffer;
+            },
+            // Error
+            function (e) {
+                console.log("Error decoding audio data: " + e.err);
+            });
+    }, false);
+    xhr.send();
+}
+
+// Play function, for playing the sound
+Sound.prototype.play = function () {
+    let thisObject = this;
+
+    // Play the sound only if it's been decoded already
+    if (this.buffer) {
+        let bufferSource = this.audioContext.createBufferSource();
+        bufferSource.buffer = this.buffer;
+        bufferSource.connect(this.gainNode).connect(this.audioContext.destination);
+        bufferSource.start(0);
+        bufferSource.loop = this.loop;
+    }
+
+    // If it hasn't been decoded yet, check every 50ms to see if it's ready
+    else {
+        window.setTimeout(function () {
+            thisObject.play();
+        }, 50);
+    }
+};;
