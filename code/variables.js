@@ -150,7 +150,8 @@ function startGame() {
     character.width = tileWidth/2;
 
     // sound
-    clickAudio = document.getElementById("clickSound");
+    // clickAudio = document.getElementById("clickSound");
+    clickAudio = new Audio('click2.mp3');
     completeAudio = document.getElementById("completeSound");
     completeAudio.volume = 0.8;
     highlightAudio = document.getElementById("highlightSound");
