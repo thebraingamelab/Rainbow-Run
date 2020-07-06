@@ -190,11 +190,11 @@ function startGame() {
     // fallAudio.volume = 0.1;
     // gameOverAudio = document.getElementById("gameOverSound");
 
-    clickAudio = new Sound("audio/click2.mp3", context, _sfxGainNode);
-    completeAudio = new Sound("audio/complete1.mp3", context, _sfxGainNode);
-    highlightAudio = new Sound("audio/positive2.mp3", context, _sfxGainNode);
-    slowAudio = new Sound("audio/negative two-beep (slow).mp3", context, _sfxGainNode);
-    errorAudio = new Sound("audio/negative one-chime.mp3", context, _sfxGainNode);
+    clickAudio = new Sound("audio/click.mp3", context, _sfxGainNode);
+    completeAudio = new Sound("audio/complete.mp3", context, _sfxGainNode);
+    highlightAudio = new Sound("audio/positive.mp3", context, _sfxGainNode);
+    slowAudio = new Sound("audio/slow.mp3", context, _sfxGainNode);
+    errorAudio = new Sound("audio/error.mp3", context, _sfxGainNode);
     fallAudio = new Sound("audio/whoosh.mp3", context, _sfxGainNode);
     gameOverAudio = new Sound("audio/gameOver.mp3", context, _sfxGainNode);
 
