@@ -66,10 +66,10 @@ function colorShape() {
         }
         else nC--;
     }
-    // for (nC = 0; nC < nColors; nC++) {
-    //     console.log(colors[nC][2] + ": ");
-    //     for (let i=0; i<colors[nC][4].length; i++) console.log(colors[nC][4][i]);
-    // }
+    for (nC = 0; nC < nColors; nC++) {
+        console.log(colors[nC][2] + ": ");
+        for (let i=0; i<colors[nC][4].length; i++) console.log(colors[nC][4][i]);
+    }
 }
 
 function divideSegments(nOfTiles, nOfTurns) {
