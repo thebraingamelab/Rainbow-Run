@@ -1,7 +1,7 @@
 
 function updatePlayerPosition(evt) {
-    clickAudio.currentTime = 0;
-    clickAudio.play();
+    // clickAudio.currentTime = 0;
+    // clickAudio.play();
     let playerMove = getInteractionArea(evt);
     if (gameOver) restart();
     else if (endOfMaze) {
