@@ -34,10 +34,10 @@ function colorShape() {
         // notes
         let colorNotes = [];
         for (let i = 0; i < nTiles; i++) {
-            let curNote = notes[Math.floor(Math.random(notes.length))];
+            let curNote = notes[Math.floor(Math.random()*notes.length)];
             let sharp = '';
-            if (Math.floor(Math.random(2) === 0)) sharp = 's';
-            let range = Math.floor(Math.random(3)) + 3; //piano range: [3,4,5]
+            if (Math.floor(Math.random()*2 === 0)) sharp = 's';
+            let range = Math.floor(Math.random()*3) + 3; //piano range: [3,4,5]
             let curPitch = curNote + sharp + range;
             let repeated = false;
             for (let j=0; j<i; j++){
@@ -66,10 +66,10 @@ function colorShape() {
         }
         else nC--;
     }
-    for (nC = 0; nC < nColors; nC++) {
-        console.log(colors[nC][2] + ": ");
-        for (let i=0; i<colors[nC][4].length; i++) console.log(colors[nC][4][i]);
-    }
+    // for (nC = 0; nC < nColors; nC++) {
+    //     console.log(colors[nC][2] + ": ");
+    //     for (let i=0; i<colors[nC][4].length; i++) console.log(colors[nC][4][i]);
+    // }
 }
 
 function divideSegments(nOfTiles, nOfTurns) {
