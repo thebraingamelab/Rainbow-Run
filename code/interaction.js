@@ -32,14 +32,18 @@ function updatePlayerPosition(evt) {
         slow = false;
         proceed = true;
         currentTile++;
+
+        curInstrument.toMaster();
+        curInstrument.triggerAttack(map[currentTile].note);
+
         currentCollapsing = currentCollapsingThreshold * 0.95;
         if (sinceClrStarted === nTiles) {
             sinceClrStarted = 0;
         }
         if (map[currentTile].tileClr !== '#B1BCCA') sinceClrStarted++;
         if (sinceClrStarted === nTiles) {
-            highlightAudio.currentTime = 0;
-            highlightAudio.play();
+            // highlightAudio.currentTime = 0;
+            // highlightAudio.play();
             // only extra life when the sequence was accurately completed
             // an array to record the moves
             let accurateSequence = true;

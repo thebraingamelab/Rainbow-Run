@@ -1,6 +1,6 @@
 
 class Tile {
-    constructor(tileClr, shadowClr, relativePositionToLast) {
+    constructor(tileClr, shadowClr, relativePositionToLast, note) {
         this.x = 0;
         this.y = 0;
         this.collapseY = 0;
@@ -12,6 +12,7 @@ class Tile {
         this.shadowClr = shadowClr;
         this.relativePositionToLast = relativePositionToLast; // relative position to the last tile
         //this.relativePositionToNext; // relative position to the next tile
+        this.note = note;
     }
 
     currentDisplay() { // when the tile is where the player currently is, position it in the middle
@@ -196,7 +197,7 @@ function disappearHistory() {
         // display if not overlapping
         offsets = getOffsets(getOppositeDirection(map[tileCounter + 1].relativePositionToLast));
         if (checkOverlap(tileCounter) !== false) {
-            ctx.globalAlpha = 0;
+            if (! map[tileCounter].collapsed) ctx.globalAlpha = 0;
             map[tileCounter].pastDisplay(map[tileCounter + 1].relativePositionToLast);
         }
         else {

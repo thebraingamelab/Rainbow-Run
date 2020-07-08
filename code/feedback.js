@@ -32,7 +32,7 @@ function collapse() {
         slowAudio.play();
         slow = true;
         lifeLeft--;
-        console.log(lifeLeft);
+        // console.log(lifeLeft);
         justCollapsed++;
         // }
     }

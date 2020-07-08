@@ -5,14 +5,14 @@ let canvas, ctx, w, h; // canvas
 let strokeClr = 'rgba(35,44,58,0.2)';
 
 // map (variables should vary for different levels in the final version)
-let nColors = 2; // number of colors >=2; <nColorsUpperLimit
+let nColors = 3; // number of colors >=2; <nColorsUpperLimit
 let colors = [['#5ECBF2', '#1D9DD2', 'blue'], ['#FEDE68', '#E9B926', 'yellow'], ['#FB4D4B', '#D60904', 'red'], ['#2CDDAF', '#168469', 'green'], ['#FC954F', '#D45A10', 'orange'], ['#9582D2', '#553BA9', 'purple']];
-// [tileClr, shadowClr, colorName, colorSegments ( [i,'d'] - for tiles until i, their directions are 'd'; e.g. [[1,'TL'],[3,'BL']])]
+// [0:tileClr, 1:shadowClr, 2:colorName, 3:colorSegments ( [i,'d'] - for tiles until i their directions are 'd'; e.g. [[1,'TL'],[3,'BL']]) , 4:color notes [C3, E3, G3] ]
 let greyTileClr = '#B1BCCA';
 let greyShadowClr = '#66738E';
 let nTimes = 2; // number of times each color sequence appears
-let nTiles = 3; // number of tiles in a color sequence
-let nTurns = 1; // number of turns in a sequence; nTurns <= (nTiles-2)
+let nTiles = 5; // number of tiles in a color sequence
+let nTurns = 2; // number of turns in a sequence; nTurns <= (nTiles-2)
 let nHistory = 7; // history shown 
 let map = [];
 let directions = ['TL', 'TR', 'BL', 'BR']; // TopLeft, TopRight, BottomLeft, BottomRight
@@ -80,6 +80,10 @@ let _masterVolume = 1;
 let _musicVolume = 0.1;
 let _sfxVolume = 0.15;
 
+// instruments
+let sampleInstruments;
+let curInstrument;
+let notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B']; // CDFGA have sharps
 
 // mode
 let mode = 'CLEAN';
@@ -107,22 +111,12 @@ function init() {
     // sound
     try {
         // Fix up for prefixing
-        window.AudioContext = window.AudioContext||window.webkitAudioContext;
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
         context = new AudioContext();
-      }
-      catch(e) {
+    }
+    catch (e) {
         alert('Web Audio API is not supported in this browser');
-      }
-    // Music volume
-    _musicGainNode = context.createGain();
-    _musicGainNode.gain.value = _musicVolume;
-    // Sound Effects volume
-    _sfxGainNode = context.createGain();
-    _sfxGainNode.gain.value = _sfxVolume;
-    // SFX
-    // let _valid = new Sound("audio/ding", _audioContext, _sfxGainNode);
-    // let _error = new Sound("audio/error", _audioContext, _sfxGainNode);
-    // // let _bgm = new Sound("audio/bgm", _audioContext, _musicGainNode, true);
+    }
 }
 
 function startGame() {
@@ -157,7 +151,6 @@ function startGame() {
     //text
     gameOverText = document.getElementById("gameOverText");
     winText = document.getElementById("winText");
-    // mapViewText = document.getElementById("mapViewInstruction");
     //image
     let lifeImgs = document.getElementsByClassName("life");
     lifeImgWidth = Math.min(w, h) / 12;
@@ -178,17 +171,13 @@ function startGame() {
     character.width = tileWidth / 2;
 
     // sound
-    // clickAudio = document.getElementById("clickSound");
-    // completeAudio = document.getElementById("completeSound");
-    // completeAudio.volume = 0.8;
-    // highlightAudio = document.getElementById("highlightSound");
-    // highlightAudio.volume = 0.8;
-    // slowAudio = document.getElementById("slowErrorSound");
-    // errorAudio = document.getElementById("incorrectSound");
-    // errorAudio.volume = 0.9;
-    // fallAudio = document.getElementById("fallSound");
-    // fallAudio.volume = 0.1;
-    // gameOverAudio = document.getElementById("gameOverSound");
+
+    // Music volume
+    _musicGainNode = context.createGain();
+    _musicGainNode.gain.value = _musicVolume;
+    // Sound Effects volume
+    _sfxGainNode = context.createGain();
+    _sfxGainNode.gain.value = _sfxVolume;
 
     clickAudio = new Sound("audio/click.mp3", context, _sfxGainNode);
     completeAudio = new Sound("audio/complete.mp3", context, _sfxGainNode);
@@ -198,7 +187,14 @@ function startGame() {
     fallAudio = new Sound("audio/whoosh.mp3", context, _sfxGainNode);
     gameOverAudio = new Sound("audio/gameOver.mp3", context, _sfxGainNode);
 
+
+    // instruments
+    sampleInstruments = SampleLibrary.load({
+        instruments: "piano"
+    });
+    curInstrument = sampleInstruments;
 }
+
 
 function setTileParaByWidth(tileWidth) {
     tileLength = tileWidth / 1.5;
@@ -219,7 +215,7 @@ function setTileParaByLength(tileLength) {
 // Sound object
 function Sound(filePath, audioContext, gainNode, loop = false) {
     let my = this;
-    let testAudio;
+    // let testAudio;
     let xhr;
 
     // Initialize fields (constructor stuff)

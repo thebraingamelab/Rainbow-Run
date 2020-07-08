@@ -1,4 +1,4 @@
-let order =[];
+let order = [];
 
 function generateMap() {
     colorOrder();
@@ -28,20 +28,47 @@ function colorOrder() {
 
 function colorShape() {
     for (nC = 0; nC < nColors; nC++) {
-        let colorSegments = divideSegments(nTiles,nTurns);
+        // shape
+        let colorSegments = divideSegments(nTiles, nTurns);
 
-        let repeated = false;
+        // notes
+        let colorNotes = [];
+        for (let i = 0; i < nTiles; i++) {
+            let curNote = notes[Math.random(notes.length)];
+            let sharp = '';
+            if (Math.random(2) === 0) sharp = 's';
+            let range = Math.random(3) + 3; //piano range: [3,4,5]
+            let curPitch = curNote + sharp + range;
+            let repeated = false;
+            for (let j=0; j<i; j++){
+                if (curPitch===colorNotes[j]){
+                    repeated = true;
+                    break;
+                }
+            }
+            if (repeated) i--;
+            else colorNotes.push(curPitch);
+        }
+
+        // ensure each color sequence is unique
+        repeated = false;
         for (let i = 0; i < nC; i++) {
             let comparedColorSegments = colors[i][3];
-            if (colorSegments.compare(comparedColorSegments)) {
+            let comparedColorNotes = colors[i][4];
+            if (colorSegments.compare(comparedColorSegments) || colorNotes.compare(comparedColorNotes)) {
                 repeated = true;
                 break;
             }
         }
         if (!repeated) {
             colors[nC].push(colorSegments); // e.g. [[1,'TL'],[3,'BL']]
+            colors[nC].push(colorNotes);
         }
         else nC--;
+    }
+    for (nC = 0; nC < nColors; nC++) {
+        console.log(colors[nC][2] + ": ");
+        for (let i=0; i<colors[nC][4].length; i++) console.log(colors[nC][4][i]);
     }
 }
 
@@ -103,15 +130,15 @@ function buildMap() {
             let shadowClr = colors[curClr][1];
             let clrSegments = colors[curClr][3];
 
-            if (i!==0){
+            if (i !== 0) {
                 let curDirection = clrSegments[0][1];
                 let oppDirection = getOppositeDirection(curDirection);
-                if ((curDirection===map[map.length-1].relativePositionToLast) || (oppDirection===map[map.length-1].relativePositionToLast)){
+                if ((curDirection === map[map.length - 1].relativePositionToLast) || (oppDirection === map[map.length - 1].relativePositionToLast)) {
                     let greyDirection;
-                    do{
+                    do {
                         greyDirection = directions[Math.floor(Math.random() * directions.length)]
-                    } while((curDirection ===greyDirection) || (oppDirection === greyDirection));
-                    map.push(new Tile(greyTileClr,greyShadowClr,greyDirection));
+                    } while ((curDirection === greyDirection) || (oppDirection === greyDirection));
+                    map.push(new Tile(greyTileClr, greyShadowClr, greyDirection));
                 }
 
 
@@ -138,7 +165,7 @@ function addGreySequence() {
 
     let tileClr = greyTileClr;
     let shadowClr = greyShadowClr;
-    lastDirection = map[map.length-1].relativePositionToLast;
+    lastDirection = map[map.length - 1].relativePositionToLast;
     let greySegments = divideSegments(nGreyTiles, nGreyTurns);
 
     let tileCounter = 0;
