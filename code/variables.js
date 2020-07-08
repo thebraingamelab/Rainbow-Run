@@ -190,7 +190,8 @@ function startGame() {
 
     // instruments
     sampleInstruments = SampleLibrary.load({
-        instruments: "piano"
+        instruments: "piano",
+        minify: true
     });
     curInstrument = sampleInstruments;
 }
