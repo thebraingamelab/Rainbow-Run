@@ -192,7 +192,7 @@ function startGame() {
     sampleInstruments = SampleLibrary.load({
         instruments: "piano",
         minify: true,
-        baseUrl: "/code/instruments/samples/"
+        baseUrl: "/Rainbow-Run/code/instruments/samples/"
     });
     curInstrument = sampleInstruments;
 }
