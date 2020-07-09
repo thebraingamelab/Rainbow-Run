@@ -20,6 +20,10 @@ function mainLoop() {
         canvas.addEventListener("click", updatePlayerPosition);
         window.addEventListener('resize', init, false);
         collapseDefault = setInterval(collapse, collapsingInterval);
+
+        curInstrument.toMaster();
+        curInstrument.triggerAttack(map[0].note);
+
         gameLoop();
     }
 

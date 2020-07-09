@@ -32,7 +32,8 @@ function updatePlayerPosition(evt) {
         slow = false;
         proceed = true;
         currentTile++;
-
+        
+        console.log(map[currentTile].note);
         curInstrument.toMaster();
         curInstrument.triggerAttack(map[currentTile].note);
 

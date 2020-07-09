@@ -129,6 +129,7 @@ function buildMap() {
             let tileClr = colors[curClr][0];
             let shadowClr = colors[curClr][1];
             let clrSegments = colors[curClr][3];
+            let clrNotes = colors[curClr][4];
 
             if (i !== 0) {
                 let curDirection = clrSegments[0][1];
@@ -146,7 +147,7 @@ function buildMap() {
 
             let tileCounter = 0;
             for (let s = 0; s < clrSegments.length; s++) {
-                for (; tileCounter <= clrSegments[s][0]; tileCounter++) map.push(new Tile(tileClr, shadowClr, clrSegments[s][1]));
+                for (; tileCounter <= clrSegments[s][0]; tileCounter++) map.push(new Tile(tileClr, shadowClr, clrSegments[s][1], clrNotes[tileCounter]));
             }
         }
     }
