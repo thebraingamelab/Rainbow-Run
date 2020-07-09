@@ -106,15 +106,15 @@ function randomChord() { // current chord pattern: no sharp
 }
 
 
-function randomNote() { // can have sharp
+function randomNote() { // doesn't have sharp
     let lastPitch = map[map.length - 1].note;
     let curNote, sharp, range, curPitch;
     do {
         curNote = notes[Math.floor(Math.random() * notes.length)];
-        sharp = '';
-        if ((Math.floor(Math.random() * 2) === 0) && !(curNote === 'E' || curNote === 'B')) sharp = 's';
+        // sharp = '';
+        // if ((Math.floor(Math.random() * 2) === 0) && !(curNote === 'E' || curNote === 'B')) sharp = 's';
         range = Math.floor(Math.random()) * 3 + 3; //[3, 4, 5];
-        curPitch = curNote + sharp + range;
+        curPitch = curNote + range;
     } while (curPitch === lastPitch)
     return curPitch;
 }
