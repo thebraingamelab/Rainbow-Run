@@ -32,10 +32,6 @@ function updatePlayerPosition(evt) {
         slow = false;
         proceed = true;
         currentTile++;
-
-        curInstrument.toMaster();
-        curInstrument.triggerAttack(map[currentTile].note);
-
         currentCollapsing = currentCollapsingThreshold * 0.95;
         if (sinceClrStarted === nTiles) {
             sinceClrStarted = 0;
@@ -60,6 +56,9 @@ function updatePlayerPosition(evt) {
                 lifeLeft = Math.min(lifeLeft + 1, lifeMax);
             }
         }
+        curInstrument.toMaster();
+        curInstrument.triggerAttack(map[currentTile].note);
+
     }
     else { // the player tapped a wrong direction
         errorAudio.currentTime = 0;
