@@ -29,12 +29,12 @@ function collapse() {
     if ((currentTile < nTiles) || endOfMaze || gameOver) { }
     else if ((currentTile > nTiles - 1) && (disappearingTiles.length === 0) && (justCollapsed === 0)) {
         // if (!endOfMaze){
-        slowAudio.play();
         slow = true;
         lifeLeft--;
         // console.log(lifeLeft);
         justCollapsed++;
         // }
+        slowAudio.play();
     }
     else if (justCollapsed > 0) justCollapsed++;
     else {
