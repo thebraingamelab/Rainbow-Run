@@ -31,46 +31,94 @@ function colorShape() {
         // shape
         let colorSegments = divideSegments(nTiles, nTurns);
 
-        // notes
-        let colorNotes = [];
-        for (let i = 0; i < nTiles; i++) {
-            let curNote = notes[Math.floor(Math.random()*notes.length)];
-            let sharp = '';
-            if (Math.floor(Math.random()*2 === 0)) sharp = 's';
-            let range = Math.floor(Math.random()*3) + 3; //piano range: [3,4,5]
-            let curPitch = curNote + sharp + range;
-            let repeated = false;
-            for (let j=0; j<i; j++){
-                if (curPitch===colorNotes[j]){
-                    repeated = true;
-                    break;
-                }
-            }
-            if (repeated) i--;
-            else colorNotes.push(curPitch);
-        }
-
         // ensure each color sequence is unique
         repeated = false;
         for (let i = 0; i < nC; i++) {
             let comparedColorSegments = colors[i][3];
-            let comparedColorNotes = colors[i][4];
-            if (colorSegments.compare(comparedColorSegments) || colorNotes.compare(comparedColorNotes)) {
+            // let comparedColorNotes = colors[i][4];
+            if (colorSegments.compare(comparedColorSegments)) {
                 repeated = true;
                 break;
             }
         }
         if (!repeated) {
             colors[nC].push(colorSegments); // e.g. [[1,'TL'],[3,'BL']]
-            colors[nC].push(colorNotes);
         }
-        else nC--;
+        else {
+            nC--;
+            continue;
+        }
+
+        // assign chord
+        colors[nC].push(randomChord());
     }
-    for (nC = 0; nC < nColors; nC++) {
-        console.log(colors[nC][2] + ": ");
-        for (let i=0; i<colors[nC][4].length; i++) console.log(colors[nC][4][i]);
-    }
+    // for (nC = 0; nC < nColors; nC++) {
+    //     console.log(colors[nC][2] + ": ");
+    //     for (let i=0; i<colors[nC][4].length; i++) console.log(colors[nC][4][i]);
+    // }
 }
+
+let roots = [];
+function randomChord() { // current chord pattern: no sharp
+    // randomly choose the root in the chord, which should be in range3
+    let curNote, curRoot;
+    let range = 3;
+    let repeated;
+    do {// build curRoot
+        curNote = notes[Math.floor(Math.random() * notes.length)];
+        // sharp = '';
+        // if (Math.floor(Math.random() * 2) === 0) sharp = 's';
+        curRoot = curNote + range;
+        // examine if repeated
+        repeated = false;
+        for (let i = 0; i < roots.length; i++) {
+            if (curRoot === roots[i]) {
+                repeated = true;
+                break;
+            }
+        }
+    } while (repeated);
+    roots.push(curRoot);
+
+    // build chord out of the root
+    let nNotes = Math.max(4, nTiles);
+    let curPitch;
+    let colorNotes = [];
+    for (let i = 0; i < nNotes; i++) {
+        curNote += 2;
+        if (curNote > notes.length - 1) {
+            curNote = curNote - (notes.length - 1) - 1;
+            range++;
+        }
+        curPitch = curNote + range;
+        colorNotes.push(curPitch);
+    }
+
+    // number of notes that fits nTiles
+    if (nNotes > nTiles) {
+        for (let i = 0; i < nNotes - nTiles; i++) {
+            let omittedNote = Math.random() * colorNotes.length;
+            colorNotes.splice(omittedNote, 1);
+        }
+    }
+    shuffle(colorNotes);
+    return colorNotes;
+}
+
+
+function randomNote() { // can have sharp
+    let lastPitch = map[map.length - 1].note;
+    let curNote, sharp, range, curPitch;
+    do {
+        curNote = notes[Math.floor(Math.random() * notes.length)];
+        sharp = '';
+        if (Math.floor(Math.random() * 2) === 0) sharp = 's';
+        range = Math.floor(Math.random()) * 3 + 3;[3, 4, 5];
+        curPitch = curNote + sharp + range;
+    } while (curPitch === lastPitch)
+    return curPitch;
+}
+
 
 function divideSegments(nOfTiles, nOfTurns) {
     let segments = [];
@@ -139,7 +187,7 @@ function buildMap() {
                     do {
                         greyDirection = directions[Math.floor(Math.random() * directions.length)]
                     } while ((curDirection === greyDirection) || (oppDirection === greyDirection));
-                    map.push(new Tile(greyTileClr, greyShadowClr, greyDirection));
+                    map.push(new Tile(greyTileClr, greyShadowClr, greyDirection, randomNote()));
                 }
 
 
@@ -171,8 +219,6 @@ function addGreySequence() {
 
     let tileCounter = 0;
     for (let s = 0; s < greySegments.length; s++) {
-        for (; tileCounter <= greySegments[s][0]; tileCounter++) map.push(new Tile(tileClr, shadowClr, greySegments[s][1]));
+        for (; tileCounter <= greySegments[s][0]; tileCounter++) map.push(new Tile(tileClr, shadowClr, greySegments[s][1], randomNote()));
     }
 }
-
-
