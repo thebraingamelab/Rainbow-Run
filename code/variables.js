@@ -41,7 +41,7 @@ let disappearingSpeed = 0.003; // in terms of globalAlpha
 // let collapseThreshold = 0.1;
 let collapseDefault;
 let justCollapsed = 0;
-let collapsingInterval = 1000; // in ms
+let collapsingInterval = 800; // in ms
 let collapsingSpeed = disappearingSpeed * 3;
 
 
@@ -84,6 +84,7 @@ let _sfxVolume = 0.15;
 let sampleInstruments;
 let curInstrument;
 let notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B']; // CDFGA have sharps
+let attackedFirstNote = false;
 
 // mode
 let mode = 'CLEAN';

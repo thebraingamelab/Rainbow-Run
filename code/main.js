@@ -21,9 +21,6 @@ function mainLoop() {
         window.addEventListener('resize', init, false);
         collapseDefault = setInterval(collapse, collapsingInterval);
 
-        // curInstrument.toMaster();
-        // curInstrument.triggerAttack(map[0].note);
-
         gameLoop();
     }
 
@@ -31,6 +28,11 @@ function mainLoop() {
 
 
 function gameLoop() {
+    // if (currentTile===0 && !attackedFirstNote){
+    //     curInstrument.toMaster();
+    //     curInstrument.triggerAttack(map[0].note);
+    //     attackedFirstNote=true;
+    // }
     if ((lifeLeft <= 0) && (!gameOver)) {
         // gameOverAudio.play();
         gameOver = true;
