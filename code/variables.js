@@ -33,7 +33,7 @@ let dNextTileAlpha;
 let rateHistoryAlpha = (historyAlpha - 0) / (nHistory);
 let sinceClrStarted = 1; // to detect when to highlight
 let currentTile = 0;
-let nextTileDelayTime = 20;
+let nextTileDelayTime = 10;
 let delayed = 0;
 let disappearingTiles = []; // {tile (tile's counter -  from the last history shown to cur-1), alpha]
 let alphaThreshold = 0.3;
@@ -41,7 +41,7 @@ let disappearingSpeed = 0.003; // in terms of globalAlpha
 // let collapseThreshold = 0.1;
 let collapseDefault;
 let justCollapsed = 0;
-let collapsingInterval = 1300; // in ms
+let collapsingInterval = 1000; // in ms
 let collapsingSpeed = disappearingSpeed * 3;
 
 
