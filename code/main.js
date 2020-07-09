@@ -28,7 +28,7 @@ function mainLoop() {
 
 function gameLoop() {
     if ((lifeLeft <= 0) && (!gameOver)) {
-        gameOverAudio.play();
+        // gameOverAudio.play();
         gameOver = true;
         gameOverFeedback();
     }
@@ -49,7 +49,7 @@ function gameLoop() {
         else { // just finished transition
             // no clearRect here, otherwise the end of the transition will be jerky
             if (currentTile === map.length - 1) {
-                completeAudio.play();
+                // completeAudio.play();
                 endOfMaze = true;
             }
             transitionProgressY = 0;
