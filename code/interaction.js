@@ -60,8 +60,8 @@ function updatePlayerPosition(evt) {
         }
     }
     else { // the player tapped a wrong direction
-        errorAudio.currentTime = 0;
-        errorAudio.play();
+        // errorAudio.currentTime = 0;
+        // errorAudio.play();
         mistake = true;
         moves.push(false);
         lifeLeft--;

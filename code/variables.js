@@ -71,14 +71,14 @@ let crownImg, crownImgTop, crownAlpha, character;
 let crownImgUpSpeed = 5;
 
 // sound
-let context;
-// var bufferLoader;
-let clickAudio, completeAudio, highlightAudio, slowAudio, errorAudio, fallAudio, gameOverAudio;
-let _musicGainNode, _sfxGainNode;
-// Volume control (1 = 100%)
-let _masterVolume = 1;
-let _musicVolume = 0.1;
-let _sfxVolume = 0.15;
+// let context;
+// // var bufferLoader;
+// let clickAudio, completeAudio, highlightAudio, slowAudio, errorAudio, fallAudio, gameOverAudio;
+// let _musicGainNode, _sfxGainNode;
+// // Volume control (1 = 100%)
+// let _masterVolume = 1;
+// let _musicVolume = 0.1;
+// let _sfxVolume = 0.15;
 
 // instruments
 let sampleInstruments;
@@ -109,14 +109,14 @@ function init() {
     dNextTileAlpha = nextTileAlpha / 50;
 
     // sound
-    try {
-        // Fix up for prefixing
-        window.AudioContext = window.AudioContext || window.webkitAudioContext;
-        context = new AudioContext();
-    }
-    catch (e) {
-        alert('Web Audio API is not supported in this browser');
-    }
+    // try {
+    //     // Fix up for prefixing
+    //     window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    //     context = new AudioContext();
+    // }
+    // catch (e) {
+    //     alert('Web Audio API is not supported in this browser');
+    // }
 }
 
 function startGame() {
@@ -172,20 +172,20 @@ function startGame() {
 
     // sound
 
-    // Music volume
-    _musicGainNode = context.createGain();
-    _musicGainNode.gain.value = _musicVolume;
-    // Sound Effects volume
-    _sfxGainNode = context.createGain();
-    _sfxGainNode.gain.value = _sfxVolume;
+    // // Music volume
+    // _musicGainNode = context.createGain();
+    // _musicGainNode.gain.value = _musicVolume;
+    // // Sound Effects volume
+    // _sfxGainNode = context.createGain();
+    // _sfxGainNode.gain.value = _sfxVolume;
 
-    clickAudio = new Sound("audio/click.mp3", context, _sfxGainNode);
-    completeAudio = new Sound("audio/complete.mp3", context, _sfxGainNode);
-    highlightAudio = new Sound("audio/positive.mp3", context, _sfxGainNode);
-    slowAudio = new Sound("audio/slow.mp3", context, _sfxGainNode);
-    errorAudio = new Sound("audio/error.mp3", context, _sfxGainNode);
-    fallAudio = new Sound("audio/whoosh.mp3", context, _sfxGainNode);
-    gameOverAudio = new Sound("audio/gameOver.mp3", context, _sfxGainNode);
+    // clickAudio = new Sound("audio/click.mp3", context, _sfxGainNode);
+    // completeAudio = new Sound("audio/complete.mp3", context, _sfxGainNode);
+    // highlightAudio = new Sound("audio/positive.mp3", context, _sfxGainNode);
+    // slowAudio = new Sound("audio/slow.mp3", context, _sfxGainNode);
+    // errorAudio = new Sound("audio/error.mp3", context, _sfxGainNode);
+    // fallAudio = new Sound("audio/whoosh.mp3", context, _sfxGainNode);
+    // gameOverAudio = new Sound("audio/gameOver.mp3", context, _sfxGainNode);
 
 
     // instruments
@@ -213,66 +213,66 @@ function setTileParaByLength(tileLength) {
 }
 
 
-// Sound object
-function Sound(filePath, audioContext, gainNode, loop = false) {
-    let my = this;
-    // let testAudio;
-    let xhr;
+// // Sound object
+// function Sound(filePath, audioContext, gainNode, loop = false) {
+//     let my = this;
+//     // let testAudio;
+//     let xhr;
 
-    // Initialize fields (constructor stuff)
-    this.buffer = null;
-    this.audioContext = audioContext;
-    this.gainNode = gainNode;
-    this.loop = loop;
+//     // Initialize fields (constructor stuff)
+//     this.buffer = null;
+//     this.audioContext = audioContext;
+//     this.gainNode = gainNode;
+//     this.loop = loop;
 
-    // Check for file type compatibility
-    testAudio = document.createElement("audio");
+//     // Check for file type compatibility
+//     testAudio = document.createElement("audio");
 
-    // Fetch the file
-    xhr = new XMLHttpRequest();
-    xhr.open('GET', encodeURI(filePath), true);
-    xhr.responseType = 'arraybuffer';
-    // xhr.onload = function() {
-    //     context.decodeAudioData(xhr.response, function(buffer) {
-    //       my.buffer = buffer;
-    //     }, onError);
-    //   }
-    // Oopsie doopsie, couldn't fetch the file
-    xhr.addEventListener("error", function () {
-        console.log('Error loading from server: ' + filePath);
-    }, false);
-    // On successful load, decode the audio data
-    xhr.addEventListener("load", function () {
-        audioContext.decodeAudioData(xhr.response,
-            // Success
-            function (audioBuffer) {
-                my.buffer = audioBuffer;
-            },
-            // Error
-            function (e) {
-                console.log("Error decoding audio data: " + e.err);
-            });
-    }, false);
-    xhr.send();
-}
+//     // Fetch the file
+//     xhr = new XMLHttpRequest();
+//     xhr.open('GET', encodeURI(filePath), true);
+//     xhr.responseType = 'arraybuffer';
+//     // xhr.onload = function() {
+//     //     context.decodeAudioData(xhr.response, function(buffer) {
+//     //       my.buffer = buffer;
+//     //     }, onError);
+//     //   }
+//     // Oopsie doopsie, couldn't fetch the file
+//     xhr.addEventListener("error", function () {
+//         console.log('Error loading from server: ' + filePath);
+//     }, false);
+//     // On successful load, decode the audio data
+//     xhr.addEventListener("load", function () {
+//         audioContext.decodeAudioData(xhr.response,
+//             // Success
+//             function (audioBuffer) {
+//                 my.buffer = audioBuffer;
+//             },
+//             // Error
+//             function (e) {
+//                 console.log("Error decoding audio data: " + e.err);
+//             });
+//     }, false);
+//     xhr.send();
+// }
 
-// Play function, for playing the sound
-Sound.prototype.play = function () {
-    let thisObject = this;
+// // Play function, for playing the sound
+// Sound.prototype.play = function () {
+//     let thisObject = this;
 
-    // Play the sound only if it's been decoded already
-    if (this.buffer) {
-        let bufferSource = this.audioContext.createBufferSource();
-        bufferSource.buffer = this.buffer;
-        bufferSource.connect(this.gainNode).connect(this.audioContext.destination);
-        bufferSource.start(0);
-        bufferSource.loop = this.loop;
-    }
+//     // Play the sound only if it's been decoded already
+//     if (this.buffer) {
+//         let bufferSource = this.audioContext.createBufferSource();
+//         bufferSource.buffer = this.buffer;
+//         bufferSource.connect(this.gainNode).connect(this.audioContext.destination);
+//         bufferSource.start(0);
+//         bufferSource.loop = this.loop;
+//     }
 
-    // If it hasn't been decoded yet, check every 50ms to see if it's ready
-    else {
-        window.setTimeout(function () {
-            thisObject.play();
-        }, 50);
-    }
-};;
+//     // If it hasn't been decoded yet, check every 50ms to see if it's ready
+//     else {
+//         window.setTimeout(function () {
+//             thisObject.play();
+//         }, 50);
+//     }
+// };;
