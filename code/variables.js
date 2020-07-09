@@ -71,14 +71,14 @@ let crownImg, crownImgTop, crownAlpha, character;
 let crownImgUpSpeed = 5;
 
 // sound
-// let context;
-// // var bufferLoader;
-// let clickAudio, completeAudio, highlightAudio, slowAudio, errorAudio, fallAudio, gameOverAudio;
-// let _musicGainNode, _sfxGainNode;
-// // Volume control (1 = 100%)
-// let _masterVolume = 1;
-// let _musicVolume = 0.1;
-// let _sfxVolume = 0.15;
+let context;
+// var bufferLoader;
+let clickAudio, completeAudio, highlightAudio, slowAudio, errorAudio, fallAudio, gameOverAudio;
+let _musicGainNode, _sfxGainNode;
+// Volume control (1 = 100%)
+let _masterVolume = 1;
+let _musicVolume = 0.1;
+let _sfxVolume = 0.15;
 
 // instruments
 let sampleInstruments;
