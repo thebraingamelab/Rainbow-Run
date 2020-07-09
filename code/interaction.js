@@ -40,8 +40,6 @@ function updatePlayerPosition(evt) {
         if (sinceClrStarted === nTiles) {
             // highlightAudio.currentTime = 0;
             // highlightAudio.play();
-            // curInstrument.toMaster();
-            // for (let i=currentTile-nTiles+1; i<=currentTile; i++) curInstrument.triggerAttack(map[i].note);
             // only extra life when the sequence was accurately completed
             // an array to record the moves
             let accurateSequence = true;
@@ -55,6 +53,12 @@ function updatePlayerPosition(evt) {
             if (accurateSequence) {
                 lifeLeft = Math.min(lifeLeft + 1, lifeMax);
             }
+            // play the chord
+            let chord = [];
+            for (let i=currentTile-nTiles+1; i<=currentTile; i++) chord.push(map[i].note);
+            curInstrument.toMaster();
+            curInstrument.triggerAttack(chord);
+            // for (let i=currentTile-nTiles+1; i<=currentTile; i++) curInstrument.triggerAttack(map[i].note);
         }
         curInstrument.toMaster();
         curInstrument.triggerAttack(map[currentTile].note);

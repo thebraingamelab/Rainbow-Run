@@ -141,7 +141,7 @@ function centerTile(cur) { // start position: last end position
     }
     if (sinceClrStarted === nTiles) {
         offsets = { x: 0, y: 0 };
-        highlight(cur, lastHighlight)
+        highlight(cur, lastHighlight);
     }
     ctx.restore();
 
