@@ -61,14 +61,14 @@ function colorShape() {
 let roots = [];
 function randomChord() { // current chord pattern: no sharp
     // randomly choose the root in the chord, which should be in range3
-    let curNote, curRoot;
+    let curNoteCounter, curRoot;
     let range = 3;
     let repeated;
     do {// build curRoot
-        curNote = notes[Math.floor(Math.random() * notes.length)];
+        curNoteCounter = Math.floor(Math.random() * notes.length)
         // sharp = '';
         // if (Math.floor(Math.random() * 2) === 0) sharp = 's';
-        curRoot = curNote + range;
+        curRoot = notes[curNoteCounter] + range;
         // examine if repeated
         repeated = false;
         for (let i = 0; i < roots.length; i++) {
@@ -85,12 +85,12 @@ function randomChord() { // current chord pattern: no sharp
     let curPitch;
     let colorNotes = [];
     for (let i = 0; i < nNotes; i++) {
-        curNote += 2;
-        if (curNote > notes.length - 1) {
-            curNote = curNote - (notes.length - 1) - 1;
+        curNoteCounter += 2;
+        if (curNoteCounter > notes.length - 1) {
+            curNoteCounter = curNoteCounter - (notes.length - 1) - 1;
             range++;
         }
-        curPitch = curNote + range;
+        curPitch = notes[curNoteCounter] + range;
         colorNotes.push(curPitch);
     }
 
@@ -198,6 +198,9 @@ function buildMap() {
                 for (; tileCounter <= clrSegments[s][0]; tileCounter++) map.push(new Tile(tileClr, shadowClr, clrSegments[s][1], clrNotes[tileCounter]));
             }
         }
+    }
+    for (let i=0; i< map.length; i++){
+        console.log(map[i]);
     }
 }
 

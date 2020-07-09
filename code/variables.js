@@ -10,9 +10,9 @@ let colors = [['#5ECBF2', '#1D9DD2', 'blue'], ['#FEDE68', '#E9B926', 'yellow'], 
 // [0:tileClr, 1:shadowClr, 2:colorName, 3:colorSegments ( [i,'d'] - for tiles until i their directions are 'd'; e.g. [[1,'TL'],[3,'BL']]) , 4:color notes [C3, E3, G3] ]
 let greyTileClr = '#B1BCCA';
 let greyShadowClr = '#66738E';
-let nTimes = 2; // number of times each color sequence appears
-let nTiles = 5; // number of tiles in a color sequence
-let nTurns = 2; // number of turns in a sequence; nTurns <= (nTiles-2)
+let nTimes = 4; // number of times each color sequence appears
+let nTiles = 3; // number of tiles in a color sequence
+let nTurns = 1; // number of turns in a sequence; nTurns <= (nTiles-2)
 let nHistory = 7; // history shown 
 let map = [];
 let directions = ['TL', 'TR', 'BL', 'BR']; // TopLeft, TopRight, BottomLeft, BottomRight
