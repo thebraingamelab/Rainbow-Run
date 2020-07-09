@@ -81,7 +81,7 @@ function randomChord() { // current chord pattern: no sharp
     roots.push(curRoot);
 
     // build chord out of the root
-    let nNotes = Math.max(4, nTiles);
+    let nNotes = nTiles;
     let curPitch;
     let colorNotes = [];
     for (let i = 0; i < nNotes; i++) {
@@ -95,12 +95,12 @@ function randomChord() { // current chord pattern: no sharp
     }
 
     // number of notes that fits nTiles
-    if (nNotes > nTiles) {
-        for (let i = 0; i < nNotes - nTiles; i++) {
-            let omittedNote = Math.random() * colorNotes.length;
-            colorNotes.splice(omittedNote, 1);
-        }
-    }
+    // if (nNotes > nTiles) {
+    //     for (let i = 0; i < nNotes - nTiles; i++) {
+    //         let omittedNote = Math.random() * colorNotes.length;
+    //         colorNotes.splice(omittedNote, 1);
+    //     }
+    // }
     shuffle(colorNotes);
     return colorNotes;
 }
