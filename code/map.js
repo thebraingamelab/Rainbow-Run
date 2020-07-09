@@ -112,8 +112,8 @@ function randomNote() { // can have sharp
     do {
         curNote = notes[Math.floor(Math.random() * notes.length)];
         sharp = '';
-        if (Math.floor(Math.random() * 2) === 0) sharp = 's';
-        range = Math.floor(Math.random()) * 3 + 3;[3, 4, 5];
+        if ((Math.floor(Math.random() * 2) === 0) && !(curNote === 'E' || curNote === 'B')) sharp = 's';
+        range = Math.floor(Math.random()) * 3 + 3; //[3, 4, 5];
         curPitch = curNote + sharp + range;
     } while (curPitch === lastPitch)
     return curPitch;
@@ -199,7 +199,7 @@ function buildMap() {
             }
         }
     }
-    for (let i=0; i< map.length; i++){
+    for (let i = 0; i < map.length; i++) {
         console.log(map[i]);
     }
 }
