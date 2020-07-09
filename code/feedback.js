@@ -45,6 +45,7 @@ function collapse() {
         }
         if (tileCounter !== undefined) {
             map[tileCounter].collapsed = true;
+            // curInstrument.triggerRelease(map[tileCounter].note);
             // if (tileCounter != currentTile){
             //     if (fallAudio.paused) fallAudio.play();
             //     else{
