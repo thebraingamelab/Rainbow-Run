@@ -26,7 +26,7 @@ let xDistance, yDistance; // distance between tiles
 let currentTileAlpha = 1;
 let curNextTileAlpha = 0;
 let nextTileAlpha = 1;
-let historyAlpha = 0.5;
+let historyAlpha = 0.8;
 let dCurrentTileAlpha = 0; // amount reduced
 // let dHistoryAlpha = 0;
 let dNextTileAlpha;
@@ -36,14 +36,14 @@ let currentTile = 0;
 let nextTileDelayTime = 10;
 let delayed = 0;
 let disappearingTiles = []; // {tile (tile's counter -  from the last history shown to cur-1), alpha]
-let alphaThreshold = 0.3;
+let alphaThreshold = 0.15; // least opacity before collapsing
 let disappearingSpeed = 0.003; // in terms of globalAlpha
 // let collapseThreshold = 0.1;
+let startCollapsing = 8;
 let collapseDefault;
 let justCollapsed = 0;
 let collapsingInterval = 800; // in ms
-let collapsingSpeed = disappearingSpeed * 3;
-
+let collapsingSpeed = disappearingSpeed;
 
 // interaction
 let transitionProgressY = 0; // tbe amount of transition already happened on the y-axis
@@ -52,6 +52,7 @@ let transitionSpeed;
 let mistake = false;
 let slow = false;
 let moves = ['start']; // no move needed for the first tile
+let playerX, playerY;
 
 // feedback
 let lives = [];
@@ -89,7 +90,7 @@ let arrows = [];
 window.onload = function () {
     init(); // Set up page variables
     setUpGame(); // Set up game variables
-    
+
     gameStatus = 'PREGAME';
     mainLoop();
 }

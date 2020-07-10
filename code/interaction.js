@@ -79,13 +79,10 @@ function proceedTransition(transitionDirection) {
     let change = Math.min(transitionProgressY / yDistance, 1);
     if (sinceClrStarted === nTiles) {
         dCurrentTileAlpha = 0; // highlighting the shape
-        // dHistoryAlpha = 0;
     }
     else {
         dCurrentTileAlpha = change * (currentTileAlpha - historyAlpha);
-        // dHistoryAlpha = change * (rateHistoryAlpha);
     }
-    //dNextTileAlpha = change * (currentTileAlpha - nextTileAlpha);
 
     let centered = currentTile - 1; // animate around the last tile -> smoother transition
 
@@ -108,6 +105,13 @@ function proceedTransition(transitionDirection) {
             break;
     }
     ctx.translate(-w / 2, -h / 2); // cancel the translate(w/2,h/2) in centerTile() function
+}
+
+
+function displayPlayer(x,y){
+    character.style.display = "initial";
+    character.style.left = x - character.width/2 + "px";
+    character.style.top = y - character.height/2 + "px";
 }
 
 // function displayPlayer(x,y) {
@@ -189,7 +193,7 @@ function displayLife() {
 function collapse() {
     if (justCollapsed > 3) justCollapsed = 0;
 
-    if ((currentTile < nTiles) || endOfMaze || gameOver) { }
+    if ((currentTile < startCollapsing) || endOfMaze || gameOver) { }
     else if ((currentTile > nTiles - 1) && (disappearingTiles.length === 0) && (justCollapsed === 0)) {
         // if (!endOfMaze){
         slow = true;
@@ -208,16 +212,8 @@ function collapse() {
         }
         if (tileCounter !== undefined) {
             map[tileCounter].collapsed = true;
-            // if (tileCounter != currentTile){
-            //     if (fallAudio.paused) fallAudio.play();
-            //     else{
-            //         fallAudio.pause();
-            //         fallAudio.currentTime =0;
-            //     }
-            // }
             map[tileCounter].collapseY += 5;
             map[tileCounter].y = map[tileCounter].collapseY;
-            // disappearingTiles[0].alpha -= collapsingSpeed;
         }
     }
 }
@@ -251,14 +247,10 @@ function mistakeFeedback() {
 }
 
 function gameOverFeedback() {
-    // gameOverText.style.fontSize = w/10 + "px";
-    // console.log(gameOverText.style.fontSize);
-    // gameOverText.style.left = tileWidth + "px"; 
     gameOverText.style.display = "initial";
 }
 
 function winFeedback() {
-    // winText.style.left = tileWidth + "px"; 
     winText.style.display = "initial";
 
     crownImg.style.display = "initial";
@@ -269,9 +261,3 @@ function winFeedback() {
     crownImg.style.top = crownImgTop + "px";
 }
 
-
-function displayPlayer(x,y){
-    character.style.display = "initial";
-    character.style.left = x - character.width/2 + "px";
-    character.style.top = y - character.height/2 + "px";
-}
