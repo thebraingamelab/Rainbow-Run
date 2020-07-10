@@ -1,19 +1,6 @@
 
 let status;
 
-window.onload = function () {
-    // if (nColorsUpperLimit < nColors) alert("nColors exceeds its limit!");
-    // if (nTurns > nTiles-2) alert("nTurns exceeds its limit!");
-    init();
-    mainLoop();
-}
-
-
-function init() {
-    setUpPage();
-    setUpGame();
-}
-
 function mainLoop() {
     if (mapView) {
         // mapViewFeedback();

@@ -86,7 +86,16 @@ let arrowImgWidth;
 let arrows = [];
 
 
-function setUpPage(){
+window.onload = function () {
+    // if (nColorsUpperLimit < nColors) alert("nColors exceeds its limit!");
+    // if (nTurns > nTiles-2) alert("nTurns exceeds its limit!");
+    init();
+    setUpGame();
+    mainLoop();
+}
+
+
+function init() {
     canvas = document.querySelector("#myCanvas");
     ctx = canvas.getContext("2d");
     ctx.imageSmoothingEnabled = false;
