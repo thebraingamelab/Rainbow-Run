@@ -19,7 +19,7 @@ function colorOrder() {
     let lastClr = false;
     for (let k = 0; k < randomOrder.length; k++) {
         let curClr = randomOrder[k];
-        if ((curClr === lastClr) || (Math.floor(Math.random() * 3) === 0)) order.push('grey');
+        if ((curClr === lastClr) || ((k>0) && (Math.floor(Math.random() * 3) === 0))) order.push('grey');
         order.push(curClr);
         lastClr = curClr;
     }
