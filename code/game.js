@@ -12,7 +12,7 @@ function gameLoop() {
         mistakeFeedback();
     }
     if (proceed === true) { // transitioning
-        if (transitionProgressY < yDistance) {
+        if (transitionProgressY < yDistance-5) {
             ctx.clearRect(0 - xDistance, 0 - yDistance, w + xDistance * 2, h + yDistance * 2);
             modeFeature(mode);
             transitionProgressY += transitionSpeed;
@@ -22,7 +22,7 @@ function gameLoop() {
             if (transitionProgressY < yDistance/2){
                 playerY-=5;
             }
-            else if (transitionProgressY < yDistance){
+            else if (transitionProgressY < yDistance-5){
                 playerY+=4;
             }
         }

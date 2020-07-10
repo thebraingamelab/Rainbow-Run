@@ -111,7 +111,7 @@ function proceedTransition(transitionDirection) {
 function displayPlayer(x,y){
     character.style.display = "initial";
     character.style.left = x - character.width/2 + "px";
-    character.style.top = y - character.height/2 + "px";
+    character.style.top = y - character.height/1.8 + "px";
 }
 
 // function displayPlayer(x,y) {
