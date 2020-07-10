@@ -28,13 +28,8 @@ function mainLoop() {
 
 
 function gameLoop() {
-    // if (currentTile===0 && !attackedFirstNote){
-    //     curInstrument.toMaster();
-    //     curInstrument.triggerAttack(map[0].note);
-    //     attackedFirstNote=true;
-    // }
     if ((lifeLeft <= 0) && (!gameOver)) {
-        // gameOverAudio.play();
+        gameOverAudio.play();
         gameOver = true;
         gameOverFeedback();
     }

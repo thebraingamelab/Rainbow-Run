@@ -7,7 +7,7 @@ let strokeClr = 'rgba(35,44,58,0.2)';
 // map (variables should vary for different levels in the final version)
 let nColors = 3; // number of colors >=2; <nColorsUpperLimit
 let colors = [['#5ECBF2', '#1D9DD2', 'blue'], ['#FEDE68', '#E9B926', 'yellow'], ['#FB4D4B', '#D60904', 'red'], ['#2CDDAF', '#168469', 'green'], ['#FC954F', '#D45A10', 'orange'], ['#9582D2', '#553BA9', 'purple']];
-// [0:tileClr, 1:shadowClr, 2:colorName, 3:colorSegments ( [i,'d'] - for tiles until i their directions are 'd'; e.g. [[1,'TL'],[3,'BL']]) , 4:color notes [C3, E3, G3] ]
+// [0:tileClr, 1:shadowClr, 2:colorName, 3:colorSegments ( [i,'d'] - for tiles until i their directions are 'd'; e.g. [[1,'TL'],[3,'BL']])]
 let greyTileClr = '#B1BCCA';
 let greyShadowClr = '#66738E';
 let nTimes = 4; // number of times each color sequence appears
@@ -79,12 +79,6 @@ let _musicGainNode, _sfxGainNode;
 let _masterVolume = 1;
 let _musicVolume = 0.1;
 let _sfxVolume = 0.15;
-
-// instruments
-let sampleInstruments;
-let curInstrument;
-let notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B']; // CDFGA have sharps
-let attackedFirstNote = false;
 
 // mode
 let mode = 'CLEAN';
@@ -188,93 +182,83 @@ function startGame() {
     fallAudio = new Sound("audio/whoosh.mp3", context, _sfxGainNode);
     gameOverAudio = new Sound("audio/gameOver.mp3", context, _sfxGainNode);
 
+    function setTileParaByWidth(tileWidth) {
+        tileLength = tileWidth / 1.5;
+        tileHeight = tileLength / 5;
+        xDistance = tileWidth / 2 + tileHeight * 1.5; // distance from the last tile on x-axis
+        yDistance = tileHeight + tileLength / 2; // distance from the last tile on y-axis
 
-    // instruments
-    sampleInstruments = SampleLibrary.load({
-        instruments: "piano",
-        minify: true,
-        baseUrl: "/Rainbow-Run/code/instruments/samples/"
-    });
-    curInstrument = sampleInstruments;
-}
-
-
-function setTileParaByWidth(tileWidth) {
-    tileLength = tileWidth / 1.5;
-    tileHeight = tileLength / 5;
-    xDistance = tileWidth / 2 + tileHeight * 1.5; // distance from the last tile on x-axis
-    yDistance = tileHeight + tileLength / 2; // distance from the last tile on y-axis
-
-}
-
-function setTileParaByLength(tileLength) {
-    tileWidth = tileLength * 1.5;
-    tileHeight = tileLength / 5;
-    xDistance = tileWidth / 2 + tileHeight * 1.5; // distance from the last tile on x-axis
-    yDistance = tileHeight + tileLength / 2; // distance from the last tile on y-axis
-}
-
-
-// Sound object
-function Sound(filePath, audioContext, gainNode, loop = false) {
-    let my = this;
-    // let testAudio;
-    let xhr;
-
-    // Initialize fields (constructor stuff)
-    this.buffer = null;
-    this.audioContext = audioContext;
-    this.gainNode = gainNode;
-    this.loop = loop;
-
-    // Check for file type compatibility
-    testAudio = document.createElement("audio");
-
-    // Fetch the file
-    xhr = new XMLHttpRequest();
-    xhr.open('GET', encodeURI(filePath), true);
-    xhr.responseType = 'arraybuffer';
-    // xhr.onload = function() {
-    //     context.decodeAudioData(xhr.response, function(buffer) {
-    //       my.buffer = buffer;
-    //     }, onError);
-    //   }
-    // Oopsie doopsie, couldn't fetch the file
-    xhr.addEventListener("error", function () {
-        console.log('Error loading from server: ' + filePath);
-    }, false);
-    // On successful load, decode the audio data
-    xhr.addEventListener("load", function () {
-        audioContext.decodeAudioData(xhr.response,
-            // Success
-            function (audioBuffer) {
-                my.buffer = audioBuffer;
-            },
-            // Error
-            function (e) {
-                console.log("Error decoding audio data: " + e.err);
-            });
-    }, false);
-    xhr.send();
-}
-
-// Play function, for playing the sound
-Sound.prototype.play = function () {
-    let thisObject = this;
-
-    // Play the sound only if it's been decoded already
-    if (this.buffer) {
-        let bufferSource = this.audioContext.createBufferSource();
-        bufferSource.buffer = this.buffer;
-        bufferSource.connect(this.gainNode).connect(this.audioContext.destination);
-        bufferSource.start(0);
-        bufferSource.loop = this.loop;
     }
 
-    // If it hasn't been decoded yet, check every 50ms to see if it's ready
-    else {
-        window.setTimeout(function () {
-            thisObject.play();
-        }, 50);
+    function setTileParaByLength(tileLength) {
+        tileWidth = tileLength * 1.5;
+        tileHeight = tileLength / 5;
+        xDistance = tileWidth / 2 + tileHeight * 1.5; // distance from the last tile on x-axis
+        yDistance = tileHeight + tileLength / 2; // distance from the last tile on y-axis
     }
-};;
+
+
+    // Sound object
+    function Sound(filePath, audioContext, gainNode, loop = false) {
+        let my = this;
+        // let testAudio;
+        let xhr;
+
+        // Initialize fields (constructor stuff)
+        this.buffer = null;
+        this.audioContext = audioContext;
+        this.gainNode = gainNode;
+        this.loop = loop;
+
+        // Check for file type compatibility
+        testAudio = document.createElement("audio");
+
+        // Fetch the file
+        xhr = new XMLHttpRequest();
+        xhr.open('GET', encodeURI(filePath), true);
+        xhr.responseType = 'arraybuffer';
+        // xhr.onload = function() {
+        //     context.decodeAudioData(xhr.response, function(buffer) {
+        //       my.buffer = buffer;
+        //     }, onError);
+        //   }
+        // Oopsie doopsie, couldn't fetch the file
+        xhr.addEventListener("error", function () {
+            console.log('Error loading from server: ' + filePath);
+        }, false);
+        // On successful load, decode the audio data
+        xhr.addEventListener("load", function () {
+            audioContext.decodeAudioData(xhr.response,
+                // Success
+                function (audioBuffer) {
+                    my.buffer = audioBuffer;
+                },
+                // Error
+                function (e) {
+                    console.log("Error decoding audio data: " + e.err);
+                });
+        }, false);
+        xhr.send();
+    }
+
+    // Play function, for playing the sound
+    Sound.prototype.play = function () {
+        let thisObject = this;
+
+        // Play the sound only if it's been decoded already
+        if (this.buffer) {
+            let bufferSource = this.audioContext.createBufferSource();
+            bufferSource.buffer = this.buffer;
+            bufferSource.connect(this.gainNode).connect(this.audioContext.destination);
+            bufferSource.start(0);
+            bufferSource.loop = this.loop;
+        }
+
+        // If it hasn't been decoded yet, check every 50ms to see if it's ready
+        else {
+            window.setTimeout(function () {
+                thisObject.play();
+            }, 50);
+        }
+    }
+}

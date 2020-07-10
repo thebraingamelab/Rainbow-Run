@@ -1,6 +1,6 @@
 
 class Tile {
-    constructor(tileClr, shadowClr, relativePositionToLast, note) {
+    constructor(tileClr, shadowClr, relativePositionToLast) {
         this.x = 0;
         this.y = 0;
         this.collapseY = 0;
@@ -12,7 +12,6 @@ class Tile {
         this.shadowClr = shadowClr;
         this.relativePositionToLast = relativePositionToLast; // relative position to the last tile
         //this.relativePositionToNext; // relative position to the next tile
-        this.note = note;
     }
 
     currentDisplay() { // when the tile is where the player currently is, position it in the middle

@@ -35,7 +35,6 @@ function colorShape() {
         repeated = false;
         for (let i = 0; i < nC; i++) {
             let comparedColorSegments = colors[i][3];
-            // let comparedColorNotes = colors[i][4];
             if (colorSegments.compare(comparedColorSegments)) {
                 repeated = true;
                 break;
@@ -50,75 +49,13 @@ function colorShape() {
         }
 
         // assign chord
-        colors[nC].push(randomChord());
+        // colors[nC].push(randomChord());
     }
     // for (nC = 0; nC < nColors; nC++) {
     //     console.log(colors[nC][2] + ": ");
     //     for (let i=0; i<colors[nC][4].length; i++) console.log(colors[nC][4][i]);
     // }
 }
-
-let roots = [];
-function randomChord() { // current chord pattern: no sharp
-    // randomly choose the root in the chord, which should be in range3
-    let curNoteCounter, curRoot;
-    let range = 3;
-    let repeated;
-    do {// build curRoot
-        curNoteCounter = Math.floor(Math.random() * notes.length)
-        // sharp = '';
-        // if (Math.floor(Math.random() * 2) === 0) sharp = 's';
-        curRoot = notes[curNoteCounter] + range;
-        // examine if repeated
-        repeated = false;
-        for (let i = 0; i < roots.length; i++) {
-            if (curRoot === roots[i]) {
-                repeated = true;
-                break;
-            }
-        }
-    } while (repeated);
-    roots.push(curRoot);
-
-    // build chord out of the root
-    let nNotes = nTiles;
-    let curPitch;
-    let colorNotes = [];
-    for (let i = 0; i < nNotes; i++) {
-        curNoteCounter += 2;
-        if (curNoteCounter > notes.length - 1) {
-            curNoteCounter = curNoteCounter - (notes.length - 1) - 1;
-            range++;
-        }
-        curPitch = notes[curNoteCounter] + range;
-        colorNotes.push(curPitch);
-    }
-
-    // number of notes that fits nTiles
-    // if (nNotes > nTiles) {
-    //     for (let i = 0; i < nNotes - nTiles; i++) {
-    //         let omittedNote = Math.random() * colorNotes.length;
-    //         colorNotes.splice(omittedNote, 1);
-    //     }
-    // }
-    if (Math.floor(Math.random() * 2) === 0) shuffle(colorNotes);
-    return colorNotes;
-}
-
-
-function randomNote() { // doesn't have sharp
-    let lastPitch = map[map.length - 1].note;
-    let curNote, sharp, range, curPitch;
-    do {
-        curNote = notes[Math.floor(Math.random() * notes.length)];
-        // sharp = '';
-        // if ((Math.floor(Math.random() * 2) === 0) && !(curNote === 'E' || curNote === 'B')) sharp = 's';
-        range = Math.floor(Math.random()) * 3 + 3; //[3, 4, 5];
-        curPitch = curNote + range;
-    } while (curPitch === lastPitch)
-    return curPitch;
-}
-
 
 function divideSegments(nOfTiles, nOfTurns) {
     let segments = [];
@@ -177,7 +114,6 @@ function buildMap() {
             let tileClr = colors[curClr][0];
             let shadowClr = colors[curClr][1];
             let clrSegments = colors[curClr][3];
-            let clrNotes = colors[curClr][4];
 
             if (i !== 0) {
                 let curDirection = clrSegments[0][1];
@@ -187,7 +123,7 @@ function buildMap() {
                     do {
                         greyDirection = directions[Math.floor(Math.random() * directions.length)]
                     } while ((curDirection === greyDirection) || (oppDirection === greyDirection));
-                    map.push(new Tile(greyTileClr, greyShadowClr, greyDirection, randomNote()));
+                    map.push(new Tile(greyTileClr, greyShadowClr, greyDirection));
                 }
             }
 
@@ -199,11 +135,11 @@ function buildMap() {
                     clrDirection = directions[Math.floor(Math.random() * directions.length)]
                 }  // not going reverse: not opposite to either the last tile or the next tile
                 while ((getOppositeDirection(clrDirection) === map[map.length - 1].relativePositionToLast) || (getOppositeDirection(clrDirection) === clrSegments[0][1]));
-                map.push(new Tile(tileClr, shadowClr, clrDirection, clrNotes[0]));
+                map.push(new Tile(tileClr, shadowClr, clrDirection));
                 tileCounter++;
             }
             for (let s = 0; s < clrSegments.length; s++) {
-                for (; tileCounter <= clrSegments[s][0]; tileCounter++) map.push(new Tile(tileClr, shadowClr, clrSegments[s][1], clrNotes[tileCounter]));
+                for (; tileCounter <= clrSegments[s][0]; tileCounter++) map.push(new Tile(tileClr, shadowClr, clrSegments[s][1]));
             }
         }
     }
@@ -226,25 +162,6 @@ function addGreySequence() {
             greyDirection = directions[Math.floor(Math.random() * directions.length)]
         }  // not going reverse: not opposite to either the last tile or the next tile
         while (getOppositeDirection(greyDirection) === lastDirection);
-        map.push(new Tile(tileClr, shadowClr, greyDirection, randomNote()));
+        map.push(new Tile(tileClr, shadowClr, greyDirection));
     }
-
-    // let nGreyTurns;
-    // let control = true;
-    // do {
-    //     //nGreyTiles = Math.floor(Math.random() * 4) + 3; //[3,6]
-    //     nGreyTurns = Math.max(Math.floor(Math.random() * nGreyTiles) - 1, 0); //[0, nGreyTiles-2]
-    //     //if ((nGreyTiles === nTiles) && (nGreyTurns === nTurns)) control = false;
-    // }
-    // while (!control);
-
-    // let tileClr = greyTileClr;
-    // let shadowClr = greyShadowClr;
-    // lastDirection = map[map.length - 1].relativePositionToLast;
-    // let greySegments = divideSegments(nGreyTiles, nGreyTurns);
-
-    // let tileCounter = 0;
-    // for (let s = 0; s < greySegments.length; s++) {
-    //     for (; tileCounter <= greySegments[s][0]; tileCounter++) map.push(new Tile(tileClr, shadowClr, greySegments[s][1], randomNote()));
-    // }
 }
