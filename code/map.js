@@ -19,7 +19,7 @@ function colorOrder() {
     let lastClr = false;
     for (let k = 0; k < randomOrder.length; k++) {
         let curClr = randomOrder[k];
-        if (curClr === lastClr) order.push('grey'); // if a color is repeating itself immediately after the last occurance, add a random grey sequence
+        if ((curClr === lastClr) || (Math.floor(Math.random() * 3) === 0)) order.push('grey');
         order.push(curClr);
         lastClr = curClr;
     }
@@ -101,7 +101,7 @@ function randomChord() { // current chord pattern: no sharp
     //         colorNotes.splice(omittedNote, 1);
     //     }
     // }
-    shuffle(colorNotes);
+    if (Math.floor(Math.random() * 2) === 0) shuffle(colorNotes);
     return colorNotes;
 }
 
