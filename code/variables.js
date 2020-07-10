@@ -89,6 +89,8 @@ let arrows = [];
 window.onload = function () {
     init(); // Set up page variables
     setUpGame(); // Set up game variables
+    
+    gameStatus = 'PREGAME';
     mainLoop();
 }
 

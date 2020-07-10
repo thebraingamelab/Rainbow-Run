@@ -5,11 +5,8 @@ function updatePlayerPosition(evt) {
 
     let playerMove = getInteractionArea(evt);
     if (gameOver) restart();
-    else if (endOfMaze) {
-        // message.innerHTML = "You have reached the end! Press R to restart.";
-        winText.style.display = "none";
-        crownImg.style.display = "none";
-        mapView = true;
+    else if (endOfMaze){
+        gameStatus = 'POSTGAME';
         mainLoop();
     }
     else if (currentTile === map.length - 1) { }
@@ -272,10 +269,6 @@ function winFeedback() {
     crownImg.style.top = crownImgTop + "px";
 }
 
-// function mapViewFeedback(){
-//     mapViewText.style.left = tileWidth + "px"; 
-//     mapViewText.style.display = 'initial';
-// }
 
 function displayPlayer(x,y){
     character.style.display = "initial";
