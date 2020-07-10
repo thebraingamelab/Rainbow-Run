@@ -129,7 +129,7 @@ function startGame() {
     // set up variables
     tileWidth = Math.max(w, h) / (nHistory + 1);
     setTileParaByWidth(tileWidth);
-    transitionSpeed = tileWidth / 40;
+    transitionSpeed = tileWidth / 20;
 
     //arrow
     if ((mode === 'ARROW') || (mode === 'GRIDARROW')) {
