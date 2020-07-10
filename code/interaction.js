@@ -163,3 +163,122 @@ function proceedTransition(transitionDirection) {
 function restart() {
     location.reload();
 }
+
+function preShake() {
+    ctx.save();
+    let dx = Math.random() * tileHeight / 2;
+    let dy = Math.random() * tileHeight / 2;
+    ctx.translate(dx, dy);
+}
+
+function postShake() {
+    ctx.restore();
+}
+
+function displayLife() {
+    let i = 0;
+    for (i = 0; i < lifeLeft; i++) {
+        // ctx.drawImage(lifeImg, w + heartInterval - (heartInterval + heartW) * i, heartH/4);
+        lives[i].style.display = "initial";
+        lives[i].style.top = lifeImgWidth * 0.6 + "px";
+        lives[i].style.right = lifeImgWidth * 0.6 + lifeImgWidth * 1.5 * i + "px";
+        //console.log("life" + i + "'s right: " + lives[i].style.right);
+    }
+    for (; i < lifeMax; i++) {
+        lives[i].style.display = "none";
+    }
+}
+
+function collapse() {
+    if (justCollapsed > 3) justCollapsed = 0;
+
+    if ((currentTile < nTiles) || endOfMaze || gameOver) { }
+    else if ((currentTile > nTiles - 1) && (disappearingTiles.length === 0) && (justCollapsed === 0)) {
+        // if (!endOfMaze){
+        slow = true;
+        lifeLeft--;
+        // console.log(lifeLeft);
+        justCollapsed++;
+        // }
+        slowAudio.play();
+    }
+    else if (justCollapsed > 0) justCollapsed++;
+    else {
+        let tileCounter;
+        for (let i = 0; i < disappearingTiles.length; i++) {
+            tileCounter = disappearingTiles[i].tile;
+            if (!map[tileCounter].collapsed) break;
+        }
+        if (tileCounter !== undefined) {
+            map[tileCounter].collapsed = true;
+            // if (tileCounter != currentTile){
+            //     if (fallAudio.paused) fallAudio.play();
+            //     else{
+            //         fallAudio.pause();
+            //         fallAudio.currentTime =0;
+            //     }
+            // }
+            map[tileCounter].collapseY += 5;
+            map[tileCounter].y = map[tileCounter].collapseY;
+            // disappearingTiles[0].alpha -= collapsingSpeed;
+        }
+    }
+}
+
+// function clickPop(evt){
+//     let rect = canvas.getBoundingClientRect();
+//     let mousePosX = evt.clientX - rect.left;
+//     let mousePosY = evt.clientY - rect.top;
+
+//     ctx.save();
+//     ctx.lineWidth = "5";
+//     ctx.strokeStyle = "black";
+//     ctx.fillStyle = map[currentTile].tileClr;
+//     ctx.rotate(-10 * Math.PI / 180);
+//     ctx.fillRect(mousePosX-15, mousePosY-30, 5, 15);
+//     // ctx.rotate();
+//     // ctx.fillRect();
+//     // ctx.rotate();
+//     // ctx.fillRect();
+//     ctx.stroke();
+//     ctx.restore();
+// }
+
+function mistakeFeedback() {
+    incorrectImg.style.left = mousePosX - incorrectImg.width / 2 + "px";
+    incorrectImg.style.top = mousePosY - incorrectImg.height / 2 + "px";
+    incorrectImg.style.display = "initial";
+    // reduceLifeImg.style.left = mousePosX - incorrectImg.width/2 + incorrectImg.width *1.5 + "px";
+    // reduceLifeImg.style.top = mousePosY + "px";
+    // reduceLifeImg.style.display = "initial";
+}
+
+function gameOverFeedback() {
+    // gameOverText.style.fontSize = w/10 + "px";
+    // console.log(gameOverText.style.fontSize);
+    // gameOverText.style.left = tileWidth + "px"; 
+    gameOverText.style.display = "initial";
+}
+
+function winFeedback() {
+    // winText.style.left = tileWidth + "px"; 
+    winText.style.display = "initial";
+
+    crownImg.style.display = "initial";
+    crownAlpha += 0.05;
+    crownImg.style.opacity = crownAlpha;
+    crownImg.style.left = w / 2 - crownImg.width / 2 + "px";
+    crownImgTop = Math.max(crownImgTop - crownImgUpSpeed, lifeImgWidth / 1.5);
+    crownImg.style.top = crownImgTop + "px";
+}
+
+// function mapViewFeedback(){
+//     mapViewText.style.left = tileWidth + "px"; 
+//     mapViewText.style.display = 'initial';
+// }
+
+function displayPlayer(x,y){
+    character.style.display = "initial";
+    character.style.left = x - character.width/2 + "px";
+    character.style.top = y - character.height/2 + "px";
+}

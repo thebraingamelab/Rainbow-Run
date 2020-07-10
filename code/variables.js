@@ -85,15 +85,8 @@ let mode = 'CLEAN';
 let arrowImgWidth;
 let arrows = [];
 
-window.onload = function () {
-    // if (nColorsUpperLimit < nColors) alert("nColors exceeds its limit!");
-    // if (nTurns > nTiles-2) alert("nTurns exceeds its limit!");
-    init();
-    startGame();
-    mainLoop();
-}
 
-function init() {
+function setUpPage(){
     canvas = document.querySelector("#myCanvas");
     ctx = canvas.getContext("2d");
     ctx.imageSmoothingEnabled = false;
@@ -114,7 +107,7 @@ function init() {
     }
 }
 
-function startGame() {
+function setUpGame() {
     shuffle(colors);
 
     // set mode
@@ -198,67 +191,3 @@ function setTileParaByLength(tileLength) {
     yDistance = tileHeight + tileLength / 2; // distance from the last tile on y-axis
 }
 
-
-// Sound object
-function Sound(filePath, audioContext, gainNode, loop = false) {
-    let my = this;
-    // let testAudio;
-    let xhr;
-
-    // Initialize fields (constructor stuff)
-    this.buffer = null;
-    this.audioContext = audioContext;
-    this.gainNode = gainNode;
-    this.loop = loop;
-
-    // Check for file type compatibility
-    testAudio = document.createElement("audio");
-
-    // Fetch the file
-    xhr = new XMLHttpRequest();
-    xhr.open('GET', encodeURI(filePath), true);
-    xhr.responseType = 'arraybuffer';
-    // xhr.onload = function() {
-    //     context.decodeAudioData(xhr.response, function(buffer) {
-    //       my.buffer = buffer;
-    //     }, onError);
-    //   }
-    // Oopsie doopsie, couldn't fetch the file
-    xhr.addEventListener("error", function () {
-        console.log('Error loading from server: ' + filePath);
-    }, false);
-    // On successful load, decode the audio data
-    xhr.addEventListener("load", function () {
-        audioContext.decodeAudioData(xhr.response,
-            // Success
-            function (audioBuffer) {
-                my.buffer = audioBuffer;
-            },
-            // Error
-            function (e) {
-                console.log("Error decoding audio data: " + e.err);
-            });
-    }, false);
-    xhr.send();
-}
-
-// Play function, for playing the sound
-Sound.prototype.play = function () {
-    let thisObject = this;
-
-    // Play the sound only if it's been decoded already
-    if (this.buffer) {
-        let bufferSource = this.audioContext.createBufferSource();
-        bufferSource.buffer = this.buffer;
-        bufferSource.connect(this.gainNode).connect(this.audioContext.destination);
-        bufferSource.start(0);
-        bufferSource.loop = this.loop;
-    }
-
-    // If it hasn't been decoded yet, check every 50ms to see if it's ready
-    else {
-        window.setTimeout(function () {
-            thisObject.play();
-        }, 50);
-    }
-}
