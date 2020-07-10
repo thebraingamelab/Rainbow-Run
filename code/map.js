@@ -189,11 +189,19 @@ function buildMap() {
                     } while ((curDirection === greyDirection) || (oppDirection === greyDirection));
                     map.push(new Tile(greyTileClr, greyShadowClr, greyDirection, randomNote()));
                 }
-
-
             }
 
             let tileCounter = 0;
+            if (i > 0) {
+                // first tile has a random direction
+                let clrDirection;
+                do {
+                    clrDirection = directions[Math.floor(Math.random() * directions.length)]
+                }  // not going reverse: not opposite to either the last tile or the next tile
+                while ((getOppositeDirection(clrDirection) === map[map.length - 1].relativePositionToLast) || (getOppositeDirection(clrDirection) === clrSegments[0][1]));
+                map.push(new Tile(tileClr, shadowClr, clrDirection, clrNotes[0]));
+                tileCounter++;
+            }
             for (let s = 0; s < clrSegments.length; s++) {
                 for (; tileCounter <= clrSegments[s][0]; tileCounter++) map.push(new Tile(tileClr, shadowClr, clrSegments[s][1], clrNotes[tileCounter]));
             }
@@ -206,22 +214,37 @@ function buildMap() {
 
 function addGreySequence() {
     let nGreyTiles = nTiles;
-    let nGreyTurns;
-    let control = true;
-    do {
-        //nGreyTiles = Math.floor(Math.random() * 4) + 3; //[3,6]
-        nGreyTurns = Math.max(Math.floor(Math.random() * nGreyTiles) - 1, 0); //[0, nGreyTiles-2]
-        //if ((nGreyTiles === nTiles) && (nGreyTurns === nTurns)) control = false;
-    }
-    while (!control);
 
     let tileClr = greyTileClr;
     let shadowClr = greyShadowClr;
-    lastDirection = map[map.length - 1].relativePositionToLast;
-    let greySegments = divideSegments(nGreyTiles, nGreyTurns);
 
     let tileCounter = 0;
-    for (let s = 0; s < greySegments.length; s++) {
-        for (; tileCounter <= greySegments[s][0]; tileCounter++) map.push(new Tile(tileClr, shadowClr, greySegments[s][1], randomNote()));
+    for (; tileCounter < nGreyTiles; tileCounter++) {
+        lastDirection = map[map.length - 1].relativePositionToLast;
+        let greyDirection;
+        do {
+            greyDirection = directions[Math.floor(Math.random() * directions.length)]
+        }  // not going reverse: not opposite to either the last tile or the next tile
+        while (getOppositeDirection(greyDirection) === lastDirection);
+        map.push(new Tile(tileClr, shadowClr, greyDirection, randomNote()));
     }
+
+    // let nGreyTurns;
+    // let control = true;
+    // do {
+    //     //nGreyTiles = Math.floor(Math.random() * 4) + 3; //[3,6]
+    //     nGreyTurns = Math.max(Math.floor(Math.random() * nGreyTiles) - 1, 0); //[0, nGreyTiles-2]
+    //     //if ((nGreyTiles === nTiles) && (nGreyTurns === nTurns)) control = false;
+    // }
+    // while (!control);
+
+    // let tileClr = greyTileClr;
+    // let shadowClr = greyShadowClr;
+    // lastDirection = map[map.length - 1].relativePositionToLast;
+    // let greySegments = divideSegments(nGreyTiles, nGreyTurns);
+
+    // let tileCounter = 0;
+    // for (let s = 0; s < greySegments.length; s++) {
+    //     for (; tileCounter <= greySegments[s][0]; tileCounter++) map.push(new Tile(tileClr, shadowClr, greySegments[s][1], randomNote()));
+    // }
 }
