@@ -19,7 +19,7 @@ function colorOrder() {
     let lastClr = false;
     for (let k = 0; k < randomOrder.length; k++) {
         let curClr = randomOrder[k];
-        if ((curClr === lastClr) || ((k>0) && (Math.floor(Math.random() * 5) === 0))) order.push('grey');
+        if (curClr === lastClr) order.push('grey'); //|| ((k>0) && (Math.floor(Math.random() * 4) === 0)); need to ensure a similar amount of grey tiles each round
         order.push(curClr);
         lastClr = curClr;
     }
