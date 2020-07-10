@@ -11,21 +11,20 @@ function mainLoop() {
             for (let i = 0; i < arrowImgs.length; i++) {
                 arrowImgs[i].style.display = 'none';
             }
-
-            character.style.opacity = 0;
-            clearInterval(collapseDefault);
-            setParaForMapView();
-
-            mapLoop();
         }
-        else {
-            window.addEventListener("keydown", restart);
-            canvas.addEventListener("click", updatePlayerPosition);
-            window.addEventListener('resize', init, false);
-            collapseDefault = setInterval(collapse, collapsingInterval);
+        character.style.opacity = 0;
+        clearInterval(collapseDefault);
+        setParaForMapView();
 
-            gameLoop();
-        }
+        mapLoop();
+    }
+    else {
+        window.addEventListener("keydown", restart);
+        canvas.addEventListener("click", updatePlayerPosition);
+        window.addEventListener('resize', init, false);
+        collapseDefault = setInterval(collapse, collapsingInterval);
+
+        gameLoop();
     }
 }
 
