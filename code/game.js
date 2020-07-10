@@ -12,18 +12,19 @@ function gameLoop() {
         mistakeFeedback();
     }
     if (proceed === true) { // transitioning
-        if (transitionProgressY < yDistance-5) {
+        if (transitionProgressY < yDistance - 5) {
             ctx.clearRect(0 - xDistance, 0 - yDistance, w + xDistance * 2, h + yDistance * 2);
-            modeFeature(mode);
+            drawGrid();
+            drawArrows();
             transitionProgressY += transitionSpeed;
             proceedTransition(getOppositeDirection(map[currentTile].relativePositionToLast));
 
             // character jump animation
-            if (transitionProgressY < yDistance/2){
-                playerY-=5;
+            if (transitionProgressY < yDistance / 2) {
+                playerY -= 5;
             }
-            else if (transitionProgressY < yDistance-5){
-                playerY+=4;
+            else if (transitionProgressY < yDistance - 5) {
+                playerY += 4;
             }
         }
         // note: this else block will NOT execute if the player moves before the transition completes
@@ -44,8 +45,9 @@ function gameLoop() {
     else {
         ctx.restore(); // 0,0
         ctx.clearRect(0, 0, w, h);
-        modeFeature(mode);
-
+        drawGrid();
+        drawArrows();
+        
         displayLife();
 
         dCurrentTileAlpha = 0;

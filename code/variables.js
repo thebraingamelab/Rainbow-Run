@@ -53,6 +53,8 @@ let mistake = false;
 let slow = false;
 let moves = ['start']; // no move needed for the first tile
 let playerX, playerY;
+let arrowImgWidth;
+let arrows = [];
 
 // feedback
 let lives = [];
@@ -81,10 +83,6 @@ let _masterVolume = 1;
 let _musicVolume = 0.1;
 let _sfxVolume = 0.15;
 
-// mode
-let mode = 'CLEAN';
-let arrowImgWidth;
-let arrows = [];
 
 
 window.onload = function () {
@@ -120,25 +118,21 @@ function init() {
 function setUpGame() {
     shuffle(colors);
 
-    // set mode
-    mode = 'GRIDARROW';
-
     // set up variables
     tileWidth = Math.max(w, h) / (nHistory + 1);
     setTileParaByWidth(tileWidth);
     transitionSpeed = tileWidth / 20;
 
     //arrow
-    if ((mode === 'ARROW') || (mode === 'GRIDARROW')) {
-        let arrowImgs = document.getElementsByClassName("arrow");
-        arrowImgWidth = tileWidth / 1.5;
-        for (let i = 0; i < arrowImgs.length; i++) {
-            arrowImgs[i].style.display = 'initial';
-            arrowImgs[i].width = arrowImgWidth;
-            arrowImgs[i].addEventListener('click', updatePlayerPosition);
-            arrows.push(arrowImgs[i]);
-        }
+    let arrowImgs = document.getElementsByClassName("arrow");
+    arrowImgWidth = tileWidth / 1.5;
+    for (let i = 0; i < arrowImgs.length; i++) {
+        arrowImgs[i].style.display = 'initial';
+        arrowImgs[i].width = arrowImgWidth;
+        arrowImgs[i].addEventListener('click', updatePlayerPosition);
+        arrows.push(arrowImgs[i]);
     }
+
 
     // map
     generateMap();

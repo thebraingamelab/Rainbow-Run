@@ -25,13 +25,14 @@ function mainLoop() {
             crownImg.style.display = "none";
 
             canvas.addEventListener("click", restart);
-            if ((mode === 'ARROW') || (mode === 'GRIDARROW')) {
-                let arrowImgs = document.getElementsByClassName("arrow");
-                arrowImgWidth = tileWidth / 1.5;
-                for (let i = 0; i < arrowImgs.length; i++) {
-                    arrowImgs[i].style.display = 'none';
-                }
+
+            //arrow
+            let arrowImgs = document.getElementsByClassName("arrow");
+            arrowImgWidth = tileWidth / 1.5;
+            for (let i = 0; i < arrowImgs.length; i++) {
+                arrowImgs[i].style.display = 'none';
             }
+
             character.style.opacity = 0;
             clearInterval(collapseDefault);
             setParaForMapView();

@@ -1,19 +1,3 @@
-function modeFeature(mode) {
-    switch (mode) {
-        case 'GRID':
-            drawGrid();
-            break;
-        case 'ARROW':
-            drawArrows();
-            break;
-        case 'GRIDARROW':
-            drawGrid();
-            drawArrows();
-            break;
-        case 'CLEAN':
-            break;
-    }
-}
 
 function drawGrid() {
     let nTileOnEachSide = Math.floor(Math.max(w, h) / tileWidth / 2) + 1;
