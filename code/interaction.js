@@ -75,7 +75,6 @@ function getInteractionArea(evt) {
 }
 
 function proceedTransition(transitionDirection) {
-    let xPerY = xDistance / yDistance; // for every transition of 1 on y-axis, transition of xPerY on x-axis
     let change = Math.min(transitionProgressY / yDistance, 1);
     if (sinceClrStarted === nTiles) {
         dCurrentTileAlpha = 0; // highlighting the shape
@@ -89,21 +88,18 @@ function proceedTransition(transitionDirection) {
     switch (transitionDirection) {
         case 'TL':
             ctx.translate(-xPerY * transitionSpeed, -transitionSpeed);
-            centerTile(centered);
             break;
         case 'TR':
             ctx.translate(xPerY * transitionSpeed, -transitionSpeed);
-            centerTile(centered);
             break;
         case 'BL':
             ctx.translate(-xPerY * transitionSpeed, transitionSpeed);
-            centerTile(centered);
             break;
         case 'BR':
             ctx.translate(xPerY * transitionSpeed, transitionSpeed);
-            centerTile(centered);
             break;
     }
+    centerTile(centered);
     ctx.translate(-w / 2, -h / 2); // cancel the translate(w/2,h/2) in centerTile() function
 }
 

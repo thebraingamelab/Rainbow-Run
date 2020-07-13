@@ -47,7 +47,6 @@ function gameLoop() {
         ctx.clearRect(0, 0, w, h);
         drawGrid();
         drawArrows();
-        
         displayLife();
 
         dCurrentTileAlpha = 0;

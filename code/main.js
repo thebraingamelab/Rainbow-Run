@@ -3,15 +3,16 @@ let gameStatus;
 
 function mainLoop() {
     switch (gameStatus) {
-        case 'PREGAME':
-            // tutorial?
-            // animation
+        case 'INTRO':
+            buildIntroPath();
+            introAnimationLoop();
 
-            gameStatus = 'GAME';
-            mainLoop();
+            // gameStatus = 'GAME';
+            // mainLoop();
             break;
 
         case 'GAME':
+            setUpGame();
             window.addEventListener("keydown", restart);
             canvas.addEventListener("click", updatePlayerPosition);
             window.addEventListener('resize', init, false);

@@ -3,6 +3,7 @@
 let requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 let canvas, ctx, w, h; // canvas 
 let strokeClr = 'rgba(35,44,58,0.2)';
+let tilePageRatio = 12;
 
 // map (variables should vary for different levels in the final version)
 let nColors = 3; // number of colors >=2; <nColorsUpperLimit
@@ -22,7 +23,7 @@ let endOfMaze = false;
 
 // tile
 let tileWidth, tileLength, tileHeight; // tile 
-let xDistance, yDistance; // distance between tiles
+let xDistance, yDistance, xPerY; // distance between tiles
 let currentTileAlpha = 1;
 let curNextTileAlpha = 0;
 let nextTileAlpha = 1;
@@ -89,7 +90,7 @@ window.onload = function () {
     init(); // Set up page variables
     setUpGame(); // Set up game variables
 
-    gameStatus = 'PREGAME';
+    gameStatus = 'INTRO';
     mainLoop();
 }
 
@@ -119,8 +120,18 @@ function setUpGame() {
     shuffle(colors);
 
     // set up variables
-    tileWidth = Math.max(w, h) / (nHistory + 1);
-    setTileParaByWidth(tileWidth);
+    if (w>h) {
+        tileWidth = w/tilePageRatio*1.5;
+        setTileParaByWidth(tileWidth);
+    }
+    else {
+        tileLength = h/tilePageRatio;
+        setTileParaByLength(tileLength);
+    }
+    xPerY = xDistance / yDistance; // for every transition of 1 on y-axis, transition of xPerY on x-axis
+
+    // tileWidth = Math.max(w, h) / (nHistory + 1);
+    // setTileParaByWidth(tileWidth);
     transitionSpeed = tileWidth / 20;
 
     //arrow

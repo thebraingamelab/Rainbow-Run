@@ -143,9 +143,9 @@ function buildMap() {
             }
         }
     }
-    for (let i = 0; i < map.length; i++) {
-        console.log(map[i]);
-    }
+    // for (let i = 0; i < map.length; i++) {
+    //     console.log(map[i]);
+    // }
 }
 
 function addGreySequence() {
