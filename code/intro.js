@@ -79,6 +79,8 @@ function introAnimationLoop() {
                     playerX = introTiles[pathCounter].x;
                     playerY = introTiles[pathCounter].y;
                     displayPlayer(playerX, playerY);
+                    clickAudio.currentTime = 0;
+                    clickAudio.play();
                     if (pathCounter === introTiles.length - 1) {
                         introStatus = 'READY';
                         startTileClr = map[0].tileClr;
@@ -160,10 +162,7 @@ function go() {
 }
 
 function introHopAnimation() {
-    if (hopProgress === 0) {
-        clickAudio.currentTime = 0;
-        clickAudio.play();
-    }
+
     hopProgress += transitionSpeed;
     // towards the next tile in the path
     if (introTiles[pathCounter].x > playerX) playerX += xPerY * transitionSpeed;
