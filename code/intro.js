@@ -11,8 +11,8 @@ function buildIntroPath() {
 
     let x, y;
 
-    introStartX = w / 2 - xDisplacement * 3;
-    introStartY = h / 2 - yDisplacement * 5;
+    introStartX = w / 2 - xDisplacement * 2;
+    introStartY = h / 2 - yDisplacement * 4;
     introTiles.push(new Tile(greyTileClr, greyShadowClr, 'any'));
     introTiles[introTiles.length - 1].x = introStartX;
     introTiles[introTiles.length - 1].y = introStartY;
@@ -24,18 +24,12 @@ function buildIntroPath() {
     introTiles[introTiles.length - 1].x = x;
     introTiles[introTiles.length - 1].y = y;
     // second tile
-    x += xDisplacement;
-    y += yDisplacement;
-    introTiles.push(new Tile(greyTileClr, greyShadowClr, 'any'));
-    introTiles[introTiles.length - 1].x = x;
-    introTiles[introTiles.length - 1].y = y;
-    // third tile
     x -= xDisplacement;
     y += yDisplacement;
     introTiles.push(new Tile(greyTileClr, greyShadowClr, 'any'));
     introTiles[introTiles.length - 1].x = x;
     introTiles[introTiles.length - 1].y = y;
-    // fourth tile
+    // third tile
     x += xDisplacement;
     y += yDisplacement;
     introTiles.push(new Tile(greyTileClr, greyShadowClr, 'any'));
@@ -64,8 +58,8 @@ function introStartAnimation() {
         introBgAlpha = Math.max(0, introBgAlpha - 0.05);
         let dScaleNumber = 0.2;
         scaleNumber = Math.max(1, scaleNumber - dScaleNumber);
-        if ((introStartX < playerX) || (towardsStart < 0)) towardsStart -= 6;
-        else towardsStart += 6;
+        if ((introStartX < playerX) || (towardsStart < 0)) towardsStart -= 5;
+        else towardsStart += 5;
     }
 }
 
@@ -140,7 +134,7 @@ function introAnimationLoop() {
 
             canvas.addEventListener('click', startIntro, { once: true });
 
-            if (Math.abs(towardsStart) >= Math.abs(w / 2 - introStartX)) {
+            if (Math.abs(towardsStart) >= Math.abs(w / 2 - introStartX)+30) {
                 introStatus = 'START';
                 hopProgress = 0;
                 pathCounter++;
