@@ -12,7 +12,7 @@ function mainLoop() {
             window.addEventListener("keydown", restart);
             canvas.addEventListener("click", updatePlayerPosition);
             window.addEventListener('resize', init, false);
-            collapseDefault = setInterval(collapse, collapsingInterval);
+            collapseDefault = setInterval(collapse, collapsingIntervalDefault);
             gameLoop();
             break;
 

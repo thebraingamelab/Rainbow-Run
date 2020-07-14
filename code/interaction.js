@@ -32,7 +32,8 @@ function updatePlayerPosition(evt) {
         slow = false;
         proceed = true;
         currentTile++;
-        currentCollapsing = currentCollapsingThreshold * 0.95;
+        if (currentTile > startCollapsing) collapsingInterval-= (collapsingIntervalDefault-200)/map.length;
+
         if (sinceClrStarted === nTiles) {
             sinceClrStarted = 0;
         }
@@ -193,9 +194,11 @@ function displayLife() {
 }
 
 function collapse() {
-    if (justCollapsed > 3) justCollapsed = 0;
-    if ((currentTile < startCollapsing) || endOfMaze || (lifeLeft<=0)) { }
-    else if ((currentTile > nTiles - 1) && (disappearingTiles.length === 0) && (justCollapsed === 0)) {
+    // if (justCollapsed > 3) justCollapsed = 0;
+    if ((currentTile < startCollapsing) || endOfMaze || (lifeLeft <= 0)) { }
+    // else if ((currentTile > nTiles - 1) && (disappearingTiles.length === 0) && (justCollapsed === 0)) {
+
+    else if ((currentTile > nTiles - 1) && (disappearingTiles.length === 0)) {
         // // reduce life:
         // slow = true;
         // lifeLeft--;
@@ -209,7 +212,7 @@ function collapse() {
 
         map[currentTile].collapsed = true;
     }
-    else if (justCollapsed > 0) justCollapsed++;
+    // else if (justCollapsed > 0) justCollapsed++;
     else {
         let tileCounter;
         for (let i = 0; i < disappearingTiles.length; i++) {

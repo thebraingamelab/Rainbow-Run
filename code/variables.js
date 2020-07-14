@@ -44,7 +44,8 @@ let disappearingSpeed = 0.003; // in terms of globalAlpha
 let startCollapsing = nTiles*2-1;
 let collapseDefault;
 let justCollapsed = 0;
-let collapsingInterval = 800; // in ms
+let collapsingIntervalDefault = 800; // in ms
+let collapsingInterval = collapsingIntervalDefault; // in ms
 let collapsingSpeed = disappearingSpeed;
 
 // interaction
