@@ -79,7 +79,7 @@ let startTileClr, startTileShadowClr, startTile;
 
 let introBgAlpha = 0.8;
 let startAnimate = false;
-let scaleNumber = 3;
+let scaleNumber = 2.5;
 let towardsStart = 0;
 function introAnimationLoop() {
     ctx.clearRect(0 - xDistance, 0 - yDistance, w + xDistance * 2, h + yDistance * 2);
@@ -122,7 +122,7 @@ function introAnimationLoop() {
             ctx.restore();
             // start text
             ctx.save();
-            ctx.font = '48px Overpass';
+            ctx.font = '36px Overpass';
             ctx.textAlign = 'center';
             ctx.globalAlpha = introBgAlpha;
             ctx.fillText('START', w / 2, h / 2 + tileHeight * 3 / 2);
@@ -253,6 +253,8 @@ function introAnimationLoop() {
 
 
 function startIntro() {
+    clickAudio.currentTime = 0;
+    clickAudio.play();
     startAnimate = true;
 }
 
