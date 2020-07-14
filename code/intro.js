@@ -113,7 +113,7 @@ function introAnimationLoop() {
             // display past tiles
             displayPastIntroTiles();
 
-            canvas.addEventListener("click", go, {once:true});
+            canvas.addEventListener("click", go, { once: true });
             break;
 
         case 'GO':
@@ -139,16 +139,21 @@ function introAnimationLoop() {
             break;
     }
 
-    if (gameStatus==='INTRO') introRequest = requestAnimationFrame(introAnimationLoop);
+    if (gameStatus === 'INTRO') introRequest = requestAnimationFrame(introAnimationLoop);
 }
 
 function go() {
     introTiles.push(startTile);
     introStatus = 'GO';
-    // canvas.removeEventListener("click", go);
+    clickAudio.currentTime = 0;
+    clickAudio.play();
 }
 
 function introHopAnimation() {
+    if (hopProgress === 0) {
+        clickAudio.currentTime = 0;
+        clickAudio.play();
+    }
     hopProgress += transitionSpeed;
     // towards the next tile in the path
     if (introTiles[pathCounter].x > playerX) playerX += xPerY * transitionSpeed;

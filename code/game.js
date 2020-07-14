@@ -64,5 +64,5 @@ function gameLoop() {
 
     displayPlayer(playerX, playerY);
 
-    requestAnimationFrame(gameLoop);
+    if (gameStatus ==='GAME') requestAnimationFrame(gameLoop);
 }
