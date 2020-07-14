@@ -85,8 +85,8 @@ function introAnimationLoop() {
                         startTileShadowClr = map[0].shadowClr;
                         startTile = new Tile(startTileClr, startTileShadowClr, 'any');
                     }
-                    else if (pathCounter < 2) hopInterval -= 5;
-                    else hopInterval = 10;
+                    else if (pathCounter < 2) hopInterval -= 6;
+                    else hopInterval = 5;
 
                     pathCounter++;
                 }
@@ -101,8 +101,17 @@ function introAnimationLoop() {
             break;
 
         case 'READY':
+            if (startTile.alpha < 0.8) {
+                startTile.alpha += 0.01;
+                if (startTile.alpha > 0.5) {
+                    handImg.style.top = h / 2 - tileHeight / 3 + 'px';
+                    handImg.style.left = w / 2 - tileHeight / 3 + 'px';
+                    // handImg.style.transform = 'rotate(350deg)';
+                    $("#handImg").fadeIn("slow");
+                    handImg.addEventListener('click', go, { once: true });
+                }
+            }
 
-            if (startTile.alpha < 0.8) startTile.alpha += 0.01;
             ctx.save();
             ctx.globalAlpha = startTile.alpha;
             startTile.x = w / 2;
@@ -147,6 +156,7 @@ function go() {
     introStatus = 'GO';
     clickAudio.currentTime = 0;
     clickAudio.play();
+    handImg.style.display = 'none';
 }
 
 function introHopAnimation() {

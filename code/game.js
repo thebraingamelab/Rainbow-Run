@@ -64,5 +64,19 @@ function gameLoop() {
 
     displayPlayer(playerX, playerY);
 
-    if (gameStatus ==='GAME') requestAnimationFrame(gameLoop);
+    // // click interface
+    // if (clickProgress === 0) {
+    //     clickProgress = Math.min(clickProgress+dClickProgress, clickFinish);
+    //     clickAlpha = Math.max(clickAlpha-dClickAlpha, 0);
+    //     ctx.save();
+    //     ctx.beginPath();
+    //     ctx.lineWidth = 1;
+    //     ctx.strokeStyle = 'black';
+    //     ctx.globalAlpha = clickAlpha;
+    //     ctx.arc(mousePosX, mousePosY, clickProgress, 0, 2 * Math.PI);
+    //     ctx.stroke();
+    //     ctx.restore();
+    // }
+
+    if (gameStatus === 'GAME') requestAnimationFrame(gameLoop);
 }

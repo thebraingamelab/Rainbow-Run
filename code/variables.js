@@ -75,6 +75,12 @@ let gameOverText, winText, mapViewText;
 let crownImg, crownImgTop, crownAlpha, character;
 let crownImgUpSpeed = 5;
 
+// let clickFinish = 50;
+// let clickProgress = clickFinish;
+// let dClickProgress = 5;
+// let clickAlpha = 0;
+// let dClickAlpha = 0.005;
+
 // sound
 let context;
 // var bufferLoader;
@@ -173,6 +179,10 @@ function setUpGame() {
     crownAlpha = 0;
     character = document.getElementById("character");
     character.width = tileWidth / 2;
+    handImg = document.getElementById("handImg");
+    handImg.width = tileWidth/1.8;
+    // handImg.setAttribute("fill", "green");
+    // handImg.style.opacity =0;
 
     // sound
 

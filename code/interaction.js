@@ -1,11 +1,13 @@
 
 function updatePlayerPosition(evt) {
+    // clickProgress=0;
+    // clickAlpha = 1;
     clickAudio.currentTime = 0;
     clickAudio.play();
 
     let playerMove = getInteractionArea(evt);
     if (gameOver) restart();
-    else if (endOfMaze){
+    else if (endOfMaze) {
         gameStatus = 'POSTGAME';
         mainLoop();
     }
@@ -102,15 +104,15 @@ function proceedTransition(transitionDirection) {
             centerTile(centered);
             break;
     }
-    
+
     ctx.translate(-w / 2, -h / 2); // cancel the translate(w/2,h/2) in centerTile() function
 }
 
 
-function displayPlayer(x,y){
+function displayPlayer(x, y) {
     character.style.display = "initial";
-    character.style.left = x - character.width/2 + "px";
-    character.style.top = y - character.height/1.8 + "px";
+    character.style.left = x - character.width / 2 + "px";
+    character.style.top = y - character.height / 1.8 + "px";
 }
 
 // function displayPlayer(x,y) {
@@ -219,21 +221,12 @@ function collapse() {
 
 // function clickPop(evt){
 //     let rect = canvas.getBoundingClientRect();
-//     let mousePosX = evt.clientX - rect.left;
-//     let mousePosY = evt.clientY - rect.top;
-
-//     ctx.save();
-//     ctx.lineWidth = "5";
-//     ctx.strokeStyle = "black";
-//     ctx.fillStyle = map[currentTile].tileClr;
-//     ctx.rotate(-10 * Math.PI / 180);
-//     ctx.fillRect(mousePosX-15, mousePosY-30, 5, 15);
-//     // ctx.rotate();
-//     // ctx.fillRect();
-//     // ctx.rotate();
-//     // ctx.fillRect();
+//     mousePosX = evt.clientX - rect.left;
+//     mousePosY = evt.clientY - rect.top;
+//     ctx.beginPath();
+//     ctx.arc(mousePosX, mousePosY, 50, 0, 2 * Math.PI);
 //     ctx.stroke();
-//     ctx.restore();
+//     // inner 
 // }
 
 function mistakeFeedback() {
