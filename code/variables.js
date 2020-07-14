@@ -4,7 +4,7 @@ let requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAni
 var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 let canvas, ctx, w, h; // canvas 
 let strokeClr = 'rgba(35,44,58,0.2)';
-let tilePageRatio = 13;
+let tilePageRatio = 12;
 
 // map (variables should vary for different levels in the final version)
 let nColors = 3; // number of colors >=2; <nColorsUpperLimit
@@ -133,7 +133,7 @@ function setUpGame() {
         setTileParaByWidth(tileWidth);
     }
     else {
-        tileLength = h/tilePageRatio;
+        tileLength = h/tilePageRatio*1.1;
         setTileParaByLength(tileLength);
     }
     xPerY = xDistance / yDistance; // for every transition of 1 on y-axis, transition of xPerY on x-axis
