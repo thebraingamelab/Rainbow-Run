@@ -32,7 +32,7 @@ function updatePlayerPosition(evt) {
         slow = false;
         proceed = true;
         currentTile++;
-        if (currentTile > startCollapsing) collapsingInterval-= collapsingIntervalDefault/map.length;
+        if (currentTile > startCollapsing) collapsingInterval -= collapsingIntervalDefault / map.length;
 
         if (sinceClrStarted === nTiles) {
             sinceClrStarted = 0;
@@ -206,11 +206,12 @@ function collapse() {
         // slowAudio.play();
 
         // game over:
-        gameOverAudio.play();
-        gameOver = true;
-        gameOverFeedback();
-
-        map[currentTile].collapsed = true;
+        if (!gameOver) {
+            gameOverAudio.play();
+            gameOver = true;
+            gameOverFeedback();
+            map[currentTile].collapsed = true;
+        }
     }
     // else if (justCollapsed > 0) justCollapsed++;
     else {
