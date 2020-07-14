@@ -121,7 +121,7 @@ function introAnimationLoop() {
 
             ctx.font = '48px Overpass';
             ctx.fillText('RAINBOW', w / 2, h /6 - tileHeight);
-            ctx.fillText('RUN', w / 2, h / 6 + tileHeight);
+            ctx.fillText('RUN', w / 2, h / 6*1.5 - tileHeight);
 
             ctx.font = '32px Overpass';
             ctx.fillText('START', w / 2, h / 2 + tileHeight);
