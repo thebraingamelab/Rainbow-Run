@@ -60,7 +60,6 @@ function updatePlayerPosition(evt) {
         errorAudio.currentTime = 0;
         errorAudio.play();
     }
-
 }
 
 function getInteractionArea(evt) {
@@ -88,18 +87,22 @@ function proceedTransition(transitionDirection) {
     switch (transitionDirection) {
         case 'TL':
             ctx.translate(-xPerY * transitionSpeed, -transitionSpeed);
+            centerTile(centered);
             break;
         case 'TR':
             ctx.translate(xPerY * transitionSpeed, -transitionSpeed);
+            centerTile(centered);
             break;
         case 'BL':
             ctx.translate(-xPerY * transitionSpeed, transitionSpeed);
+            centerTile(centered);
             break;
         case 'BR':
             ctx.translate(xPerY * transitionSpeed, transitionSpeed);
+            centerTile(centered);
             break;
     }
-    centerTile(centered);
+    
     ctx.translate(-w / 2, -h / 2); // cancel the translate(w/2,h/2) in centerTile() function
 }
 

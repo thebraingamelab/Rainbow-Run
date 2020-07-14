@@ -1,6 +1,7 @@
 let order = [];
 
 function generateMap() {
+    map = [];
     colorOrder();
     colorShape();
     buildMap();

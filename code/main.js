@@ -6,18 +6,13 @@ function mainLoop() {
         case 'INTRO':
             buildIntroPath();
             introAnimationLoop();
-
-            // gameStatus = 'GAME';
-            // mainLoop();
             break;
 
         case 'GAME':
-            setUpGame();
             window.addEventListener("keydown", restart);
             canvas.addEventListener("click", updatePlayerPosition);
             window.addEventListener('resize', init, false);
             collapseDefault = setInterval(collapse, collapsingInterval);
-
             gameLoop();
             break;
 

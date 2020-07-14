@@ -1,7 +1,6 @@
-let introPath = [];
 let introTiles = [];
-let nHops = 2;
 let introRequest;
+let introStartX, introStartY;
 function buildIntroPath() {
     let xDisplacement = xDistance;
     let yDisplacement = yDistance;
@@ -11,102 +10,60 @@ function buildIntroPath() {
     if (firstDirection === 'TL' || firstDirection === 'BL') xDisplacement *= -1;
 
     let x, y;
-    if (w > h) { // landscape
-        // character hops across 4 tiles:
-        x = w / 2;
-        y = h / 2 - yDistance * 2 * 3;
-        for (let i = 0; i < nHops; i++) {
-            introPath.push({ x: x, y: y });
-            x -= xDisplacement;
-            y += yDisplacement;
-        }
-        // first tile
-        introPath.push({ x: x, y: y });
-        // second tile
-        x += xDisplacement;
-        y += yDisplacement;
-        introPath.push({ x: x, y: y });
-        // third tile
-        x += xDisplacement;
-        y -= yDisplacement;
-        introPath.push({ x: x, y: y });
-        // fourth tile
-        x += xDisplacement;
-        y += yDisplacement;
-        introPath.push({ x: x, y: y });
-    }
-    else { // portrait
-        // character hops across 4 tiles:
-        x = w / 2 + xDisplacement * 2;
-        y = h / 2 - yDistance * 2 * 4;
-        for (let i = 0; i < 4; i++) {
-            introPath.push({ x: x, y: y });
-            x -= xDisplacement;
-            y += yDisplacement;
-        }
-        // first tile
-        introPath.push({ x: x, y: y });
-        // second tile
-        x += xDisplacement;
-        y += yDisplacement;
-        introPath.push({ x: x, y: y });
-        // third tile
-        x -= xDisplacement;
-        y += yDisplacement;
-        introPath.push({ x: x, y: y });
-        // fourth tile
-        x += xDisplacement;
-        y += yDisplacement;
-        introPath.push({ x: x, y: y });
-    }
 
-    for (let i = nHops; i < introPath.length; i++) {
-        let t = new Tile(greyTileClr, greyShadowClr, 'any');
-        t.x = introPath[i].x;
-        t.y = introPath[i].y;
-        introTiles.push(t);
-    }
+    introStartX = w / 2 - xDisplacement * 3;
+    introStartY = h / 2 - yDisplacement * 5;
+
+    // first tile
+    x = introStartX + xDisplacement;
+    y = introStartY + yDisplacement;
+    introTiles.push(new Tile(greyTileClr, greyShadowClr, 'any'));
+    introTiles[introTiles.length - 1].x = x;
+    introTiles[introTiles.length - 1].y = y;
+    // second tile
+    x += xDisplacement;
+    y += yDisplacement;
+    introTiles.push(new Tile(greyTileClr, greyShadowClr, 'any'));
+    introTiles[introTiles.length - 1].x = x;
+    introTiles[introTiles.length - 1].y = y;
+    // third tile
+    x -= xDisplacement;
+    y += yDisplacement;
+    introTiles.push(new Tile(greyTileClr, greyShadowClr, 'any'));
+    introTiles[introTiles.length - 1].x = x;
+    introTiles[introTiles.length - 1].y = y;
+    // fourth tile
+    x += xDisplacement;
+    y += yDisplacement;
+    introTiles.push(new Tile(greyTileClr, greyShadowClr, 'any'));
+    introTiles[introTiles.length - 1].x = x;
+    introTiles[introTiles.length - 1].y = y;
 }
 
 
 let introStatus = 'START';
 let pathCounter = 0;
 let hopProgress = 0;// along x-axis
-let hopInterval = 20;
-let pauseTime = hopInterval;
+let hopInterval = 30;
+let pauseTime = 0;
+let startTileClr, startTileShadowClr, startTile;
+
 function introAnimationLoop() {
     ctx.clearRect(0 - xDistance, 0 - yDistance, w + xDistance * 2, h + yDistance * 2);
     drawGrid();
     switch (introStatus) {
         case 'START':
-            playerX = introPath[pathCounter].x;
-            playerY = introPath[pathCounter].y;
+            playerX = introStartX;
+            playerY = introStartY;
             displayPlayer(playerX, playerY);
-            introStatus = 'HOP';
-            break;
-        case 'HOP':
             if (pauseTime < hopInterval) pauseTime++;
-            else if (hopProgress < yDistance - 5) {
-                introHopAnimation();
-            }
-            // arrived at next tile
             else {
                 pauseTime = 0;
-                hopProgress = 0;
-                pathCounter++;
-                playerX = introPath[pathCounter].x;
-                playerY = introPath[pathCounter].y;
-                displayPlayer(playerX, playerY);
-                if (pathCounter === nHops - 1) {
-                    introStatus = 'ONTILE';
-                    hopInterval += 15;
-                }
-                // clickAudio.currentTime = 0;
-                // clickAudio.play();
+                introStatus = 'ONTILE';
             }
             break;
         case 'ONTILE':
-            let curTile = introTiles[pathCounter - nHops + 1];
+            let curTile = introTiles[pathCounter];
 
             // fade in the current tile
             if (curTile.alpha < 0.8) curTile.alpha += 0.1;
@@ -119,16 +76,19 @@ function introAnimationLoop() {
                 else {
                     pauseTime = 0;
                     hopProgress = 0;
-                    pathCounter++;
-                    playerX = introPath[pathCounter].x;
-                    playerY = introPath[pathCounter].y;
+                    playerX = introTiles[pathCounter].x;
+                    playerY = introTiles[pathCounter].y;
                     displayPlayer(playerX, playerY);
-
-                    if (pathCounter === introPath.length - 1) {
+                    if (pathCounter === introTiles.length - 1) {
                         introStatus = 'READY';
+                        startTileClr = map[0].tileClr;
+                        startTileShadowClr = map[0].shadowClr;
+                        startTile = new Tile(startTileClr, startTileShadowClr, 'any');
                     }
-                    else if (pathCounter < 4) hopInterval -= 5;
+                    else if (pathCounter < 2) hopInterval -= 5;
                     else hopInterval = 10;
+
+                    pathCounter++;
                 }
             }
             ctx.save();
@@ -137,26 +97,23 @@ function introAnimationLoop() {
             ctx.restore();
 
             // display past tiles
-            displayPastIntroTiles();
+            if (pathCounter > 0) displayPastIntroTiles();
             break;
 
         case 'READY':
-            let startTile = map[0];
+
             if (startTile.alpha < 0.8) startTile.alpha += 0.01;
             ctx.save();
             ctx.globalAlpha = startTile.alpha;
-            startTile.currentDisplay();
+            startTile.x = w / 2;
+            startTile.y = h / 2;
+            startTile.display();
             ctx.restore();
 
             // display past tiles
             displayPastIntroTiles();
 
-            canvas.addEventListener("click", function () {
-                introPath.push(map[0]);
-                map[0].x = w / 2;
-                map[0].y = h / 2;
-                introStatus = 'GO';
-            });
+            canvas.addEventListener("click", go, {once:true});
             break;
 
         case 'GO':
@@ -164,36 +121,39 @@ function introAnimationLoop() {
                 introHopAnimation();
                 for (let i = 0; i < introTiles.length; i++) {
                     let t = introTiles[i];
-                    t.alpha = Math.max(0, t.alpha - disappearingSpeed * 3);
+                    if (t.alpha > alphaThreshold * 2) t.alpha = Math.max(0, t.alpha - 0.2);
+                    else t.alpha = Math.max(0, t.alpha - 0.05);
                     ctx.save();
                     ctx.globalAlpha = t.alpha;
                     t.display();
                     ctx.restore();
                 }
                 ctx.globalAlpha = 0.9;
-                map[0].display();
+                startTile.display();
             }
             else {
-                map[0].x = 0;
-                map[0].y = 0;
-                cancelAnimationFrame(introRequest);
+                // cancelAnimationFrame(introRequest);
                 gameStatus = 'GAME';
                 mainLoop();
             }
             break;
     }
 
-
-    introRequest = requestAnimationFrame(introAnimationLoop);
+    if (gameStatus==='INTRO') introRequest = requestAnimationFrame(introAnimationLoop);
 }
 
+function go() {
+    introTiles.push(startTile);
+    introStatus = 'GO';
+    // canvas.removeEventListener("click", go);
+}
 
 function introHopAnimation() {
     hopProgress += transitionSpeed;
     // towards the next tile in the path
-    if (introPath[pathCounter + 1].x > introPath[pathCounter].x) playerX += xPerY * transitionSpeed;
+    if (introTiles[pathCounter].x > playerX) playerX += xPerY * transitionSpeed;
     else playerX -= xPerY * transitionSpeed;
-    if (introPath[pathCounter + 1].y > introPath[pathCounter].y) playerY += transitionSpeed;
+    if (introTiles[pathCounter].y > playerY) playerY += transitionSpeed;
     else playerY -= transitionSpeed;
 
     // character jump animation
@@ -204,9 +164,9 @@ function introHopAnimation() {
 }
 
 function displayPastIntroTiles() {
-    for (let i = pathCounter - nHops; i >= 0; i--) {
+    for (let i = 0; i < pathCounter; i++) {
         let t = introTiles[i];
-        if (i === pathCounter - nHops) t.alpha = 1;
+        if (i === pathCounter - 1) t.alpha = 1;
         else t.alpha = Math.max(alphaThreshold * 2, t.alpha - disappearingSpeed * 3);
 
         ctx.save();

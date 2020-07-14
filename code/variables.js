@@ -1,6 +1,7 @@
 // general / html-related
 // let message;
 let requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 let canvas, ctx, w, h; // canvas 
 let strokeClr = 'rgba(35,44,58,0.2)';
 let tilePageRatio = 12;
