@@ -13,6 +13,9 @@ function buildIntroPath() {
 
     introStartX = w / 2 - xDisplacement * 3;
     introStartY = h / 2 - yDisplacement * 5;
+    introTiles.push(new Tile(greyTileClr, greyShadowClr, 'any'));
+    introTiles[introTiles.length - 1].x = introStartX;
+    introTiles[introTiles.length - 1].y = introStartY;
 
     // first tile
     x = introStartX + xDisplacement;
@@ -41,18 +44,113 @@ function buildIntroPath() {
 }
 
 
-let introStatus = 'START';
+function introStartAnimation() {
+    // hop
+    if (hopProgress < yDistance * scaleNumber) {
+        hopProgress += transitionSpeed;
+        playerX += xPerY * transitionSpeed;
+        playerY -= transitionSpeed;
+        // character jump animation
+        if (hopProgress < yDistance * scaleNumber / 2) playerY -= 5 * scaleNumber / 1.5;
+        else playerY += 4 * scaleNumber / 1.5;
+        displayPlayer(playerX, playerY);
+    }
+    // player already hopped onto the button tile
+    else {
+        playerX = w / 2 + towardsStart * Math.abs((w / 2 - introStartX) / (h / 2 - introStartY));
+        playerY = h / 2 - Math.abs(towardsStart);
+        displayPlayer(playerX, playerY);
+
+        introBgAlpha = Math.max(0, introBgAlpha - 0.05);
+        let dScaleNumber = 0.2;
+        scaleNumber = Math.max(1, scaleNumber - dScaleNumber);
+        if ((introStartX < playerX) || (towardsStart < 0)) towardsStart -= 6;
+        else towardsStart += 6;
+    }
+}
+
+
+let introStatus = 'WAITING_TO_START';
 let pathCounter = 0;
 let hopProgress = 0;// along x-axis
 let hopInterval = 30;
 let pauseTime = 0;
 let startTileClr, startTileShadowClr, startTile;
 
+let introBgAlpha = 0.8;
+let startAnimate = false;
+let scaleNumber = 3;
+let towardsStart = 0;
 function introAnimationLoop() {
     ctx.clearRect(0 - xDistance, 0 - yDistance, w + xDistance * 2, h + yDistance * 2);
     drawGrid();
     switch (introStatus) {
+        case 'WAITING_TO_START':
+
+            // background
+            ctx.save();
+            ctx.globalAlpha = introBgAlpha;
+            ctx.strokeStyle = 'transparent';
+
+            if (w > h) {
+                width = w / colors.length;
+                for (let i = 0; i < colors.length; i++) {
+                    ctx.save();
+                    ctx.fillStyle = colors[i][0];
+                    ctx.fillRect(width * i, 0, width, h);
+                    ctx.restore();
+                }
+            }
+            else {
+                height = h / colors.length;
+                for (let i = 0; i < colors.length; i++) {
+                    ctx.save();
+                    ctx.fillStyle = colors[i][0];
+                    ctx.fillRect(0, height * i, w, height);
+                    ctx.restore();
+                }
+            }
+            ctx.restore();
+
+
+            // button tile
+            ctx.save();
+            let buttonTile = new Tile(greyTileClr, greyShadowClr, 'any');
+            ctx.translate(w / 2 + towardsStart * Math.abs((w / 2 - introStartX) / (h / 2 - introStartY)), h / 2 - Math.abs(towardsStart));
+            ctx.scale(scaleNumber, scaleNumber);
+            buttonTile.display();
+            ctx.restore();
+            // start text
+            ctx.save();
+            ctx.font = '48px Overpass';
+            ctx.textAlign = 'center';
+            ctx.globalAlpha = introBgAlpha;
+            ctx.fillText('START', w / 2, h / 2 + tileHeight * 3 / 2);
+            ctx.restore();
+
+            character.width = tileWidth / 2 * scaleNumber;
+            if (startAnimate) {
+                introStartAnimation();
+            }
+            else {
+                playerX = w / 2 - xDistance * scaleNumber;
+                playerY = h / 2 + yDistance * scaleNumber;
+                displayPlayer(playerX, playerY);
+            }
+
+            canvas.addEventListener('click', startIntro, { once: true });
+
+            if (Math.abs(towardsStart) >= Math.abs(w / 2 - introStartX)) {
+                introStatus = 'START';
+                hopProgress = 0;
+                pathCounter++;
+            }
+            // if ((Math.abs(playerX-introStartX)<=20)&& (Math.abs(playerY-introStartY)<=20)) introStatus = 'START';
+
+            break;
+
         case 'START':
+            introTiles[0].display();
             playerX = introStartX;
             playerY = introStartY;
             displayPlayer(playerX, playerY);
@@ -105,7 +203,7 @@ function introAnimationLoop() {
         case 'READY':
             if (startTile.alpha < 0.8) {
                 startTile.alpha += 0.01;
-                if (startTile.alpha > 0.5) {
+                if (startTile.alpha > 0.2) {
                     handImg.style.top = h / 2 - tileHeight / 3 + 'px';
                     handImg.style.left = w / 2 - tileHeight / 3 + 'px';
                     // handImg.style.transform = 'rotate(350deg)';
@@ -152,6 +250,12 @@ function introAnimationLoop() {
 
     if (gameStatus === 'INTRO') introRequest = requestAnimationFrame(introAnimationLoop);
 }
+
+
+function startIntro() {
+    startAnimate = true;
+}
+
 
 function go() {
     introTiles.push(startTile);

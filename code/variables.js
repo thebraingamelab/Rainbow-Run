@@ -8,7 +8,7 @@ let tilePageRatio = 12;
 
 // map (variables should vary for different levels in the final version)
 let nColors = 3; // number of colors >=2; <nColorsUpperLimit
-let colors = [['#5ECBF2', '#1D9DD2', 'blue'], ['#FEDE68', '#E9B926', 'yellow'], ['#FB4D4B', '#D60904', 'red'], ['#2CDDAF', '#168469', 'green'], ['#FC954F', '#D45A10', 'orange'], ['#9582D2', '#553BA9', 'purple']];
+let colors = [['#FB4D4B', '#D60904', 'red'], ['#FC954F', '#D45A10', 'orange'], ['#FEDE68', '#E9B926', 'yellow'], ['#2CDDAF', '#168469', 'green'], ['#5ECBF2', '#1D9DD2', 'blue'], ['#9582D2', '#553BA9', 'purple']];
 // [0:tileClr, 1:shadowClr, 2:colorName, 3:colorSegments ( [i,'d'] - for tiles until i their directions are 'd'; e.g. [[1,'TL'],[3,'BL']])]
 let greyTileClr = '#B1BCCA';
 let greyShadowClr = '#66738E';
