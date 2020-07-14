@@ -32,7 +32,7 @@ function updatePlayerPosition(evt) {
         slow = false;
         proceed = true;
         currentTile++;
-        if (currentTile > startCollapsing) collapsingInterval-= (collapsingIntervalDefault-200)/map.length;
+        if (currentTile > startCollapsing) collapsingInterval-= collapsingIntervalDefault/map.length;
 
         if (sinceClrStarted === nTiles) {
             sinceClrStarted = 0;
