@@ -70,7 +70,7 @@ let hopProgress = 0;// along x-axis
 let hopInterval = 15;
 let pauseTime = 0;
 let startTileClr, startTileShadowClr, startTile;
-
+let bgwidth, bgheight;
 let introBgAlpha = 0.8;
 let startAnimate = false;
 let scaleNumber = 2.5;
@@ -87,20 +87,20 @@ function introAnimationLoop() {
             ctx.strokeStyle = 'transparent';
 
             if (w > h) {
-                width = w / colors.length;
+                bgwidth = w / colors.length;
                 for (let i = 0; i < colors.length; i++) {
                     ctx.save();
                     ctx.fillStyle = colors[i][0];
-                    ctx.fillRect(width * i, 0, width, h);
+                    ctx.fillRect(bgwidth * i, 0, bgwidth, h);
                     ctx.restore();
                 }
             }
             else {
-                height = h / colors.length;
+                bgheight = h / colors.length;
                 for (let i = 0; i < colors.length; i++) {
                     ctx.save();
                     ctx.fillStyle = colors[i][0];
-                    ctx.fillRect(0, height * i, w, height);
+                    ctx.fillRect(0, bgheight * i, w, bgheight);
                     ctx.restore();
                 }
             }
@@ -116,10 +116,15 @@ function introAnimationLoop() {
             ctx.restore();
             // start text
             ctx.save();
-            ctx.font = '36px Overpass';
             ctx.textAlign = 'center';
             ctx.globalAlpha = introBgAlpha;
-            ctx.fillText('START', w / 2, h / 2 + tileHeight * 3 / 2);
+
+            ctx.font = '48px Overpass';
+            ctx.fillText('RAINBOW', w / 2, h /6 - tileHeight);
+            ctx.fillText('RUN', w / 2, h / 6 + tileHeight);
+
+            ctx.font = '32px Overpass';
+            ctx.fillText('START', w / 2, h / 2 + tileHeight);
             ctx.restore();
 
             character.width = tileWidth / 2 * scaleNumber;
