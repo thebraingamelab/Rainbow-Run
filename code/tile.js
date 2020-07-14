@@ -227,7 +227,7 @@ function highlight(cur, lastHighlight) {
 
         if (map[j].collapsed) {
             ctx.restore();
-            ctx.globalAlpha = alphaThreshold;
+            ctx.globalAlpha = alphaThreshold/2;
             let collapsedHighlightTile = map[j];
             collapsedHighlightTile.y = 0;
             if (j === Math.max(lastHighlight + 1, 0)) collapsedHighlightTile.display();

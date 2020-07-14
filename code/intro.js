@@ -67,7 +67,7 @@ function introStartAnimation() {
 let introStatus = 'WAITING_TO_START';
 let pathCounter = 0;
 let hopProgress = 0;// along x-axis
-let hopInterval = 30;
+let hopInterval = 15;
 let pauseTime = 0;
 let startTileClr, startTileShadowClr, startTile;
 
@@ -134,13 +134,12 @@ function introAnimationLoop() {
 
             canvas.addEventListener('click', startIntro, { once: true });
 
-            if (Math.abs(towardsStart) >= Math.abs(w / 2 - introStartX)+30) {
+            if (Math.abs(towardsStart) >= Math.abs(w / 2 - introStartX) + 30) {
                 introStatus = 'START';
                 hopProgress = 0;
                 pathCounter++;
             }
             // if ((Math.abs(playerX-introStartX)<=20)&& (Math.abs(playerY-introStartY)<=20)) introStatus = 'START';
-
             break;
 
         case 'START':
@@ -179,8 +178,8 @@ function introAnimationLoop() {
                         startTileShadowClr = map[0].shadowClr;
                         startTile = new Tile(startTileClr, startTileShadowClr, 'any');
                     }
-                    else if (pathCounter < 2) hopInterval -= 6;
-                    else hopInterval = 5;
+                    else if (pathCounter < 2) hopInterval -= 7;
+                    else hopInterval = 0;
 
                     pathCounter++;
                 }
@@ -197,14 +196,11 @@ function introAnimationLoop() {
         case 'READY':
             if (startTile.alpha < 0.8) {
                 startTile.alpha += 0.01;
-                if (startTile.alpha > 0.2) {
-                    handImg.style.top = h / 2 - tileHeight / 3 + 'px';
-                    handImg.style.left = w / 2 - tileHeight / 3 + 'px';
-                    // handImg.style.transform = 'rotate(350deg)';
-                    $("#handImg").fadeIn("slow");
-                    handImg.addEventListener('click', go, { once: true });
-                }
+                handImg.style.top = h / 2 - tileHeight / 3 + 'px';
+                handImg.style.left = w / 2 - tileHeight / 3 + 'px';
+                $("#handImg").fadeIn("fast");
             }
+
 
             ctx.save();
             ctx.globalAlpha = startTile.alpha;
@@ -216,7 +212,10 @@ function introAnimationLoop() {
             // display past tiles
             displayPastIntroTiles();
 
-            canvas.addEventListener("click", go, { once: true });
+            if (startTile.alpha > 0.05) {
+                handImg.addEventListener('click', go, { once: true });
+                canvas.addEventListener("click", go, { once: true });
+            }
             break;
 
         case 'GO':
@@ -230,6 +229,7 @@ function introAnimationLoop() {
                     ctx.globalAlpha = t.alpha;
                     t.display();
                     ctx.restore();
+
                 }
                 ctx.globalAlpha = 0.9;
                 startTile.display();
@@ -279,10 +279,15 @@ function introHopAnimation() {
 
 function displayPastIntroTiles() {
     for (let i = 0; i < pathCounter; i++) {
+        
         let t = introTiles[i];
         if (i === pathCounter - 1) t.alpha = 1;
-        else t.alpha = Math.max(alphaThreshold * 2, t.alpha - disappearingSpeed * 3);
-
+        else if (t.alpha > alphaThreshold) t.alpha= Math.max(alphaThreshold, t.alpha - disappearingSpeed * 3);
+        else {
+            t.y +=5;
+            t.alpha = Math.max(0, t.alpha - disappearingSpeed)
+        }
+       
         ctx.save();
         ctx.globalAlpha = t.alpha;
         t.display();

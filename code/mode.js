@@ -1,6 +1,6 @@
 
 function drawGrid() {
-    let nTileOnEachSide = Math.floor(Math.max(w, h) / tileWidth / 2) + 1;
+    let nTileOnEachSide = Math.floor(Math.max(w, h) / tileWidth / 2) + 2;
     ctx.save();
     for (let wid = w / 2 - xDistance * 2 * nTileOnEachSide; wid < w / 2 + xDistance * 2 * nTileOnEachSide; wid += xDistance * 2) {
         for (let hei = h / 2 - yDistance * 2 * nTileOnEachSide; hei < h / 2 + yDistance * 2 * nTileOnEachSide; hei += yDistance * 2) {

@@ -164,6 +164,7 @@ function displayPlayer(x, y) {
 
 function restart() {
     location.reload();
+    gameStatus = 'GAME';
 }
 
 function preShake() {
@@ -193,16 +194,20 @@ function displayLife() {
 
 function collapse() {
     if (justCollapsed > 3) justCollapsed = 0;
-
-    if ((currentTile < startCollapsing) || endOfMaze || gameOver) { }
+    if ((currentTile < startCollapsing) || endOfMaze || (lifeLeft<=0)) { }
     else if ((currentTile > nTiles - 1) && (disappearingTiles.length === 0) && (justCollapsed === 0)) {
-        // if (!endOfMaze){
-        slow = true;
-        lifeLeft--;
-        // console.log(lifeLeft);
-        justCollapsed++;
-        // }
-        slowAudio.play();
+        // // reduce life:
+        // slow = true;
+        // lifeLeft--;
+        // justCollapsed++;
+        // slowAudio.play();
+
+        // game over:
+        gameOverAudio.play();
+        gameOver = true;
+        gameOverFeedback();
+
+        map[currentTile].collapsed = true;
     }
     else if (justCollapsed > 0) justCollapsed++;
     else {

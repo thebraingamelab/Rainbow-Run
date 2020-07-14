@@ -5,6 +5,11 @@ function gameLoop() {
         gameOver = true;
         gameOverFeedback();
     }
+    // collapsed -gameover:
+    else if (map[currentTile].collapsed && gameOver){
+        map[currentTile].y+=5;
+        if (map[currentTile].y>=h) map[currentTile+1].y+=5;
+    }
     else if (endOfMaze && !mapView) {
         winFeedback();
     }

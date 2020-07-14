@@ -4,7 +4,7 @@ let requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAni
 var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 let canvas, ctx, w, h; // canvas 
 let strokeClr = 'rgba(35,44,58,0.2)';
-let tilePageRatio = 12;
+let tilePageRatio = 13;
 
 // map (variables should vary for different levels in the final version)
 let nColors = 3; // number of colors >=2; <nColorsUpperLimit
@@ -38,10 +38,10 @@ let currentTile = 0;
 let nextTileDelayTime = 10;
 let delayed = 0;
 let disappearingTiles = []; // {tile (tile's counter -  from the last history shown to cur-1), alpha]
-let alphaThreshold = 0.15; // least opacity before collapsing
+let alphaThreshold = 0.2; // least opacity before collapsing
 let disappearingSpeed = 0.003; // in terms of globalAlpha
 // let collapseThreshold = 0.1;
-let startCollapsing = 8;
+let startCollapsing = nTiles*2-1;
 let collapseDefault;
 let justCollapsed = 0;
 let collapsingInterval = 800; // in ms
