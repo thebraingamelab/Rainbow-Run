@@ -17,8 +17,8 @@ function mainLoop() {
             break;
 
         case 'POSTGAME':
-            winText.style.display = "none";
-            crownImg.style.display = "none";
+            // winText.style.display = "none";
+            // crownImg.style.display = "none";
 
             canvas.addEventListener("click", restart);
 
@@ -29,11 +29,11 @@ function mainLoop() {
                 arrowImgs[i].style.display = 'none';
             }
 
-            character.style.opacity = 0;
+            // character.style.opacity = 0;
             clearInterval(collapseDefault);
-            setParaForMapView();
+            // setParaForMapView();
 
-            mapLoop();
+            // mapLoop();
             break;
     }
 }

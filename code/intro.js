@@ -73,7 +73,7 @@ let startTileClr, startTileShadowClr, startTile;
 let bgwidth, bgheight;
 let introBgAlpha = 0.8;
 let startAnimate = false;
-let scaleNumber = 2.5;
+let scaleNumber = 2.2;
 let towardsStart = 0;
 function introAnimationLoop() {
     ctx.clearRect(0 - xDistance, 0 - yDistance, w + xDistance * 2, h + yDistance * 2);
@@ -87,19 +87,19 @@ function introAnimationLoop() {
             ctx.strokeStyle = 'transparent';
 
             if (w > h) {
-                bgwidth = w / colors.length;
-                for (let i = 0; i < colors.length; i++) {
+                bgwidth = w / rainbowColors.length;
+                for (let i = 0; i < rainbowColors.length; i++) {
                     ctx.save();
-                    ctx.fillStyle = colors[i][0];
+                    ctx.fillStyle = rainbowColors[i][0];
                     ctx.fillRect(bgwidth * i, 0, bgwidth, h);
                     ctx.restore();
                 }
             }
             else {
-                bgheight = h / colors.length;
-                for (let i = 0; i < colors.length; i++) {
+                bgheight = h / rainbowColors.length;
+                for (let i = 0; i < rainbowColors.length; i++) {
                     ctx.save();
-                    ctx.fillStyle = colors[i][0];
+                    ctx.fillStyle = rainbowColors[i][0];
                     ctx.fillRect(0, bgheight * i, w, bgheight);
                     ctx.restore();
                 }

@@ -10,8 +10,9 @@ function gameLoop() {
         map[currentTile].y+=5;
         if (map[currentTile].y>=h) map[currentTile+1].y+=5;
     }
-    else if (endOfMaze && !mapView) {
+    else if (endOfMaze) {
         winFeedback();
+        // outroCharacterAnimation();
     }
     if (mistake) {
         mistakeFeedback();
@@ -36,6 +37,7 @@ function gameLoop() {
         else { // just finished transition
             // no clearRect here, otherwise the end of the transition will be jerky
             if (currentTile === map.length - 1) {
+                clearInterval(collapseDefault);
                 endOfMaze = true;
                 completeAudio.play();
             }
@@ -63,8 +65,10 @@ function gameLoop() {
 
         ctx.restore(); // 0,0
 
-        playerX = map[currentTile].x + w / 2;
-        playerY = map[currentTile].y + h / 2;
+        if (!endOfMaze){
+            playerX = map[currentTile].x + w / 2;
+            playerY = map[currentTile].y + h / 2;
+        }
     }
 
     displayPlayer(playerX, playerY);

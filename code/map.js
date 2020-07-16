@@ -119,11 +119,11 @@ function buildMap() {
             if (i !== 0) {
                 let curDirection = clrSegments[0][1];
                 let oppDirection = getOppositeDirection(curDirection);
-                if ((curDirection === map[map.length - 1].relativePositionToLast) || (oppDirection === map[map.length - 1].relativePositionToLast)) {
+                if (oppDirection === map[map.length - 1].relativePositionToLast) {
                     let greyDirection;
                     do {
                         greyDirection = directions[Math.floor(Math.random() * directions.length)]
-                    } while ((curDirection === greyDirection) || (oppDirection === greyDirection));
+                    } while (greyDirection === oppDirection || greyDirection === getOppositeDirection(map[map.length - 1].relativePositionToLast));
                     map.push(new Tile(greyTileClr, greyShadowClr, greyDirection));
                 }
             }

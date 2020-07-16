@@ -8,8 +8,9 @@ function updatePlayerPosition(evt) {
     let playerMove = getInteractionArea(evt);
     if (gameOver) restart();
     else if (endOfMaze) {
-        gameStatus = 'POSTGAME';
-        mainLoop();
+        // gameStatus = 'POSTGAME';
+        // mainLoop();
+        restart();
     }
     else if (currentTile === map.length - 1) { }
     else if (playerMove === map[currentTile + 1].relativePositionToLast) {
@@ -165,7 +166,7 @@ function displayPlayer(x, y) {
 
 function restart() {
     location.reload();
-    gameStatus = 'GAME';
+    // gameStatus = 'GAME';
 }
 
 function preShake() {
@@ -258,7 +259,7 @@ function winFeedback() {
     crownAlpha += 0.05;
     crownImg.style.opacity = crownAlpha;
     crownImg.style.left = w / 2 - crownImg.width / 2 + "px";
-    crownImgTop = Math.max(crownImgTop - crownImgUpSpeed, lifeImgWidth / 1.5);
+    crownImgTop = Math.max(crownImgTop - crownImgUpSpeed, h/2-tileWidth/1.);
     crownImg.style.top = crownImgTop + "px";
 }
 

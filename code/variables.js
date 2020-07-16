@@ -10,6 +10,7 @@ let tilePageRatio = 12;
 let nColors = 2; // number of colors >=2; <nColorsUpperLimit
 let colors = [['#FB4D4B', '#D60904', 'red'], ['#FC954F', '#D45A10', 'orange'], ['#FEDE68', '#E9B926', 'yellow'], ['#2CDDAF', '#168469', 'green'], ['#5ECBF2', '#1D9DD2', 'blue'], ['#9582D2', '#553BA9', 'purple']];
 // [0:tileClr, 1:shadowClr, 2:colorName, 3:colorSegments ( [i,'d'] - for tiles until i their directions are 'd'; e.g. [[1,'TL'],[3,'BL']])]
+let rainbowColors = [['#FB4D4B', '#D60904', 'red'], ['#FC954F', '#D45A10', 'orange'], ['#FEDE68', '#E9B926', 'yellow'], ['#2CDDAF', '#168469', 'green'], ['#5ECBF2', '#1D9DD2', 'blue'], ['#9582D2', '#553BA9', 'purple']];
 let greyTileClr = '#B1BCCA';
 let greyShadowClr = '#66738E';
 let nTimes = 4; // number of times each color sequence appears
@@ -28,9 +29,8 @@ let xDistance, yDistance, xPerY; // distance between tiles
 let currentTileAlpha = 1;
 let curNextTileAlpha = 0;
 let nextTileAlpha = 1;
-let historyAlpha = 0.8;
+let historyAlpha = 0.6;
 let dCurrentTileAlpha = 0; // amount reduced
-// let dHistoryAlpha = 0;
 let dNextTileAlpha;
 let rateHistoryAlpha = (historyAlpha - 0) / (nHistory);
 let sinceClrStarted = 1; // to detect when to highlight
@@ -74,7 +74,7 @@ let incorrectImg, reduceLifeImg;
 let mousePosX, mousePosY;
 let gameOverText, winText, mapViewText;
 let crownImg, crownImgTop, crownAlpha, character;
-let crownImgUpSpeed = 5;
+let crownImgUpSpeed = 1;
 
 // let clickFinish = 50;
 // let clickProgress = clickFinish;
@@ -137,7 +137,9 @@ function setUpGame() {
         setTileParaByLength(tileLength);
     }
     xPerY = xDistance / yDistance; // for every transition of 1 on y-axis, transition of xPerY on x-axis
-
+    // outro
+    jumpPeak = tileWidth; 
+    outroRotateAngle = 360/jumpPeak;
     // tileWidth = Math.max(w, h) / (nHistory + 1);
     // setTileParaByWidth(tileWidth);
     transitionSpeed = tileWidth / 20;
@@ -174,12 +176,12 @@ function setUpGame() {
     incorrectImg.height = incorrectImg.width;
     // reduceLifeImg = document.getElementById("reduceLifeImg");
     // reduceLifeImg.height = incorrectImg.height/1.5;
-    crownImg = document.getElementById("crownImg");
-    crownImg.width = tileWidth / 2;
-    crownImgTop = h / 2 - tileLength;
-    crownAlpha = 0;
     character = document.getElementById("character");
     character.width = tileWidth / 2;
+    crownImg = document.getElementById("crownImg");
+    crownImg.width = character.width;
+    crownImgTop = h / 2 - crownImg.height/2;
+    crownAlpha = 0;
     handImg = document.getElementById("handImg");
     handImg.width = tileWidth/1.8;
     // handImg.setAttribute("fill", "green");
