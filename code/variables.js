@@ -103,7 +103,7 @@ window.onload = function () {
     init(); // Set up page variables
     setUpGame(); // Set up game variables
 
-    gameStatus = 'GAME';
+    gameStatus = 'INTRO';
     mainLoop();
 }
 
