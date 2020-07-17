@@ -13,7 +13,7 @@ let colors = [['#FB4D4B', '#D60904', 'red'], ['#FC954F', '#D45A10', 'orange'], [
 let rainbowColors = [['#FB4D4B', '#D60904', 'red'], ['#FC954F', '#D45A10', 'orange'], ['#FEDE68', '#E9B926', 'yellow'], ['#2CDDAF', '#168469', 'green'], ['#5ECBF2', '#1D9DD2', 'blue'], ['#9582D2', '#553BA9', 'purple']];
 let greyTileClr = '#B1BCCA';
 let greyShadowClr = '#66738E';
-let nTimes = 4; // number of times each color sequence appears
+let nTimes = 10; // number of times each color sequence appears
 let nTiles = 3; // number of tiles in a color sequence
 let nTurns = 1; // number of turns in a sequence; nTurns <= (nTiles-2)
 let nHistory = 7; // history shown 
@@ -42,13 +42,14 @@ let delayed = 0;
 let disappearingTiles = []; // {tile (tile's counter -  from the last history shown to cur-1), alpha]
 let alphaThreshold = 0.2; // least opacity before collapsing
 let disappearingSpeed = 0.003; // in terms of globalAlpha
-// let collapseThreshold = 0.1;
+
+
+// collapse
+let last_collapse = 0;
+collapseInterval = 1000;
 let startCollapsing = nTiles*2-1;
-let collapseDefault;
-let justCollapsed = 0;
-let collapsingIntervalDefault = 700; // in ms
-let collapsingInterval = collapsingIntervalDefault; // in ms
-let collapsingSpeed = disappearingSpeed;
+// let collapsingIntervalDefault = 700; // in ms
+// let collapsingInterval = collapsingIntervalDefault; // in ms
 
 // interaction
 let transitionProgressY = 0; // tbe amount of transition already happened on the y-axis
@@ -60,7 +61,7 @@ let moves = ['start']; // no move needed for the first tile
 let playerX, playerY;
 let arrowImgWidth;
 let arrows = [];
-let accurateSequence;
+// let accurateSequence;
 
 // feedback
 let curScore = 0;

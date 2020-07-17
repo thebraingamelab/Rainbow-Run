@@ -39,7 +39,7 @@ function gameLoop() {
         else { // just finished transition
             // no clearRect here, otherwise the end of the transition will be jerky
             if (currentTile === map.length - 1) {
-                clearInterval(collapseDefault);
+                // clearInterval(collapseDefault);
                 endOfMaze = true;
                 completeAudio.play();
             }
@@ -74,36 +74,35 @@ function gameLoop() {
     }
 
 
-    if (sinceClrStarted===nTiles && accurateSequence && !proceed){
-        ctx.save();
-        ctx.fillStyle = map[currentTile].shadowClr;
-        ctx.textAlign = 'center';
-        ctx.font = '22px Overpass';
-        ctx.fillText("+5", playerX, playerY - tileHeight*2.5);
-        ctx.restore();
-    }
-    if (curScore!== targetScore) {
+    // if (sinceClrStarted === nTiles && accurateSequence && !proceed) {
+    //     ctx.save();
+    //     ctx.fillStyle = map[currentTile].shadowClr;
+    //     ctx.textAlign = 'center';
+    //     let fontSize = tileLength / 2;
+    //     ctx.font = fontSize + 'px Overpass';
+
+    //     // ctx.font = '22px Overpass';
+    //     ctx.fillText("+5", playerX, playerY - tileHeight * 2.5);
+    //     ctx.restore();
+    // }
+
+    if (curScore !== targetScore) {
         curScore++;
     }
     displayScore();
     displayPlayer(playerX, playerY);
 
-    // // click interface
-    // if (clickProgress === 0) {
-    //     clickProgress = Math.min(clickProgress+dClickProgress, clickFinish);
-    //     clickAlpha = Math.max(clickAlpha-dClickAlpha, 0);
-    //     ctx.save();
-    //     ctx.beginPath();
-    //     ctx.lineWidth = 1;
-    //     ctx.strokeStyle = 'black';
-    //     ctx.globalAlpha = clickAlpha;
-    //     ctx.arc(mousePosX, mousePosY, clickProgress, 0, 2 * Math.PI);
-    //     ctx.stroke();
-    //     ctx.restore();
-    // }
 
+    if (gameStatus === 'GAME') {
 
-    if (gameStatus === 'GAME') requestAnimationFrame(gameLoop);
+        let curTime = performance.now();
+        if (curTime - last_collapse >= collapseInterval) {
+            collapse();
+            last_collapse = curTime;
+        }
+
+        requestAnimationFrame(gameLoop);
+    }
 }
 
 function displayScore() {

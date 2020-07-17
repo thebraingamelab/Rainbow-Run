@@ -29,7 +29,7 @@ function updatePlayerPosition(evt) {
         }
 
         if (!mistake) moves.push(true);
-        if (moves[moves.length-1]) targetScore+=5;
+        targetScore += 5;
 
         mistake = false;
         incorrectImg.style.display = 'none';
@@ -37,7 +37,10 @@ function updatePlayerPosition(evt) {
         slow = false;
         proceed = true;
         currentTile++;
-        if (currentTile > startCollapsing) collapsingInterval -= collapsingIntervalDefault / map.length;
+
+        // if (currentTile > startCollapsing) {
+        //     collapsingInterval -= collapsingIntervalDefault / map.length;
+        // }
 
         if (sinceClrStarted === nTiles) {
             sinceClrStarted = 0;
@@ -48,19 +51,24 @@ function updatePlayerPosition(evt) {
             highlightAudio.play();
             // only extra life when the sequence was accurately completed
             // an array to record the moves
-            accurateSequence = true;
-            for (let i = currentTile; i > currentTile - nTiles; i--) {
-                let curMove = moves[i];
-                if (curMove === false) {
-                    accurateSequence = false;
-                    break;
-                }
-            }
-            if (accurateSequence) {
-                lifeLeft = Math.min(lifeLeft + 1, lifeMax);
-                targetScore+=5;
-            }
+            // accurateSequence = true;
+            // for (let i = currentTile; i > currentTile - nTiles; i--) {
+            //     let curMove = moves[i];
+            //     if (curMove === false) {
+            //         accurateSequence = false;
+            //         break;
+            //     }
+            // }
+            // if (accurateSequence) {
+            //     lifeLeft = Math.min(lifeLeft + 1, lifeMax);
+            //     targetScore += 5;
+            // }
         }
+
+        // collapsing speeds up
+        // after people learnt the color sequences, collapsing speed increases...
+        if ((currentTile+1) % (nTiles * nColors)===0) collapseInterval -= 50;
+        // console.log(collapseInterval);
     }
     else { // the player tapped a wrong direction
         mistake = true;
@@ -122,53 +130,6 @@ function displayPlayer(x, y) {
     character.style.top = y - character.height / 1.8 + "px";
 }
 
-// function displayPlayer(x,y) {
-//     let playerWidth = tileWidth / 3;
-//     let playerLength = playerWidth / 1.5;
-//     let playerHeight = playerLength / 1.5;
-
-//     ctx.save();
-//     ctx.translate(0,-playerHeight/2);
-//     ctx.fillStyle = '#F7F7F7';
-//     ctx.strokeStyle = '#325A74';
-//     // ctx.strokeStyle = 'transparent';
-
-//     //  top
-//     // ctx.fillStyle = '#917367';
-//     ctx.beginPath();
-//     ctx.moveTo(x, -playerLength / 2);
-//     ctx.lineTo(-playerWidth / 2, y);
-//     ctx.lineTo(x, playerLength / 2);
-//     ctx.lineTo(playerWidth / 2, y);
-//     ctx.closePath();
-//     ctx.fill();
-//     ctx.stroke();
-
-//     //  shadow
-//     // ctx.fillStyle = '#232C3A';
-//     ctx.beginPath();
-//     ctx.moveTo(x - playerWidth / 2, y);
-//     ctx.lineTo(x - playerWidth / 2, y + playerHeight);
-//     ctx.lineTo(x, y + playerLength / 2 + playerHeight);
-//     ctx.lineTo(x, y + playerLength / 2);
-//     ctx.closePath();
-//     ctx.fill();
-//     ctx.stroke();
-
-//     // tile right
-//     ctx.beginPath();
-//     ctx.moveTo(x, y + playerLength / 2);
-//     ctx.lineTo(x, y + playerHeight + playerLength / 2);
-//     ctx.lineTo(x + playerWidth / 2, y + playerHeight);
-//     ctx.lineTo(x + playerWidth / 2, y);
-//     ctx.closePath();
-//     ctx.fill();
-//     ctx.stroke();
-
-//     ctx.restore();
-
-// }
-
 function restart() {
     location.reload();
     // gameStatus = 'GAME';
@@ -200,11 +161,9 @@ function displayLife() {
 }
 
 function collapse() {
-    // if (justCollapsed > 3) justCollapsed = 0;
-    if ((currentTile < startCollapsing) || endOfMaze || (lifeLeft <= 0)) { }
-    // else if ((currentTile > nTiles - 1) && (disappearingTiles.length === 0) && (justCollapsed === 0)) {
+    if ((currentTile < startCollapsing) || endOfMaze) { }
 
-    else if ((currentTile > nTiles - 1) && (disappearingTiles.length === 0)) {
+    else if ((currentTile > nTiles - 1) && map[currentTile - 1].collapsed) {
         // // reduce life:
         // slow = true;
         // lifeLeft--;
@@ -234,15 +193,6 @@ function collapse() {
     }
 }
 
-// function clickPop(evt){
-//     let rect = canvas.getBoundingClientRect();
-//     mousePosX = evt.clientX - rect.left;
-//     mousePosY = evt.clientY - rect.top;
-//     ctx.beginPath();
-//     ctx.arc(mousePosX, mousePosY, 50, 0, 2 * Math.PI);
-//     ctx.stroke();
-//     // inner 
-// }
 
 function mistakeFeedback() {
     incorrectImg.style.left = mousePosX - incorrectImg.width / 2 + "px";
@@ -264,7 +214,7 @@ function winFeedback() {
     crownAlpha += 0.05;
     crownImg.style.opacity = crownAlpha;
     crownImg.style.left = w / 2 - crownImg.width / 2 + "px";
-    crownImgTop = Math.max(crownImgTop - crownImgUpSpeed, h/2-tileWidth/1.);
+    crownImgTop = Math.max(crownImgTop - crownImgUpSpeed, h / 2 - tileWidth / 1.);
     crownImg.style.top = crownImgTop + "px";
 }
 

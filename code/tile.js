@@ -183,7 +183,7 @@ function disappearHistory() {
         if (map[tileCounter].collapsed) {        
             map[tileCounter].collapseY += 5;
             map[tileCounter].y = map[tileCounter].collapseY;
-            disappearingTiles[i].alpha -= collapsingSpeed;
+            disappearingTiles[i].alpha -= disappearingSpeed;
         }
 
         // remove disappeared tile
