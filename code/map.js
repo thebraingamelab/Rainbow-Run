@@ -108,6 +108,10 @@ function pickDirection() {
 }
 
 function buildMap() {
+    shownTiles = [];
+    offsets = { x: 0, y: 0 };
+    shownTiles.push(offsets);
+
     for (let i = 0; i < order.length; i++) {
         let curClr = order[i];
         if (curClr === 'grey') addGreySequence();
@@ -116,16 +120,18 @@ function buildMap() {
             let shadowClr = colors[curClr][1];
             let clrSegments = colors[curClr][3];
 
-            if (i !== 0) {
-                let curDirection = clrSegments[0][1];
-                let oppDirection = getOppositeDirection(curDirection);
-                if (oppDirection === map[map.length - 1].relativePositionToLast) {
-                    let greyDirection;
-                    do {
-                        greyDirection = directions[Math.floor(Math.random() * directions.length)]
-                    } while (greyDirection === oppDirection || greyDirection === getOppositeDirection(map[map.length - 1].relativePositionToLast));
-                    map.push(new Tile(greyTileClr, greyShadowClr, greyDirection));
+            // add grey tile to prevent reverse direction of clrSegments[0][1]
+            if ((i !== 0) && (getOppositeDirection(clrSegments[0][1]) === map[map.length - 1].relativePositionToLast)) {
+                let greyDirection;
+                do {
+                    greyDirection = directions[Math.floor(Math.random() * directions.length)];
                 }
+                // while (greyDirection === getOppositeDirection(clrSegments[0][1]) === map[map.length - 1].relativePositionToLast || greyDirection === getOppositeDirection(map[map.length - 1].relativePositionToLast) || (mapOverlap(getOffsets(greyDirection))));
+                while (greyDirection === getOppositeDirection(clrSegments[0][1]) === map[map.length - 1].relativePositionToLast || (mapOverlap(getOffsets(greyDirection))));
+
+                map.push(new Tile(greyTileClr, greyShadowClr, greyDirection));
+                offsets = getOffsets(greyDirection);
+                shownTiles.push(offsets);
             }
 
             let tileCounter = 0;
@@ -133,15 +139,36 @@ function buildMap() {
                 // first tile has a random direction
                 let clrDirection;
                 do {
-                    clrDirection = directions[Math.floor(Math.random() * directions.length)]
+                    if (directions.length === 0) {
+                        directions = ['TL', 'TR', 'BL', 'BR'];
+                        addGreyTile();
+                    }
+                    shuffle(directions);
+                    clrDirection = directions[0];
+                    directions.splice(0, 1);
                 }  // not going reverse: not opposite to either the last tile or the next tile
-                while ((getOppositeDirection(clrDirection) === map[map.length - 1].relativePositionToLast) || (getOppositeDirection(clrDirection) === clrSegments[0][1]));
+                // while ((getOppositeDirection(clrDirection) === map[map.length - 1].relativePositionToLast) || (getOppositeDirection(clrDirection) === clrSegments[0][1]) || (mapOverlap(getOffsets(clrDirection))));
+                while ((getOppositeDirection(clrDirection) === clrSegments[0][1]) || (mapOverlap(getOffsets(clrDirection))));
+
+                directions = ['TL', 'TR', 'BL', 'BR'];
                 map.push(new Tile(tileClr, shadowClr, clrDirection));
+                offsets = getOffsets(clrDirection);
+                shownTiles.push(offsets);
+
                 tileCounter++;
             }
+
+            // color shape
             for (let s = 0; s < clrSegments.length; s++) {
-                for (; tileCounter <= clrSegments[s][0]; tileCounter++) map.push(new Tile(tileClr, shadowClr, clrSegments[s][1]));
+                for (; tileCounter <= clrSegments[s][0]; tileCounter++) {
+                    map.push(new Tile(tileClr, shadowClr, clrSegments[s][1]));
+                    if (tileCounter !== 0) {
+                        offsets = getOffsets(clrSegments[s][1]);
+                        shownTiles.push(offsets);
+                    }
+                }
             }
+            console.log(map[map.length - 1].relativePositionToLast);
         }
     }
     // for (let i = 0; i < map.length; i++) {
@@ -160,9 +187,59 @@ function addGreySequence() {
         lastDirection = map[map.length - 1].relativePositionToLast;
         let greyDirection;
         do {
-            greyDirection = directions[Math.floor(Math.random() * directions.length)]
-        }  // not going reverse: not opposite to either the last tile or the next tile
-        while (getOppositeDirection(greyDirection) === lastDirection);
+            shuffle(directions);
+            greyDirection = directions[0];
+            directions.splice(0, 1);
+        }
+        while (getOppositeDirection(greyDirection) === lastDirection || mapOverlap(getOffsets(greyDirection)));
+
+        directions = ['TL', 'TR', 'BL', 'BR'];
+
         map.push(new Tile(tileClr, shadowClr, greyDirection));
+        offsets = getOffsets(greyDirection);
+        shownTiles.push(offsets);
     }
 }
+
+function addGreyTile() {
+    let greyDirection;
+    do {
+        shuffle(directions);
+        greyDirection = directions[0];
+        directions.splice(0, 1);    }
+    // while (greyDirection === getOppositeDirection(clrSegments[0][1]) === map[map.length - 1].relativePositionToLast || greyDirection === getOppositeDirection(map[map.length - 1].relativePositionToLast) || (mapOverlap(getOffsets(greyDirection))));
+    while (mapOverlap(getOffsets(greyDirection)));
+    
+    directions = ['TL', 'TR', 'BL', 'BR'];
+
+    map.push(new Tile(greyTileClr, greyShadowClr, greyDirection));
+    offsets = getOffsets(greyDirection);
+    shownTiles.push(offsets);
+}
+
+function mapOverlap(curOffsets) {
+    for (let i = map.length - 1; i >= Math.max(map.length - nTiles * 2, 0); i--) {
+        if ((Math.abs(shownTiles[i].x - curOffsets.x) < xDistance / 2) && (Math.abs(shownTiles[i].y - curOffsets.y) < yDistance / 2)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// function randomUnrepeatedDirection() {
+//     let d;
+//     do {
+//         if (directions.length === 0) {
+//             addGreyTile();
+//             directions = ['TL', 'TR', 'BL', 'BR'];
+//         }
+//         shuffle(directions);
+//         d = directions[0];
+//         directions.splice(0, 1);
+//     }  // not going reverse: not opposite to either the last tile or the next tile
+//     while (mapOverlap(getOffsets(d)));
+//     // (getOppositeDirection(clrDirection) === clrSegments[0][1]) || 
+
+//     directions = ['TL', 'TR', 'BL', 'BR'];
+//     return d;
+// }

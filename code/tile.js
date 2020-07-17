@@ -109,8 +109,7 @@ function getOppositeDirection(relativePositionToLast) {
     }
 }
 
-let offsets;
-let shownTiles = []; // {xOffset, yOffset}
+
 
 function centerTile(cur) { // start position: last end position
     shownTiles = [];

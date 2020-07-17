@@ -1,14 +1,14 @@
 
 function gameLoop() {
-    if ((lifeLeft <= 0) && (!gameOver)) {
-        gameOverAudio.play();
-        gameOver = true;
-        gameOverFeedback();
-    }
+    // if ((lifeLeft <= 0) && (!gameOver)) {
+    //     gameOverAudio.play();
+    //     gameOver = true;
+    //     gameOverFeedback();
+    // }
     // collapsed -gameover:
-    else if (map[currentTile].collapsed && gameOver){
-        map[currentTile].y+=5;
-        if (map[currentTile].y>=h) map[currentTile+1].y+=5;
+    if (map[currentTile].collapsed && gameOver) {
+        map[currentTile].y += 5;
+        if (map[currentTile].y >= h) map[currentTile + 1].y += 5;
     }
     else if (endOfMaze) {
         winFeedback();
@@ -18,6 +18,7 @@ function gameLoop() {
         mistakeFeedback();
     }
     if (proceed === true) { // transitioning
+
         if (transitionProgressY < yDistance - 5) {
             ctx.clearRect(0 - xDistance, 0 - yDistance, w + xDistance * 2, h + yDistance * 2);
             drawGrid();
@@ -32,6 +33,7 @@ function gameLoop() {
             else if (transitionProgressY < yDistance - 5) {
                 playerY += 4;
             }
+
         }
         // note: this else block will NOT execute if the player moves before the transition completes
         else { // just finished transition
@@ -54,7 +56,7 @@ function gameLoop() {
         ctx.clearRect(0, 0, w, h);
         drawGrid();
         drawArrows();
-        displayLife();
+        // displayLife();
 
         dCurrentTileAlpha = 0;
         ctx.save(); // 0,0
@@ -65,12 +67,25 @@ function gameLoop() {
 
         ctx.restore(); // 0,0
 
-        if (!endOfMaze){
+        if (!endOfMaze) {
             playerX = map[currentTile].x + w / 2;
             playerY = map[currentTile].y + h / 2;
         }
     }
 
+
+    if (sinceClrStarted===nTiles && accurateSequence && !proceed){
+        ctx.save();
+        ctx.fillStyle = map[currentTile].shadowClr;
+        ctx.textAlign = 'center';
+        ctx.font = '22px Overpass';
+        ctx.fillText("+5", playerX, playerY - tileHeight*2.5);
+        ctx.restore();
+    }
+    if (curScore!== targetScore) {
+        curScore++;
+    }
+    displayScore();
     displayPlayer(playerX, playerY);
 
     // // click interface
@@ -87,5 +102,10 @@ function gameLoop() {
     //     ctx.restore();
     // }
 
+
     if (gameStatus === 'GAME') requestAnimationFrame(gameLoop);
+}
+
+function displayScore() {
+    score.innerHTML = curScore;
 }

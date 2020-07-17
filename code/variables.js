@@ -21,6 +21,8 @@ let map = [];
 let directions = ['TL', 'TR', 'BL', 'BR']; // TopLeft, TopRight, BottomLeft, BottomRight
 let endOfMaze = false;
 
+let offsets; //{xOffset, yOffset}
+let shownTiles = []; // {xOffset, yOffset}
 // let nColorsUpperLimit = combinations(nTiles - 2, nTurns) * directions.length * (nTurns + 1);
 
 // tile
@@ -58,8 +60,11 @@ let moves = ['start']; // no move needed for the first tile
 let playerX, playerY;
 let arrowImgWidth;
 let arrows = [];
+let accurateSequence;
 
 // feedback
+let curScore = 0;
+let targetScore = 0;
 let lives = [];
 let lifeMax = 3; // Must update the number of img (.life) in html when changing this variable
 let lifeLeft = lifeMax;
@@ -98,7 +103,7 @@ window.onload = function () {
     init(); // Set up page variables
     setUpGame(); // Set up game variables
 
-    gameStatus = 'INTRO';
+    gameStatus = 'GAME';
     mainLoop();
 }
 
@@ -164,6 +169,8 @@ function setUpGame() {
     //text
     gameOverText = document.getElementById("gameOverText");
     winText = document.getElementById("winText");
+    score = document.getElementById("score");
+
     //image
     let lifeImgs = document.getElementsByClassName("life");
     lifeImgWidth = Math.min(w, h) / 12;

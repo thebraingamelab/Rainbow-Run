@@ -5,11 +5,23 @@ canvas{
     /* padding: 1rem; */
 }
 
-/* #myMessage{
-    /* text-align: center; */
-    /* margin-left: 2rem;
-    font-family: 'overpass';
-    font-size: 18px;
+#score{
+    position:absolute;
+    right:2rem;
+    top: -2rem;
+    font-family: 'Overpass';
+    color: black;
+    font-size: 48px;
+    text-align: center;
+}
+
+/* #highlightExtra{
+    position: absolute;
+    right: 2rem;
+    top: 0rem;
+    font-family: 'Overpass';
+    font-size: 24px;
+    text-align: center;
 } */
 
 body, html {

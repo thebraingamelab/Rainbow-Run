@@ -15,6 +15,7 @@ function updatePlayerPosition(evt) {
     else if (currentTile === map.length - 1) { }
     else if (playerMove === map[currentTile + 1].relativePositionToLast) {
         // clickPop(evt);
+
         if (proceed) { // if the player is clicking before the transition finishes
             proceed = false;
             delayed = 0;
@@ -26,7 +27,10 @@ function updatePlayerPosition(evt) {
             centerTile(currentTile);
             ctx.restore(); // 0,0
         }
+
         if (!mistake) moves.push(true);
+        if (moves[moves.length-1]) targetScore+=5;
+
         mistake = false;
         incorrectImg.style.display = 'none';
         // reduceLifeImg.style.display = 'none';
@@ -44,7 +48,7 @@ function updatePlayerPosition(evt) {
             highlightAudio.play();
             // only extra life when the sequence was accurately completed
             // an array to record the moves
-            let accurateSequence = true;
+            accurateSequence = true;
             for (let i = currentTile; i > currentTile - nTiles; i--) {
                 let curMove = moves[i];
                 if (curMove === false) {
@@ -54,6 +58,7 @@ function updatePlayerPosition(evt) {
             }
             if (accurateSequence) {
                 lifeLeft = Math.min(lifeLeft + 1, lifeMax);
+                targetScore+=5;
             }
         }
     }
