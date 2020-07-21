@@ -79,9 +79,7 @@ function divideSegments(nOfTiles, nOfTurns) {
     turningPoints.sort(function (a, b) {
         return a - b;
     });
-    // for (let tp = 0; tp < turningPoints.length; tp++) {
-    //     console.log(colors[nC][2] + " segment turning point:" + turningPoints[tp]);
-    // }
+    
 
 
     // pick directions for each turning point (the direction to turn to after that point)
@@ -114,6 +112,7 @@ function buildMap() {
 
     for (let i = 0; i < order.length; i++) {
         let curClr = order[i];
+        console.log(curClr);
         if (curClr === 'grey') addGreySequence();
         else {
             let tileClr = colors[curClr][0];
@@ -134,22 +133,14 @@ function buildMap() {
                 shownTiles.push(offsets);
             }
 
+            // first tile direction -> ensures that the entire sequence doesn't overlap
             let tileCounter = 0;
             if (i > 0) {
-                // first tile has a random direction
-                let clrDirection;
-                do {
-                    if (directions.length === 0) {
-                        directions = ['TL', 'TR', 'BL', 'BR'];
-                        addGreyTile();
-                    }
-                    shuffle(directions);
-                    clrDirection = directions[0];
-                    directions.splice(0, 1);
-                }  // not going reverse: not opposite to either the last tile or the next tile
-                // while ((getOppositeDirection(clrDirection) === map[map.length - 1].relativePositionToLast) || (getOppositeDirection(clrDirection) === clrSegments[0][1]) || (mapOverlap(getOffsets(clrDirection))));
-                while ((getOppositeDirection(clrDirection) === clrSegments[0][1]) || (mapOverlap(getOffsets(clrDirection))));
-
+                let clrDirection = checkSequenceOverlap(clrSegments);
+                while (clrDirection === true) {
+                    addGreyTile();
+                    clrDirection = checkSequenceOverlap(clrSegments);
+                }
                 directions = ['TL', 'TR', 'BL', 'BR'];
                 map.push(new Tile(tileClr, shadowClr, clrDirection));
                 offsets = getOffsets(clrDirection);
@@ -168,7 +159,6 @@ function buildMap() {
                     }
                 }
             }
-            console.log(map[map.length - 1].relativePositionToLast);
         }
     }
     // for (let i = 0; i < map.length; i++) {
@@ -176,17 +166,88 @@ function buildMap() {
     // }
 }
 
+// return true if overlap; return the direction if not
+function checkSequenceOverlap(clrSegments) {
+    let storedOffsets = { x: 0, y: 0 };
+    storedOffsets.x = offsets.x;
+    storedOffsets.y = offsets.y;
+
+    // first tile in the sequence: random direction
+    let clrDirection = pickFirstDirection(clrSegments);
+    if (clrDirection === true) {
+        offsets = storedOffsets;
+        directions = ['TL', 'TR', 'BL', 'BR'];
+        return true;
+    }
+    offsets = getOffsets(clrDirection);
+
+    // the following tiles: check overlap
+    let t = 1;
+    for (let s = 0; s < clrSegments.length; s++) {
+        for (; t <= clrSegments[s][0]; t++) {
+            // if any tile of the sequence is overlapped, start over from the first tile in the sequence
+            if (mapOverlap(getOffsets(clrSegments[s][1]))) {
+                offsets = storedOffsets;
+                // pick another direction for the first tile
+                clrDirection = pickFirstDirection(clrSegments);
+                if (clrDirection === true) {
+                    offsets = storedOffsets;
+                    directions = ['TL', 'TR', 'BL', 'BR'];
+                    return true;
+                }
+                offsets = getOffsets(clrDirection);
+                // start over the loop for checking the following tiles
+                s = 0;
+                t = 0;
+            }
+
+            else offsets = getOffsets(clrSegments[s][1]);
+        }
+    }
+
+    // if no tile in the sequence overlaps, the direction of the first tile is perfect
+    offsets = storedOffsets;
+    return clrDirection;
+}
+
+// return true if no direction is left and still overlap, otherwise, return the direction picked
+function pickFirstDirection(clrSegments) {
+    let clrDirection;
+    do {
+        if (directions.length === 0) return true;
+        shuffle(directions);
+        clrDirection = directions[0];
+        directions.splice(0, 1);
+    }  // not going reverse: not opposite to either the last tile or the next tile
+    while ((getOppositeDirection(clrDirection) === clrSegments[0][1]) || (mapOverlap(getOffsets(clrDirection))));
+
+    return clrDirection;
+}
+
 function addGreySequence() {
     let nGreyTiles = nTiles;
-
-    let tileClr = greyTileClr;
-    let shadowClr = greyShadowClr;
 
     let tileCounter = 0;
     for (; tileCounter < nGreyTiles; tileCounter++) {
         lastDirection = map[map.length - 1].relativePositionToLast;
         let greyDirection;
         do {
+            if (directions.length === 0) {
+                console.log("greysequence overlap not solvable");
+                directions = ['TL', 'TR', 'BL', 'BR'];
+                do {
+                    shuffle(directions);
+                    greyDirection = directions[0];
+                    directions.splice(0, 1);
+                }
+                while (getOppositeDirection(greyDirection) === lastDirection);
+
+                directions = ['TL', 'TR', 'BL', 'BR'];
+                map.push(new Tile(greyTileClr, greyShadowClr, greyDirection));
+                offsets = getOffsets(greyDirection);
+                shownTiles.push(offsets);
+                return;
+            }
             shuffle(directions);
             greyDirection = directions[0];
             directions.splice(0, 1);
@@ -194,8 +255,7 @@ function addGreySequence() {
         while (getOppositeDirection(greyDirection) === lastDirection || mapOverlap(getOffsets(greyDirection)));
 
         directions = ['TL', 'TR', 'BL', 'BR'];
-
-        map.push(new Tile(tileClr, shadowClr, greyDirection));
+        map.push(new Tile(greyTileClr, greyShadowClr, greyDirection));
         offsets = getOffsets(greyDirection);
         shownTiles.push(offsets);
     }
@@ -204,14 +264,31 @@ function addGreySequence() {
 function addGreyTile() {
     let greyDirection;
     do {
+        if (directions.length === 0) {
+            console.log("greytile overlap not solvable");
+            directions = ['TL', 'TR', 'BL', 'BR'];
+            do {
+                shuffle(directions);
+                greyDirection = directions[0];
+                directions.splice(0, 1);
+            }
+            while (getOppositeDirection(greyDirection) === lastDirection);
+
+            directions = ['TL', 'TR', 'BL', 'BR'];
+            map.push(new Tile(greyTileClr, greyShadowClr, greyDirection));
+            offsets = getOffsets(greyDirection);
+            shownTiles.push(offsets);
+            return;
+
+        }
         shuffle(directions);
         greyDirection = directions[0];
-        directions.splice(0, 1);    }
+        directions.splice(0, 1);
+    }
     // while (greyDirection === getOppositeDirection(clrSegments[0][1]) === map[map.length - 1].relativePositionToLast || greyDirection === getOppositeDirection(map[map.length - 1].relativePositionToLast) || (mapOverlap(getOffsets(greyDirection))));
     while (mapOverlap(getOffsets(greyDirection)));
-    
-    directions = ['TL', 'TR', 'BL', 'BR'];
 
+    directions = ['TL', 'TR', 'BL', 'BR'];
     map.push(new Tile(greyTileClr, greyShadowClr, greyDirection));
     offsets = getOffsets(greyDirection);
     shownTiles.push(offsets);
