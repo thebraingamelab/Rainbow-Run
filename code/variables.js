@@ -13,8 +13,8 @@ let colors = [['#FB4D4B', '#D60904', 'red'], ['#FC954F', '#D45A10', 'orange'], [
 let rainbowColors = [['#FB4D4B', '#D60904', 'red'], ['#FC954F', '#D45A10', 'orange'], ['#FEDE68', '#E9B926', 'yellow'], ['#2CDDAF', '#168469', 'green'], ['#5ECBF2', '#1D9DD2', 'blue'], ['#9582D2', '#553BA9', 'purple']];
 let greyTileClr = '#B1BCCA';
 let greyShadowClr = '#66738E';
-let nTimes = 15; // number of times each color sequence appears
-let nTiles = 4; // number of tiles in a color sequence
+let nTimes = 20; // number of times each color sequence appears
+let nTiles = 3; // number of tiles in a color sequence
 let nTurns = 1; // number of turns in a sequence; nTurns <= (nTiles-2)
 let nHistory = 7; // history shown 
 let map = [];
