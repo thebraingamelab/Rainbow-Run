@@ -1,19 +1,14 @@
 
 function gameLoop() {
-    // if ((lifeLeft <= 0) && (!gameOver)) {
-    //     gameOverAudio.play();
-    //     gameOver = true;
-    //     gameOverFeedback();
-    // }
-    // collapsed -gameover:
-    if (map[currentTile].collapsed && gameOver) {
+    if (gameOver) {
         map[currentTile].y += 5;
-        if (map[currentTile].y >= h) map[currentTile + 1].y += 5;
+        // map[currentTile + 1].y += 5;
+        //arrow
+        let arrowImgs = document.getElementsByClassName("arrow");
+        for (let i = 0; i < arrowImgs.length; i++) arrowImgs[i].style.display = 'none';
+        // gameOverBox.style.display = 'initial';
     }
-    else if (endOfMaze) {
-        winFeedback();
-        // outroCharacterAnimation();
-    }
+
     if (mistake) {
         mistakeFeedback();
     }
@@ -86,6 +81,7 @@ function gameLoop() {
     //     ctx.restore();
     // }
 
+    // score update
     if (curScore !== targetScore) {
         curScore++;
     }
@@ -93,8 +89,8 @@ function gameLoop() {
     displayPlayer(playerX, playerY);
 
 
+    // collapse
     if (gameStatus === 'GAME') {
-
         let curTime = performance.now();
         if (curTime - last_collapse >= collapseInterval) {
             collapse();

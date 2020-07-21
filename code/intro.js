@@ -139,7 +139,7 @@ function introAnimationLoop() {
 
             canvas.addEventListener('click', startIntro, { once: true });
 
-            if (Math.abs(towardsStart) >= Math.abs(w / 2 - introStartX) + 30) {
+            if (Math.abs(towardsStart) >= Math.abs(w / 2 - introStartX)+30) {
                 introStatus = 'START';
                 hopProgress = 0;
                 pathCounter++;

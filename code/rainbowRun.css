@@ -27,6 +27,7 @@ canvas{
 body, html {
     margin: 0;
     overflow: hidden;
+    font-family: 'Overpass';
 }
 
 .life{
@@ -47,31 +48,37 @@ body, html {
     display: none;
 }
 
+#gameOverBox{
+    background-color: #152C51;
+    position: absolute;
+    top:30%;
+    left:0%;
+    width: 100%;
+    text-align: center;
+    line-height: 0rem;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+}
+
+.button{
+    background-color: #F9F4E3;
+    font-family: 'Overpass';
+    font-size: 18px;
+    color: #152C51;
+    border: 2px solid #152C51;
+}
+
+.button1:hover {
+    background-color: #E45C33;
+    color: white;
+  }
+
 #gameOverText{
     font-family: 'Overpass';
     color: #E00000;
     font-size: 36px;
-    /* text-align: center; */
-    left: 1rem;
-    top: 1rem;
-    line-height: 0rem;
 }
-#winText{
-    font-family: 'Overpass';
-    color: #D88500;
-    font-size: 36px;
-    /* text-align: center; */
-    left: 1rem;
-    top: 1rem;
-    line-height: 0rem;
-}
-#gameOverInstruction, #winInstruction, #mapViewInstruction{
-    font-family: 'Overpass';
-    color: black;
-    font-size: 18px;
-    top: 1rem;
-    line-height: 0rem;
-}
+
 #crownImg{
     opacity:0;
 }

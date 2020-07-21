@@ -6,12 +6,7 @@ function updatePlayerPosition(evt) {
     clickAudio.play();
 
     let playerMove = getInteractionArea(evt);
-    if (gameOver) restart();
-    else if (endOfMaze) {
-        // gameStatus = 'POSTGAME';
-        // mainLoop();
-        restart();
-    }
+    if (gameOver){}
     else if (currentTile === map.length - 1) { }
     else if (playerMove === map[currentTile + 1].relativePositionToLast) {
         // clickPop(evt);
@@ -44,30 +39,21 @@ function updatePlayerPosition(evt) {
 
         if (sinceClrStarted === nTiles) {
             sinceClrStarted = 0;
+            // past tiles turn grey
+            for (let i = currentTile - 1; i >= currentTile - nTiles; i--){
+                map[i].tileClr = greyTileClr;
+                map[i].shadowClr = greyShadowClr;
+            }
         }
-        if (map[currentTile].tileClr !== '#B1BCCA') sinceClrStarted++;
+        if (map[currentTile].tileClr !== greyTileClr) sinceClrStarted++;
         if (sinceClrStarted === nTiles) {
             highlightAudio.currentTime = 0;
             highlightAudio.play();
-            // only extra life when the sequence was accurately completed
-            // an array to record the moves
-            // accurateSequence = true;
-            // for (let i = currentTile; i > currentTile - nTiles; i--) {
-            //     let curMove = moves[i];
-            //     if (curMove === false) {
-            //         accurateSequence = false;
-            //         break;
-            //     }
-            // }
-            // if (accurateSequence) {
-            //     lifeLeft = Math.min(lifeLeft + 1, lifeMax);
-            //     targetScore += 5;
-            // }
         }
 
         // collapsing speeds up
         // after people learnt the color sequences, collapsing speed increases...
-        if ((currentTile+1) % (nTiles * nColors)===0) collapseInterval -= 50;
+        if ((currentTile + 1) % (nTiles * nColors) === 0) collapseInterval -= 50;
         // console.log(collapseInterval);
     }
     else { // the player tapped a wrong direction
@@ -174,7 +160,7 @@ function collapse() {
         if (!gameOver) {
             gameOverAudio.play();
             gameOver = true;
-            gameOverFeedback();
+            gameOverBox.style.display = 'inline-block';
             map[currentTile].collapsed = true;
         }
     }
@@ -201,10 +187,6 @@ function mistakeFeedback() {
     // reduceLifeImg.style.left = mousePosX - incorrectImg.width/2 + incorrectImg.width *1.5 + "px";
     // reduceLifeImg.style.top = mousePosY + "px";
     // reduceLifeImg.style.display = "initial";
-}
-
-function gameOverFeedback() {
-    gameOverText.style.display = "initial";
 }
 
 function winFeedback() {

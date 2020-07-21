@@ -78,7 +78,7 @@ let mapView;
 let mapTranslateX, mapTranslateY;
 let incorrectImg, reduceLifeImg;
 let mousePosX, mousePosY;
-let gameOverText, winText, mapViewText;
+let gameOverBox;
 let crownImg, crownImgTop, crownAlpha, character;
 let crownImgUpSpeed = 1;
 
@@ -168,8 +168,7 @@ function setUpGame() {
     mapView = false;
     gameOver = false;
     //text
-    gameOverText = document.getElementById("gameOverText");
-    winText = document.getElementById("winText");
+    gameOverBox = document.getElementById("gameOverBox");
     score = document.getElementById("score");
 
     //image
