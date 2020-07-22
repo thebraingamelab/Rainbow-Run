@@ -6,7 +6,7 @@ function updatePlayerPosition(evt) {
     clickAudio.play();
 
     let playerMove = getInteractionArea(evt);
-    if (gameOver){}
+    if (gameOver || punishTime > 0) { }
     else if (currentTile === map.length - 1) { }
     else if (playerMove === map[currentTile + 1].relativePositionToLast) {
         // clickPop(evt);
@@ -40,7 +40,7 @@ function updatePlayerPosition(evt) {
         if (sinceClrStarted === nTiles) {
             sinceClrStarted = 0;
             // past tiles turn grey
-            for (let i = currentTile - 1; i >= currentTile - nTiles; i--){
+            for (let i = currentTile - 1; i >= currentTile - nTiles; i--) {
                 map[i].tileClr = greyTileClr;
                 map[i].shadowClr = greyShadowClr;
             }
@@ -59,9 +59,15 @@ function updatePlayerPosition(evt) {
     else { // the player tapped a wrong direction
         mistake = true;
         moves.push(false);
-        lifeLeft--;
+        punishTime = punishTimeMax;
+        // lifeLeft--;
         errorAudio.currentTime = 0;
         errorAudio.play();
+
+        incorrectImg.style.left = mousePosX - incorrectImg.width / 2 + "px";
+        incorrectImg.style.top = mousePosY - incorrectImg.height / 2 + "px";
+        incorrectImg.style.display = "initial";
+
     }
 }
 
@@ -181,12 +187,17 @@ function collapse() {
 
 
 function mistakeFeedback() {
-    incorrectImg.style.left = mousePosX - incorrectImg.width / 2 + "px";
-    incorrectImg.style.top = mousePosY - incorrectImg.height / 2 + "px";
-    incorrectImg.style.display = "initial";
-    // reduceLifeImg.style.left = mousePosX - incorrectImg.width/2 + incorrectImg.width *1.5 + "px";
-    // reduceLifeImg.style.top = mousePosY + "px";
-    // reduceLifeImg.style.display = "initial";
+    // character animation
+    if (punishTime > punishTimeMax / 3 * 2) {
+        playerY -= 5;
+    }
+    else if (punishTime > punishTimeMax / 3) {
+        character.style.transform = 'rotate(' + 360 / punishTimeMax * 3 * (punishTime - punishTimeMax / 3) + 'deg)';
+    }
+    else {
+        character.style.transform = 'rotate(0deg)';
+        playerY += 5;
+    }
 }
 
 function winFeedback() {

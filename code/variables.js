@@ -47,7 +47,7 @@ let disappearingSpeed = 0.003; // in terms of globalAlpha
 // collapse
 let last_collapse = 0;
 collapseInterval = 1000;
-let startCollapsing = nTiles*2-1;
+let startCollapsing = nTiles * 2 - 1;
 // let collapsingIntervalDefault = 700; // in ms
 // let collapsingInterval = collapsingIntervalDefault; // in ms
 
@@ -56,6 +56,8 @@ let transitionProgressY = 0; // tbe amount of transition already happened on the
 let proceed = false;
 let transitionSpeed;
 let mistake = false;
+let punishTime = 0;
+let punishTimeMax = 30;
 let slow = false;
 let moves = ['start']; // no move needed for the first tile
 let playerX, playerY;
@@ -134,18 +136,18 @@ function setUpGame() {
     shuffle(colors);
 
     // set up variables
-    if (w>h) {
-        tileWidth = w/tilePageRatio*1.5;
+    if (w > h) {
+        tileWidth = w / tilePageRatio * 1.5;
         setTileParaByWidth(tileWidth);
     }
     else {
-        tileLength = h/tilePageRatio*1.1;
+        tileLength = h / tilePageRatio * 1.1;
         setTileParaByLength(tileLength);
     }
     xPerY = xDistance / yDistance; // for every transition of 1 on y-axis, transition of xPerY on x-axis
     // outro
-    jumpPeak = tileWidth; 
-    outroRotateAngle = 360/jumpPeak;
+    jumpPeak = tileWidth;
+    outroRotateAngle = 360 / jumpPeak;
     // tileWidth = Math.max(w, h) / (nHistory + 1);
     // setTileParaByWidth(tileWidth);
     transitionSpeed = tileWidth / 20;
@@ -187,10 +189,10 @@ function setUpGame() {
     character.width = tileWidth / 2;
     crownImg = document.getElementById("crownImg");
     crownImg.width = character.width;
-    crownImgTop = h / 2 - crownImg.height/2;
+    crownImgTop = h / 2 - crownImg.height / 2;
     crownAlpha = 0;
     handImg = document.getElementById("handImg");
-    handImg.width = tileWidth/1.8;
+    handImg.width = tileWidth / 1.8;
     // handImg.setAttribute("fill", "green");
     // handImg.style.opacity =0;
 

@@ -10,7 +10,13 @@ function gameLoop() {
     }
 
     if (mistake) {
-        mistakeFeedback();
+        if (punishTime>0){
+            mistakeFeedback();
+            punishTime--;
+        }
+        if (punishTime===0) {
+            playerY = h/2;
+        }
     }
     if (proceed === true) { // transitioning
 
@@ -62,7 +68,7 @@ function gameLoop() {
 
         ctx.restore(); // 0,0
 
-        if (!endOfMaze) {
+        if (!endOfMaze && punishTime===0) {
             playerX = map[currentTile].x + w / 2;
             playerY = map[currentTile].y + h / 2;
         }
