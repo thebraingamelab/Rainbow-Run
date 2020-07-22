@@ -295,7 +295,8 @@ function addGreyTile() {
 }
 
 function mapOverlap(curOffsets) {
-    for (let i = map.length - 1; i >= Math.max(map.length - nTiles * 2, 0); i--) {
+    let threshold = 8; // or nTiles*2
+    for (let i = map.length - 1; i >= Math.max(map.length - threshold, 0); i--) {
         if ((Math.abs(shownTiles[i].x - curOffsets.x) < xDistance / 2) && (Math.abs(shownTiles[i].y - curOffsets.y) < yDistance / 2)) {
             return true;
         }
