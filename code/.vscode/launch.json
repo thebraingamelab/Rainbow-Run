@@ -9,7 +9,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
-            "url": "file:///Users/ling/Downloads/URSI2020/Rainbow-Run/code/rainbowRunTest.html",
+            "url": "file:///Users/ling/Downloads/URSI2020/Rainbow-Run/code/index.html",
             "webRoot": "${workspaceFolder}"
         }
     ]

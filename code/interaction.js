@@ -122,6 +122,18 @@ function displayPlayer(x, y) {
     character.style.top = y - character.height / 1.8 + "px";
 }
 
+// function displayPlayer(x, y) {
+//     let newX = x - character.width / 2;
+//     let newY = y - character.height / 1.8;
+  
+//     let coords = { pageX: newX, pageY: newY };
+//     let scaledCoords = resizer.getRelativeEventCoords(coords);
+  
+//     character.style.display = "initial";
+//     character.style.left = scaledCoords.x + "px";
+//     character.style.top = scaledCoords.y + "px";
+// }
+
 function restart() {
     location.reload();
     // gameStatus = 'GAME';

@@ -68,10 +68,10 @@ let arrows = [];
 // feedback
 let curScore = 0;
 let targetScore = 0;
-let lives = [];
-let lifeMax = 3; // Must update the number of img (.life) in html when changing this variable
-let lifeLeft = lifeMax;
-let lifeImgWidth;
+// let lives = [];
+// let lifeMax = 3; // Must update the number of img (.life) in html when changing this variable
+// let lifeLeft = lifeMax;
+// let lifeImgWidth;
 let heartW, heartH, heartInterval;
 let gameOver;
 let currentCollapsingThreshold = 500;
@@ -112,14 +112,68 @@ window.onload = function () {
 
 
 function init() {
-    canvas = document.querySelector("#myCanvas");
+
+    // Initialize the resizer
+    resizer.init();
+    // Initialize the template
+    template.init();
+     // Is the game volume muted?
+     let volumeMuted = false;
+
+
+
+     //////////////////////////
+     // Resize events
+     //////////////////////////
+ 
+     // Every time the Resizer resizes things, do some extra
+     // recaculations to position the sample button in the center
+     resizer.addResizeEvent(template.resizeBarButtons);
+ 
+     // Manual resize to ensure that our resize functions are executed
+     // (could have also just called resizerBarButtons() but this will do for demonstration purposes)
+     resizer.resize();
+ 
+ 
+     //////////////////////////
+     // Button events
+     //////////////////////////
+ 
+     // Remove not implemented menus for those buttons we are implementing
+     template.removeNotImplemented(template.menuButtons.restart);
+     template.removeNotImplemented(template.menuButtons.exit);
+     template.removeNotImplemented(template.menuButtons.volume);
+ 
+     // Confirm the user wants to restart the game
+     // (restart not yet implemented, so show "not implemented" menu)
+     template.addConfirm(template.menuButtons.restart, "RESTART", function() {
+         template.showMenu(template.menus.notImplemented);
+     });
+ 
+     // Confirm if the user wants to exit the game (takes user to main website)
+     template.addConfirm(template.menuButtons.exit, "EXIT", template.goToBGL);
+ 
+     // Change icon of volume button on click
+     template.menuButtons.volume.addEventListener("click", function () {
+         volumeMuted = !volumeMuted;
+ 
+         if (volumeMuted) {
+             template.setIcon(template.menuButtons.volume, "no-volume-icon");
+         }
+         else {
+             template.setIcon(template.menuButtons.volume, "volume-icon");
+         }
+     }, false);
+ 
+    // canvas = document.querySelector("#game-canvas");
+    canvas = resizer.getCanvas();
+
     ctx = canvas.getContext("2d");
     ctx.imageSmoothingEnabled = false;
-    w = window.innerWidth;
-    h = window.innerHeight;
-    ctx.canvas.width = w;
-    ctx.canvas.height = h;
+    w = ctx.canvas.width;
+    h = ctx.canvas.height;
     dNextTileAlpha = nextTileAlpha / 50;
+
 
     // sound
     try {
@@ -171,15 +225,15 @@ function setUpGame() {
     gameOver = false;
     //text
     gameOverBox = document.getElementById("gameOverBox");
-    score = document.getElementById("score");
+    score = document.getElementById("bar-label");
 
     //image
-    let lifeImgs = document.getElementsByClassName("life");
-    lifeImgWidth = Math.min(w, h) / 12;
-    for (let i = 0; i < lifeImgs.length; i++) {
-        lifeImgs[i].width = lifeImgWidth;
-        lives.push(lifeImgs[i]);
-    }
+    // let lifeImgs = document.getElementsByClassName("life");
+    // lifeImgWidth = Math.min(w, h) / 12;
+    // for (let i = 0; i < lifeImgs.length; i++) {
+    //     lifeImgs[i].width = lifeImgWidth;
+    //     lives.push(lifeImgs[i]);
+    // }
     incorrectImg = document.getElementById("incorrectImg");
     incorrectImg.width = tileWidth / 2;
     incorrectImg.height = incorrectImg.width;

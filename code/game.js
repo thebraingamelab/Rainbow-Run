@@ -108,5 +108,5 @@ function gameLoop() {
 }
 
 function displayScore() {
-    score.innerHTML = curScore;
+    score.innerHTML = "SCORE:&nbsp;&nbsp;" + curScore;
 }
