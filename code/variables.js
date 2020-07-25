@@ -170,6 +170,9 @@ function init() {
 
     ctx = canvas.getContext("2d");
     ctx.imageSmoothingEnabled = false;
+    ctx.canvas.width = resizer.getCanvasWidth();
+    ctx.canvas.height = resizer.getCanvasHeight();
+
     w = ctx.canvas.width;
     h = ctx.canvas.height;
     dNextTileAlpha = nextTileAlpha / 50;
@@ -206,16 +209,6 @@ function setUpGame() {
     // setTileParaByWidth(tileWidth);
     transitionSpeed = tileWidth / 20;
 
-    //arrow
-    let arrowImgs = document.getElementsByClassName("arrow");
-    arrowImgWidth = tileWidth / 1.5;
-    for (let i = 0; i < arrowImgs.length; i++) {
-        arrowImgs[i].style.display = 'initial';
-        arrowImgs[i].width = arrowImgWidth;
-        arrowImgs[i].addEventListener('click', updatePlayerPosition);
-        arrows.push(arrowImgs[i]);
-    }
-
 
     // map
     generateMap();
@@ -241,10 +234,6 @@ function setUpGame() {
     // reduceLifeImg.height = incorrectImg.height/1.5;
     character = document.getElementById("character");
     character.width = tileWidth / 2;
-    crownImg = document.getElementById("crownImg");
-    crownImg.width = character.width;
-    crownImgTop = h / 2 - crownImg.height / 2;
-    crownAlpha = 0;
     handImg = document.getElementById("handImg");
     handImg.width = tileWidth / 1.8;
     // handImg.setAttribute("fill", "green");

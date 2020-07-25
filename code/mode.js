@@ -63,23 +63,23 @@ function drawArrows() {
     for (let i = 0; i < arrows.length; i++) {
         // arrows[i].style.display = "initial";
         let arrowDirection = arrows[i].id;
-        let distanceAdjustment = 1.2;
+        let distanceAdjustment = 1.3;
         switch (arrowDirection) {
             case 'TL':
-                arrows[i].style.top = h / 2 - tileLength * distanceAdjustment + "px";
-                arrows[i].style.left = w / 2 - tileWidth * distanceAdjustment + "px";
+                arrows[i].style.top = h / 2 - yDistance*distanceAdjustment + "px";
+                arrows[i].style.left = w / 2 - xDistance*distanceAdjustment + "px";
                 break;
             case 'TR':
-                arrows[i].style.top = h / 2 - tileLength * distanceAdjustment + "px";
-                arrows[i].style.right = w / 2 - tileWidth * distanceAdjustment + "px";
+                arrows[i].style.top = h / 2 - yDistance*distanceAdjustment + "px";
+                arrows[i].style.right = w / 2 - xDistance*distanceAdjustment + "px";
                 break;
             case 'BL':
-                arrows[i].style.bottom = h / 2 - tileLength * distanceAdjustment - tileHeight * 0.5 + "px";
-                arrows[i].style.left = w / 2 - tileWidth * distanceAdjustment - tileHeight * 0.5 + "px";
+                arrows[i].style.bottom = h / 2 - yDistance*distanceAdjustment*1.1 + "px";
+                arrows[i].style.left = w / 2 - xDistance*distanceAdjustment + "px";
                 break;
             case 'BR':
-                arrows[i].style.bottom = h / 2 - tileLength * distanceAdjustment - tileHeight * 0.5 + "px";
-                arrows[i].style.right = w / 2 - tileWidth * distanceAdjustment - tileHeight * 0.5 + "px";
+                arrows[i].style.bottom = h / 2 - yDistance*distanceAdjustment*1.1 + "px";
+                arrows[i].style.right = w / 2 - xDistance*distanceAdjustment + "px";
                 break;
         }
     }

@@ -150,19 +150,6 @@ function postShake() {
     ctx.restore();
 }
 
-function displayLife() {
-    let i = 0;
-    for (i = 0; i < lifeLeft; i++) {
-        // ctx.drawImage(lifeImg, w + heartInterval - (heartInterval + heartW) * i, heartH/4);
-        lives[i].style.display = "initial";
-        lives[i].style.top = lifeImgWidth * 0.6 + "px";
-        lives[i].style.right = lifeImgWidth * 0.6 + lifeImgWidth * 1.5 * i + "px";
-        //console.log("life" + i + "'s right: " + lives[i].style.right);
-    }
-    for (; i < lifeMax; i++) {
-        lives[i].style.display = "none";
-    }
-}
 
 function collapse() {
     if ((currentTile < startCollapsing) || endOfMaze) { }
@@ -211,15 +198,3 @@ function mistakeFeedback() {
         playerY += 5;
     }
 }
-
-function winFeedback() {
-    winText.style.display = "initial";
-
-    crownImg.style.display = "initial";
-    crownAlpha += 0.05;
-    crownImg.style.opacity = crownAlpha;
-    crownImg.style.left = w / 2 - crownImg.width / 2 + "px";
-    crownImgTop = Math.max(crownImgTop - crownImgUpSpeed, h / 2 - tileWidth / 1.);
-    crownImg.style.top = crownImgTop + "px";
-}
-

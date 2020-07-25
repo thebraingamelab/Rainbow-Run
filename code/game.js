@@ -1,7 +1,7 @@
 
 function gameLoop() {
     if (gameOver) {
-        map[currentTile].y += 5;
+        if (map[currentTile].y <h) map[currentTile].y += 5;
         // map[currentTile + 1].y += 5;
         //arrow
         let arrowImgs = document.getElementsByClassName("arrow");

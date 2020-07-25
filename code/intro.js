@@ -119,11 +119,11 @@ function introAnimationLoop() {
             ctx.textAlign = 'center';
             ctx.globalAlpha = introBgAlpha;
 
-            ctx.font = '48px Overpass';
-            ctx.fillText('RAINBOW', w / 2, h /4 - tileHeight);
-            ctx.fillText('RUN', w / 2, h/3 - tileHeight);
+            ctx.font = '36px Overpass';
+            ctx.fillText('RAINBOW', w / 2, h / 4 - tileHeight);
+            ctx.fillText('RUN', w / 2, h / 3 - tileHeight);
 
-            ctx.font = '32px Overpass';
+            ctx.font = '24px Overpass';
             ctx.fillText('START', w / 2, h / 2 + tileHeight);
             ctx.restore();
 
@@ -139,7 +139,7 @@ function introAnimationLoop() {
 
             canvas.addEventListener('click', startIntro, { once: true });
 
-            if (Math.abs(towardsStart) >= Math.abs(w / 2 - introStartX)+30) {
+            if (Math.abs(towardsStart) >= Math.abs(w / 2 - introStartX) + 30) {
                 introStatus = 'START';
                 hopProgress = 0;
                 pathCounter++;
@@ -241,9 +241,19 @@ function introAnimationLoop() {
             }
             else {
                 // cancelAnimationFrame(introRequest);
+                //arrow
+                let arrowImgs = document.getElementsByClassName("arrow");
+                arrowImgWidth = tileWidth / 1.5;
+                for (let i = 0; i < arrowImgs.length; i++) {
+                    arrowImgs[i].style.display = 'initial';
+                    arrowImgs[i].width = arrowImgWidth;
+                    arrowImgs[i].addEventListener('click', updatePlayerPosition);
+                    arrows.push(arrowImgs[i]);
+                }
                 gameStatus = 'GAME';
                 mainLoop();
             }
+
             break;
     }
 
@@ -284,15 +294,15 @@ function introHopAnimation() {
 
 function displayPastIntroTiles() {
     for (let i = 0; i < pathCounter; i++) {
-        
+
         let t = introTiles[i];
         if (i === pathCounter - 1) t.alpha = 1;
-        else if (t.alpha > alphaThreshold) t.alpha= Math.max(alphaThreshold, t.alpha - disappearingSpeed * 3);
+        else if (t.alpha > alphaThreshold) t.alpha = Math.max(alphaThreshold, t.alpha - disappearingSpeed * 3);
         else {
-            t.y +=5;
+            t.y += 5;
             t.alpha = Math.max(0, t.alpha - disappearingSpeed)
         }
-       
+
         ctx.save();
         ctx.globalAlpha = t.alpha;
         t.display();
